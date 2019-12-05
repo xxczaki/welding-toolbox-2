@@ -1,0 +1,59 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  },
+  "dependencies": {
+    "@expo/samples": "~3.0.3",
+    "@expo/vector-icons": "^10.0.3",
+    "expo": "^35.0.0",
+    "expo-asset": "^7.0.0",
+    "expo-constants": "^7.0.0",
+    "expo-font": "^7.0.0",
+    "formik": "^2.0.6",
+    "react": "16.8.3",
+    "react-dom": "16.8.3",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
+    "react-native-formik": "^1.7.7",
+    "react-native-gesture-handler": "~1.3.0",
+    "react-native-paper": "^3.3.0",
+    "react-navigation": "^3.12.0",
+    "react-navigation-material-bottom-tabs": "^2.1.5",
+    "styled-components": "^5.0.0-rc.2",
+    "welding-utils": "^1.0.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "babel-preset-expo": "^7.0.0",
+    "eslint-config-xo-react": "^0.20.0",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "xo": "^0.25.3"
+  },
+  "private": true,
+  "xo": {
+    "nodeVersion": ">=10",
+    "parser": "babel-eslint",
+    "envs": [
+      "node",
+      "browser"
+    ],
+    "extends": "xo-react",
+    "settings": {
+      "react": {
+        "version": "16.8"
+      }
+    },
+    "rules": {
+      "unicorn/filename-case": "off",
+      "react/prop-types": "off",
+      "import/extensions": "off"
+    }
+  }
+}
