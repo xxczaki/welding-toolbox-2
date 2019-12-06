@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {Keyboard, Clipboard, TouchableOpacity, Picker, View} from 'react-native';
+import {Keyboard, Clipboard, TouchableOpacity} from 'react-native';
 import {Title, Subheading, TextInput, Button} from 'react-native-paper';
+import {Dropdown} from 'react-native-material-dropdown';
 import {useFormik} from 'formik';
 import {heatInput} from 'welding-utils';
 
@@ -38,10 +39,20 @@ export default function HeatInputScreen() {
 		}
 	});
 
+	const data = [{
+		label: '0.6 - 141, 15',
+		value: '0.6'
+	}, {
+		label: '0.8 - 111, 114, 131, 135, 136, 138',
+		value: '0.8'
+	}, {
+		label: '1 - 121',
+		value: '1'
+	}];
+
 	return (
 		<Container
 			contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}
-			scrollEnabled={false}
 			keyboardShouldPersistTaps="handled"
 		>
 			<Title style={{fontSize: 32, marginBottom: 2}}>Heat Input Calculator</Title>
@@ -80,6 +91,7 @@ export default function HeatInputScreen() {
 				/>
 				<TextInput
 					style={{marginLeft: 10, width: 150}}
+					keyboardType="numeric"
 					placeholder="Time (sec)"
 					value={formik.values.time}
 					maxLength={10}
@@ -87,11 +99,11 @@ export default function HeatInputScreen() {
 					onBlur={formik.handleBlur('time')}
 				/>
 			</InputBox>
-			<Button 
+			<Button
 				style={{width: 150, marginTop: 10, marginLeft: 'auto', marginRight: 25}}
 				color="#00b0ff"
 				icon={lastClicked ? 'timer-off' : 'timer'}
-				mode="contained" 
+				mode="contained"
 				onPress={() => {
 					const timeNow = (new Date()).getTime();
 
@@ -100,28 +112,24 @@ export default function HeatInputScreen() {
 						formik.setFieldValue('time', null);
 					} else {
 						setLastClicked(undefined);
-						formik.setFieldValue('time', ((timeNow - lastClicked) / 1000).toString())
+						formik.setFieldValue('time', ((timeNow - lastClicked) / 1000).toString());
 					}
 				}}
 			>
-    						{lastClicked ? 'Stop' : 'Measure'}
+				{lastClicked ? 'Stop' : 'Measure'}
 			</Button>
-			<Picker
-				selectedValue={formik.values.efficiencyFactor}
-				style={{width: 300}}
-				onValueChange={itemValue =>
-					formik.setFieldValue('efficiencyFactor', itemValue)}
-			>
-				<Picker.Item label="0.6 - 141, 15" value="0.6"/>
-				<Picker.Item label="0.8 - 111, 114, 131, 135, 136, 138" value="0.8"/>
-				<Picker.Item label="1 - 121" value="1"/>
-			</Picker>
+			<Dropdown
+				containerStyle={{width: 300}}
+				label="Efficiency Factor"
+				data={data}
+				onChangeText={formik.handleChange('efficiencyFactor')}
+			/>
 			<Inline>
 				<Button color="#4caf50" icon="check" mode="contained" onPress={formik.handleSubmit}>
-    						Calculate
+		Calculate
 				</Button>
 				<Button style={{marginLeft: 15}} color="#e53935" icon="delete" mode="contained" onPress={formik.handleReset}>
-    						Reset
+		Reset
 				</Button>
 			</Inline>
 		</Container>

@@ -6,25 +6,23 @@
     "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
+    "primaryColor": "#ff9800",
     "icon": "./assets/images/icon.png",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "package": "me.kepinski.weldingtoolbox2"
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     }
   }
 }
