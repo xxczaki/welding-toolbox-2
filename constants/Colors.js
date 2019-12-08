@@ -1,7 +1,7 @@
 export default {
 	tabIconDefault: '#fff',
 	tabIconSelected: '#fff',
-	tabBar: '#ff9800',
+	tabBar: '#c66900',
 	errorBackground: 'red',
 	errorText: '#fff',
 	warningBackground: '#EAEB5E',
