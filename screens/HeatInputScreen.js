@@ -11,7 +11,12 @@ import Inline from '../components/inline';
 
 export default function HeatInputScreen() {
 	const [result, setResult] = useState(0);
-	const [lastClicked, setLastClicked] = useState(undefined);
+	const [timerOn, setTimerOn] = useState(false);
+	const [timer, setTimer] = useState({
+		timerStart: 0,
+		timerTime: 0
+	});
+	const [intervalId, setIntervalId] = useState(undefined);
 	const formik = useFormik({
 		initialValues: {
 			amperage: '',
@@ -36,8 +41,38 @@ export default function HeatInputScreen() {
 		onReset: (values, {resetForm}) => {
 			resetForm();
 			setResult(0);
+			setTimer({
+				timerOn: false,
+				timerTime: 0,
+				timerStart: 0
+			})
 		}
 	});
+
+	const startTimer = () => {
+		setTimer({
+			timerOn: true,
+			timerTime: timer.timerTime,
+			timerStart: Date.now() - timer.timerTime
+		})
+		const id = setInterval(() => {
+			setTimer({
+				timerOn: true,
+				timerStart: timer.timerStart,
+				timerTime: Date.now() - timer.timerStart
+			});
+		}, 10)
+		setIntervalId(id);
+	};
+
+	const stopTimer = () => {
+		setTimer({
+			timerOn: false,
+			timerStart: timer.timerStart,
+			timerTime: timer.timerTime
+		})
+		clearInterval(intervalId);
+	}
 
 	const data = [{
 		label: '0.6 - 141, 15',
@@ -63,7 +98,7 @@ export default function HeatInputScreen() {
 				<TextInput
 					style={{marginRight: 10, width: 150}}
 					keyboardType="numeric"
-					placeholder="Amps"
+					label="Amps"
 					value={formik.values.amperage}
 					maxLength={10}
 					onChangeText={formik.handleChange('amperage')}
@@ -72,7 +107,7 @@ export default function HeatInputScreen() {
 				<TextInput
 					style={{marginLeft: 10, width: 150}}
 					keyboardType="numeric"
-					placeholder="Volts"
+					label="Volts"
 					value={formik.values.voltage}
 					maxLength={10}
 					onChangeText={formik.handleChange('voltage')}
@@ -83,7 +118,7 @@ export default function HeatInputScreen() {
 				<TextInput
 					style={{marginRight: 10, width: 150}}
 					keyboardType="numeric"
-					placeholder="Lenght (mm)"
+					label="Lenght (mm)"
 					value={formik.values.lenght}
 					maxLength={10}
 					onChangeText={formik.handleChange('lenght')}
@@ -92,8 +127,8 @@ export default function HeatInputScreen() {
 				<TextInput
 					style={{marginLeft: 10, width: 150}}
 					keyboardType="numeric"
-					placeholder="Time (sec)"
-					value={formik.values.time}
+					label="Time (sec)"
+					value={timer.timerTime}
 					maxLength={10}
 					onChangeText={formik.handleChange('time')}
 					onBlur={formik.handleBlur('time')}
@@ -102,21 +137,19 @@ export default function HeatInputScreen() {
 			<Button
 				style={{width: 150, marginTop: 10, marginLeft: 'auto', marginRight: 25}}
 				color="#00b0ff"
-				icon={lastClicked ? 'timer-off' : 'timer'}
+				icon={timerOn ? 'pause' : 'timer'}
 				mode="contained"
 				onPress={() => {
-					const timeNow = (new Date()).getTime();
-
-					if (!lastClicked) {
-						setLastClicked(timeNow);
-						formik.setFieldValue('time', null);
+					if (!timerOn && timer.timerTime === 0) {
+						startTimer();
+					} else if (!timerOn && timer.timerTime > 0) {
+						startTimer();
 					} else {
-						setLastClicked(undefined);
-						formik.setFieldValue('time', ((timeNow - lastClicked) / 1000).toString());
+						stopTimer();
 					}
 				}}
 			>
-				{lastClicked ? 'Stop' : 'Measure'}
+				{timerOn ? 'Pause' : 'Measure'}
 			</Button>
 			<Dropdown
 				containerStyle={{width: 300}}
