@@ -20,7 +20,8 @@ HeatInputStack.navigationOptions = {
 			focused={focused}
 			name="fire"
 		/>
-	)
+	),
+	tabBarColor: '#ff9800'
 };
 
 HeatInputStack.path = '';
@@ -35,7 +36,8 @@ WeldabilityStack.navigationOptions = {
 	tabBarLabel: 'Weldability',
 	tabBarIcon: ({focused}) => (
 		<TabBarIcon focused={focused} name="calculator"/>
-	)
+	),
+	tabBarColor: '#c66900'
 };
 
 WeldabilityStack.path = '';
@@ -50,7 +52,8 @@ AboutStack.navigationOptions = {
 	tabBarLabel: 'About',
 	tabBarIcon: ({focused}) => (
 		<TabBarIcon focused={focused} name="information-outline"/>
-	)
+	),
+	tabBarColor: '#ffb74d'
 };
 
 AboutStack.path = '';
