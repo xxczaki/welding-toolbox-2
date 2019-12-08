@@ -19,7 +19,8 @@
       "**/*"
     ],
     "android": {
-      "package": "me.kepinski.weldingtoolbox2"
+      "package": "me.kepinski.weldingtoolbox2",
+      "versionCode": 2
     },
     "ios": {
       "supportsTablet": false
