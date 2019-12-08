@@ -104,7 +104,7 @@ export default function WeldabilityScreen() {
 					<TextInput
 						style={{width: 75, marginBottom: 15}}
 						keyboardType="numeric"
-						placeholder="C"
+						label="C"
 						value={formik.values.coal}
 						maxLength={10}
 						onChangeText={formik.handleChange('coal')}
@@ -113,7 +113,7 @@ export default function WeldabilityScreen() {
 					<TextInput
 						style={{width: 75, marginBottom: 15}}
 						keyboardType="numeric"
-						placeholder="Mn"
+						label="Mn"
 						value={formik.values.manganese}
 						maxLength={10}
 						onChangeText={formik.handleChange('manganese')}
@@ -122,7 +122,7 @@ export default function WeldabilityScreen() {
 					<TextInput
 						style={{width: 75, marginBottom: 15}}
 						keyboardType="numeric"
-						placeholder="Si"
+						label="Si"
 						value={formik.values.silicon}
 						maxLength={10}
 						onChangeText={formik.handleChange('silicon')}
@@ -131,7 +131,7 @@ export default function WeldabilityScreen() {
 					<TextInput
 						style={{width: 75, marginBottom: 15}}
 						keyboardType="numeric"
-						placeholder="Cr"
+						label="Cr"
 						value={formik.values.chromium}
 						maxLength={10}
 						onChangeText={formik.handleChange('chromium')}
@@ -140,7 +140,7 @@ export default function WeldabilityScreen() {
 					<TextInput
 						style={{width: 75, marginBottom: 15}}
 						keyboardType="numeric"
-						placeholder="Ni"
+						label="Ni"
 						value={formik.values.nickel}
 						maxLength={10}
 						onChangeText={formik.handleChange('nickel')}
@@ -151,7 +151,7 @@ export default function WeldabilityScreen() {
 					<TextInput
 						style={{width: 75, marginBottom: 15}}
 						keyboardType="numeric"
-						placeholder="Mo"
+						label="Mo"
 						value={formik.values.molybdenum}
 						maxLength={10}
 						onChangeText={formik.handleChange('molybdenum')}
@@ -160,7 +160,7 @@ export default function WeldabilityScreen() {
 					<TextInput
 						style={{width: 75, marginBottom: 15}}
 						keyboardType="numeric"
-						placeholder="Cu"
+						label="Cu"
 						value={formik.values.copper}
 						maxLength={10}
 						onChangeText={formik.handleChange('copper')}
@@ -169,7 +169,7 @@ export default function WeldabilityScreen() {
 					<TextInput
 						style={{width: 75, marginBottom: 15}}
 						keyboardType="numeric"
-						placeholder="V"
+						label="V"
 						value={formik.values.vanadium}
 						maxLength={10}
 						onChangeText={formik.handleChange('vanadium')}
@@ -178,7 +178,7 @@ export default function WeldabilityScreen() {
 					<TextInput
 						style={{width: 75, marginBottom: 15}}
 						keyboardType="numeric"
-						placeholder="N"
+						label="N"
 						value={formik.values.nitrogen}
 						maxLength={10}
 						onChangeText={formik.handleChange('nitrogen')}
@@ -187,7 +187,7 @@ export default function WeldabilityScreen() {
 					<TextInput
 						style={{width: 75, marginBottom: 15}}
 						keyboardType="numeric"
-						placeholder="B"
+						label="B"
 						value={formik.values.boron}
 						maxLength={10}
 						onChangeText={formik.handleChange('boron')}
