@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Keyboard, Clipboard, TouchableOpacity} from 'react-native';
-import {Title, Subheading, TextInput, Button} from 'react-native-paper';
-import {Dropdown} from 'react-native-material-dropdown';
+import {Title, Subheading, TextInput, Button, FAB} from 'react-native-paper';
+import ModalSelector from 'react-native-modal-selector';
 import {useFormik} from 'formik';
 import {heatInput} from 'welding-utils';
 import TimeFormatter from 'minutes-seconds-milliseconds';
@@ -9,7 +9,6 @@ import {useStopwatch} from '../hooks/use-stopwatch';
 
 import Container from '../components/container';
 import InputBox from '../components/input-box';
-import Inline from '../components/inline';
 
 export default function HeatInputScreen() {
 	const [result, setResult] = useState(0);
@@ -53,13 +52,13 @@ export default function HeatInputScreen() {
 
 	const data = [{
 		label: '0.6 - 141, 15',
-		value: '0.6'
+		key: '0.6'
 	}, {
 		label: '0.8 - 111, 114, 131, 135, 136, 138',
-		value: '0.8'
+		key: '0.8'
 	}, {
 		label: '1 - 121',
-		value: '1'
+		key: '1'
 	}];
 
 	return (
@@ -120,20 +119,34 @@ export default function HeatInputScreen() {
 			>
 				{isRunning ? 'Pause' : (ms !== 0 ? 'Resume' : 'Measure')}
 			</Button>
-			<Dropdown
-				containerStyle={{width: 300}}
-				label="Efficiency Factor"
+			<ModalSelector
 				data={data}
-				onChangeText={formik.handleChange('efficiencyFactor')}
+				initValue="Efficiency Factor"
+				onChange={option => formik.setFieldValue('efficiencyFactor', option.key)}/>
+			<FAB
+				style={{
+					position: 'fixed',
+					backgroundColor: '#4caf50',
+					margin: 16,
+					right: 50,
+					bottom: 0
+				}}
+				label="Calculate"
+				icon="check"
+				onPress={formik.handleSubmit}
 			/>
-			<Inline>
-				<Button color="#4caf50" icon="check" mode="contained" onPress={formik.handleSubmit}>
-		Calculate
-				</Button>
-				<Button style={{marginLeft: 15}} color="#e53935" icon="delete" mode="contained" onPress={formik.handleReset}>
-		Reset
-				</Button>
-			</Inline>
+			<FAB
+				style={{
+					position: 'absolute',
+					backgroundColor: '#e53935',
+					margin: 16,
+					right: 16,
+					bottom: 0
+				}}
+				label="Reset"
+				icon="delete"
+				onPress={formik.handleReset}
+			/>
 		</Container>
 	);
 }
