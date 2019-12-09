@@ -8,9 +8,9 @@
       "ios",
       "android"
     ],
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "portrait",
-    "primaryColor": "#ff9800",
+    "primaryColor": "#121212",
     "icon": "./assets/images/icon.png",
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,7 +20,7 @@
     ],
     "android": {
       "package": "me.kepinski.weldingtoolbox2",
-      "versionCode": 3
+      "versionCode": 4
     },
     "ios": {
       "supportsTablet": false
