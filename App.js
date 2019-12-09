@@ -1,13 +1,13 @@
 import React from 'react';
 import {Platform, StatusBar} from 'react-native';
-import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
+import {DarkTheme, Provider as PaperProvider} from 'react-native-paper';
 
 import AppNavigator from './navigation/AppNavigator';
 
 const theme = {
-	...DefaultTheme,
+	...DarkTheme,
 	colors: {
-		...DefaultTheme.colors,
+		...DarkTheme.colors,
 		primary: '#ff9800',
 		accent: '#c66900'
 	}
@@ -16,7 +16,7 @@ const theme = {
 export default function App() {
 	return (
 		<PaperProvider theme={theme}>
-			{Platform.OS === 'ios' && <StatusBar barStyle="default"/>}
+			{Platform.OS === 'ios' && <StatusBar barStyle="dark-content"/>}
 			<AppNavigator/>
 		</PaperProvider>
 	);
