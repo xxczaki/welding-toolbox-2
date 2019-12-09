@@ -4,6 +4,8 @@ import {Title, Subheading, TextInput, Button} from 'react-native-paper';
 import {Dropdown} from 'react-native-material-dropdown';
 import {useFormik} from 'formik';
 import {heatInput} from 'welding-utils';
+import TimeFormatter from 'minutes-seconds-milliseconds';
+import {useStopwatch} from '../hooks/use-stopwatch';
 
 import Container from '../components/container';
 import InputBox from '../components/input-box';
@@ -11,12 +13,7 @@ import Inline from '../components/inline';
 
 export default function HeatInputScreen() {
 	const [result, setResult] = useState(0);
-	const [timerOn, setTimerOn] = useState(false);
-	const [timer, setTimer] = useState({
-		timerStart: 0,
-		timerTime: 0
-	});
-	const [intervalId, setIntervalId] = useState(undefined);
+	const {ms, start, stop, reset, isRunning} = useStopwatch();
 	const formik = useFormik({
 		initialValues: {
 			amperage: '',
@@ -40,39 +37,19 @@ export default function HeatInputScreen() {
 		},
 		onReset: (values, {resetForm}) => {
 			resetForm();
+			reset();
 			setResult(0);
-			setTimer({
-				timerOn: false,
-				timerTime: 0,
-				timerStart: 0
-			})
 		}
 	});
 
-	const startTimer = () => {
-		setTimer({
-			timerOn: true,
-			timerTime: timer.timerTime,
-			timerStart: Date.now() - timer.timerTime
-		})
-		const id = setInterval(() => {
-			setTimer({
-				timerOn: true,
-				timerStart: timer.timerStart,
-				timerTime: Date.now() - timer.timerStart
-			});
-		}, 10)
-		setIntervalId(id);
+	const handleStartStop = () => {
+		if (isRunning) {
+			stop();
+			formik.setFieldValue('time', ms / 1000);
+		} else {
+			start();
+		}
 	};
-
-	const stopTimer = () => {
-		setTimer({
-			timerOn: false,
-			timerStart: timer.timerStart,
-			timerTime: timer.timerTime
-		})
-		clearInterval(intervalId);
-	}
 
 	const data = [{
 		label: '0.6 - 141, 15',
@@ -128,7 +105,7 @@ export default function HeatInputScreen() {
 					style={{marginLeft: 10, width: 150}}
 					keyboardType="numeric"
 					label="Time (sec)"
-					value={timer.timerTime}
+					value={ms === 0 ? formik.values.time : TimeFormatter(ms)}
 					maxLength={10}
 					onChangeText={formik.handleChange('time')}
 					onBlur={formik.handleBlur('time')}
@@ -137,19 +114,11 @@ export default function HeatInputScreen() {
 			<Button
 				style={{width: 150, marginTop: 10, marginLeft: 'auto', marginRight: 25}}
 				color="#00b0ff"
-				icon={timerOn ? 'pause' : 'timer'}
+				icon={isRunning ? 'pause' : (ms !== 0 ? 'play' : 'timer')}
 				mode="contained"
-				onPress={() => {
-					if (!timerOn && timer.timerTime === 0) {
-						startTimer();
-					} else if (!timerOn && timer.timerTime > 0) {
-						startTimer();
-					} else {
-						stopTimer();
-					}
-				}}
+				onPress={handleStartStop}
 			>
-				{timerOn ? 'Pause' : 'Measure'}
+				{isRunning ? 'Pause' : (ms !== 0 ? 'Resume' : 'Measure')}
 			</Button>
 			<Dropdown
 				containerStyle={{width: 300}}
