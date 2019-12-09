@@ -13,7 +13,6 @@
         "@expo/vector-icons": "^10.0.6",
         "expo": "^35.0.1",
         "formik": "^2.0.6",
-        "minutes-seconds-milliseconds": "^1.0.3",
         "react": "16.8.3",
         "react-dom": "16.8.3",
         "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
@@ -24,7 +23,8 @@
         "react-navigation": "^3.12.0",
         "react-navigation-material-bottom-tabs": "^2.1.5",
         "styled-components": "^4.4.1",
-        "welding-utils": "^1.0.1"
+        "welding-utils": "^1.0.1",
+        "yup": "^0.27.0"
     },
     "devDependencies": {
         "babel-eslint": "^10.0.3",
