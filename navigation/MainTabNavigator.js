@@ -10,6 +10,9 @@ import AboutScreen from '../screens/AboutScreen';
 const HeatInputStack = createStackNavigator(
 	{
 		HeatInput: HeatInputScreen
+	},
+	{
+		cardStyle: {backgroundColor: '#121212'}
 	}
 );
 
@@ -29,6 +32,9 @@ HeatInputStack.path = '';
 const WeldabilityStack = createStackNavigator(
 	{
 		Weldability: WeldabilityScreen
+	},
+	{
+		cardStyle: {backgroundColor: '#121212'}
 	}
 );
 
@@ -45,6 +51,9 @@ WeldabilityStack.path = '';
 const AboutStack = createStackNavigator(
 	{
 		About: AboutScreen
+	},
+	{
+		cardStyle: {backgroundColor: '#121212'}
 	}
 );
 
