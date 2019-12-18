@@ -1,14 +1,28 @@
 import React, {useState} from 'react';
-import {Keyboard, Clipboard, TouchableOpacity} from 'react-native';
-import {Title, Subheading, TextInput, Button, FAB} from 'react-native-paper';
+import {Keyboard, Clipboard, TouchableOpacity, View} from 'react-native';
+import {Title, Subheading, TextInput, Button, Text, HelperText} from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
 import {useFormik} from 'formik';
+import * as Yup from 'yup';
 import {heatInput} from 'welding-utils';
-import TimeFormatter from 'minutes-seconds-milliseconds';
 import {useStopwatch} from '../hooks/use-stopwatch';
 
 import Container from '../components/container';
 import InputBox from '../components/input-box';
+import Inline from '../components/inline';
+
+const validationSchema = Yup.object().shape({
+	amperage: Yup.string()
+		.required('Required'),
+	voltage: Yup.string()
+		.required('Required'),
+	lenght: Yup.string()
+		.required('Required'),
+	time: Yup.string()
+		.required('Required'),
+	efficiencyFactor: Yup.string()
+		.required('Required')
+});
 
 export default function HeatInputScreen() {
 	const [result, setResult] = useState(0);
@@ -21,6 +35,7 @@ export default function HeatInputScreen() {
 			time: '',
 			efficiencyFactor: ''
 		},
+		validationSchema,
 		onSubmit: values => {
 			Keyboard.dismiss();
 
@@ -38,7 +53,9 @@ export default function HeatInputScreen() {
 			resetForm();
 			reset();
 			setResult(0);
-		}
+		},
+		validateOnBlur: false,
+		validateOnChange: false
 	});
 
 	const handleStartStop = () => {
@@ -71,44 +88,76 @@ export default function HeatInputScreen() {
 				<Subheading style={{fontSize: 20}}>Heat Input: {result} kJ/mm</Subheading>
 			</TouchableOpacity>
 			<InputBox>
-				<TextInput
-					style={{marginRight: 10, width: 150}}
-					keyboardType="numeric"
-					label="Amps"
-					value={formik.values.amperage}
-					maxLength={10}
-					onChangeText={formik.handleChange('amperage')}
-					onBlur={formik.handleBlur('amperage')}
-				/>
-				<TextInput
-					style={{marginLeft: 10, width: 150}}
-					keyboardType="numeric"
-					label="Volts"
-					value={formik.values.voltage}
-					maxLength={10}
-					onChangeText={formik.handleChange('voltage')}
-					onBlur={formik.handleBlur('voltage')}
-				/>
+				<View>
+					<TextInput
+						style={{marginRight: 10, width: 150}}
+						keyboardType="numeric"
+						label="Amps"
+						value={formik.values.amperage}
+						maxLength={10}
+						onChangeText={formik.handleChange('amperage')}
+						onBlur={formik.handleBlur('amperage')}
+					/>
+					<HelperText
+						type="error"
+						visible={formik.errors.amperage}
+					>
+						{formik.errors.amperage}
+					</HelperText>
+				</View>
+				<View>
+					<TextInput
+						style={{marginLeft: 10, width: 150}}
+						keyboardType="numeric"
+						label="Volts"
+						value={formik.values.voltage}
+						maxLength={10}
+						onChangeText={formik.handleChange('voltage')}
+						onBlur={formik.handleBlur('voltage')}
+					/>
+					<HelperText
+						type="error"
+						visible={formik.errors.voltage}
+					>
+						{formik.errors.voltage}
+					</HelperText>
+				</View>
 			</InputBox>
 			<InputBox>
-				<TextInput
-					style={{marginRight: 10, width: 150}}
-					keyboardType="numeric"
-					label="Lenght (mm)"
-					value={formik.values.lenght}
-					maxLength={10}
-					onChangeText={formik.handleChange('lenght')}
-					onBlur={formik.handleBlur('lenght')}
-				/>
-				<TextInput
-					style={{marginLeft: 10, width: 150}}
-					keyboardType="numeric"
-					label="Time (sec)"
-					value={ms === 0 ? formik.values.time : TimeFormatter(ms)}
-					maxLength={10}
-					onChangeText={formik.handleChange('time')}
-					onBlur={formik.handleBlur('time')}
-				/>
+				<View>
+					<TextInput
+						style={{marginRight: 10, width: 150}}
+						keyboardType="numeric"
+						label="Lenght (mm)"
+						value={formik.values.lenght}
+						maxLength={10}
+						onChangeText={formik.handleChange('lenght')}
+						onBlur={formik.handleBlur('lenght')}
+					/>
+					<HelperText
+						type="error"
+						visible={formik.errors.lenght}
+					>
+						{formik.errors.lenght}
+					</HelperText>
+				</View>
+				<View>
+					<TextInput
+						style={{marginLeft: 10, width: 150}}
+						keyboardType="numeric"
+						label="Time (sec)"
+						value={ms === 0 ? formik.values.time : (ms / 1000).toString()}
+						maxLength={10}
+						onChangeText={formik.handleChange('time')}
+						onBlur={formik.handleBlur('time')}
+					/>
+					<HelperText
+						type="error"
+						visible={formik.errors.time}
+					>
+						{formik.errors.time}
+					</HelperText>
+				</View>
 			</InputBox>
 			<Button
 				style={{width: 150, marginTop: 10, marginLeft: 'auto', marginRight: 25}}
@@ -120,33 +169,22 @@ export default function HeatInputScreen() {
 				{isRunning ? 'Pause' : (ms !== 0 ? 'Resume' : 'Measure')}
 			</Button>
 			<ModalSelector
+				style={{width: 300, paddingTop: 20, paddingBottom: 20}}
+				selectTextStyle={{color: '#fff'}}
 				data={data}
+				selectedKey={formik.values.efficiencyFactor}
 				initValue="Efficiency Factor"
+				cancelText="Cancel"
 				onChange={option => formik.setFieldValue('efficiencyFactor', option.key)}/>
-			<FAB
-				style={{
-					position: 'fixed',
-					backgroundColor: '#4caf50',
-					margin: 16,
-					right: 50,
-					bottom: 0
-				}}
-				label="Calculate"
-				icon="check"
-				onPress={formik.handleSubmit}
-			/>
-			<FAB
-				style={{
-					position: 'absolute',
-					backgroundColor: '#e53935',
-					margin: 16,
-					right: 16,
-					bottom: 0
-				}}
-				label="Reset"
-				icon="delete"
-				onPress={formik.handleReset}
-			/>
+			{formik.errors.efficiencyFactor ? <Text style={{color: '#cf6679'}}>Please select the efficiency factor</Text> : null}
+			<Inline>
+				<Button color="#4caf50" icon="check" mode="contained" onPress={formik.handleSubmit}>
+		Calculate
+				</Button>
+				<Button style={{marginLeft: 15}} color="#e53935" icon="delete" mode="contained" onPress={formik.handleReset}>
+		Reset
+				</Button>
+			</Inline>
 		</Container>
 	);
 }

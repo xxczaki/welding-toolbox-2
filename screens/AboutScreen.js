@@ -11,7 +11,7 @@ export default function AboutScreen() {
 			scrollEnabled={false}
 		>
 			<Image style={{width: 128, height: 128, marginBottom: 15}} source={require('../assets/images/icon.png')}/>
-			<Title style={{fontSize: 28}}>Welding Toolbox</Title>
+			<Title style={{fontSize: 28}}>Welding Toolbox 2</Title>
 			<Text style={{paddingBottom: 20}}>If you enjoy using this app, please rate it :)</Text>
 			<Button style={{marginBottom: 10, width: 200}} color="#333" icon="github-circle" mode="contained" onPress={() => Linking.openURL('https://github.com/xxczaki/welding-toolbox-2')}>
 			Source code

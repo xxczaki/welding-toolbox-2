@@ -1,6 +1,7 @@
 import React from 'react';
-import {Platform, StatusBar} from 'react-native';
+import {StatusBar} from 'react-native';
 import {DarkTheme, Provider as PaperProvider} from 'react-native-paper';
+import {enableScreens} from 'react-native-screens';
 
 import AppNavigator from './navigation/AppNavigator';
 
@@ -13,10 +14,15 @@ const theme = {
 	}
 };
 
+enableScreens();
+
 export default function App() {
 	return (
 		<PaperProvider theme={theme}>
-			{Platform.OS === 'ios' && <StatusBar barStyle="dark-content"/>}
+			<StatusBar
+				backgroundColor="#212121"
+				barStyle="light-content"
+			/>
 			<AppNavigator/>
 		</PaperProvider>
 	);
