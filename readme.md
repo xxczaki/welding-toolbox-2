@@ -2,15 +2,15 @@
 
 > An app containing a set of useful welding tools, written in React Native ⚛️
 
+<img src="media/screenshot_1.png" height="400">
+<img src="media/screenshot_2.png" height="400">
+<img src="media/screenshot_3.png" height="400">
+
 ## Installation
 
 Currently, only the Android version is available.
 
 [![Google Play Download][google-play-badge]][google-play-download]
-
-## Highlights
-
-WIP
 
 ## Usage
 
