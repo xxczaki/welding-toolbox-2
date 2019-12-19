@@ -33,9 +33,14 @@ $ npm run ios
 $ npm test
 ```
 
+## Related
+
+- [Welding Toolbox][welding-toolbox] - the original Welding Toolbox app
+
 ### License
 
 MIT
 
 [google-play-badge]: https://play.google.com/intl/en_us/badges/images/badge_new.png
 [google-play-download]: https://play.google.com/store/apps/details?id=me.kepinski.weldingtoolbox2
+[welding-toolbox]: https://github.com/xxczaki/welding-toolbox/
