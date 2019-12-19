@@ -3,6 +3,7 @@ import {Keyboard} from 'react-native';
 import {Title, Text, TextInput, Button} from 'react-native-paper';
 import {Col, Grid} from 'react-native-easy-grid';
 import {useFormik} from 'formik';
+import {ceq, cet, ceAws, pcm, pren} from 'welding-utils';
 
 import Container from '../components/container';
 import Inline from '../components/inline';
@@ -31,47 +32,61 @@ export default function WeldabilityScreen() {
 		onSubmit: values => {
 			Keyboard.dismiss();
 
-			const c = Number(values.coal.replace(/,/g, '.'));
-			console.log(c);
-			const mn = Number(values.manganese.replace(/,/g, '.'));
-			const cr = Number(values.chromium.replace(/,/g, '.'));
-			const mo = Number(values.molybdenum.replace(/,/g, '.'));
-			const v = Number(values.vanadium.replace(/,/g, '.'));
-			const ni = Number(values.nickel.replace(/,/g, '.'));
-			const cu = Number(values.copper.replace(/,/g, '.'));
-			const si = Number(values.silicon.replace(/,/g, '.'));
-			const b = Number(values.boron.replace(/,/g, '.'));
-			const n = Number(values.nitrogen.replace(/,/g, '.'));
+			const coal = Number(values.coal.replace(/,/g, '.'));
+			const manganese = Number(values.manganese.replace(/,/g, '.'));
+			const chromium = Number(values.chromium.replace(/,/g, '.'));
+			const molybdenum = Number(values.molybdenum.replace(/,/g, '.'));
+			const vanadium = Number(values.vanadium.replace(/,/g, '.'));
+			const nickel = Number(values.nickel.replace(/,/g, '.'));
+			const copper = Number(values.copper.replace(/,/g, '.'));
+			const silicon = Number(values.silicon.replace(/,/g, '.'));
+			const boron = Number(values.boron.replace(/,/g, '.'));
+			const nitrogen = Number(values.nitrogen.replace(/,/g, '.'));
 
-			/* eslint-disable no-mixed-operators */
-
-			const calculateCeq = () => {
-				return (c + (mn / 6) + (cr + mo + v) / 5 + (ni + cu) / 15);
+			const ceqCetData = {
+				coal,
+				manganese,
+				chromium,
+				molybdenum,
+				vanadium,
+				nickel,
+				copper
 			};
 
-			const calculateCet = () => {
-				return (c + (mn + mo) / 10 + (cr + cu) / 20 + (ni / 40));
+			const ceAwsData = {
+				silicon,
+				coal,
+				manganese,
+				chromium,
+				molybdenum,
+				vanadium,
+				nickel,
+				copper
 			};
 
-			const calculateCeAws = () => {
-				return (c + (mn / 6) + (cr + mo + v) / 5 + (ni + cu) / 15 + (si / 6));
+			const pcmData = {
+				silicon,
+				boron,
+				coal,
+				manganese,
+				chromium,
+				molybdenum,
+				vanadium,
+				nickel,
+				copper
 			};
 
-			const calculatePcm = () => {
-				return (c + (si / 30) + (mn + cu + cr) / 20 + (ni / 60) + (mo / 15) + (v / 10) + 5 * b);
+			const prenData = {
+				nitrogen,
+				chromium,
+				molybdenum
 			};
 
-			const calculatePren = () => {
-				return (cr + (3.3 * mo) + (16 * n));
-			};
-
-			/* eslint-enable no-mixed-operators */
-
-			const ceqResult = Math.round(calculateCeq() * 100) / 100;
-			const cetResult = Math.round(calculateCet() * 100) / 100;
-			const ceAwsResult = Math.round(calculateCeAws() * 100) / 100;
-			const pcmResult = Math.round(calculatePcm() * 100) / 100;
-			const prenResult = Math.round(calculatePren() * 100) / 100;
+			const ceqResult = Math.round(ceq(ceqCetData) * 100) / 100;
+			const cetResult = Math.round(cet(ceqCetData) * 100) / 100;
+			const ceAwsResult = Math.round(ceAws(ceAwsData) * 100) / 100;
+			const pcmResult = Math.round(pcm(pcmData) * 100) / 100;
+			const prenResult = Math.round(pren(prenData) * 100) / 100;
 
 			setResult({
 				ceq: ceqResult,
