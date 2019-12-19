@@ -39,7 +39,13 @@ export default function HeatInputScreen() {
 		onSubmit: values => {
 			Keyboard.dismiss();
 
-			const raw = heatInput(values);
+			const keys = Object.keys(values);
+			const formattedValues = Object.values(values).map(e => Number(e.toString().replace(/,/g, '.')));
+
+			// TODO: Replace with Object.fromEntries() 
+			const data = keys.reduce((o, k, i) => ({...o, [k]: formattedValues[i]}), {})
+
+			const raw = heatInput(data);
 
 			const result = Math.round(raw * 100) / 100;
 
