@@ -2,9 +2,11 @@
 
 > An app containing a set of useful welding tools, written in React Native ⚛️
 
-<img src="media/screenshot_1.png" height="400">
-<img src="media/screenshot_2.png" height="400">
-<img src="media/screenshot_3.png" height="400">
+<div style="display: flex; flex-direction: row; flex-wrap: wrap">
+  <img src="media/screenshot_1.png" height="400">
+  <img src="media/screenshot_2.png" height="400">
+  <img src="media/screenshot_3.png" height="400">
+</div>
 
 ## Installation
 
@@ -31,9 +33,14 @@ $ npm run ios
 $ npm test
 ```
 
+## Related
+
+- [Welding Toolbox][welding-toolbox] - the original Welding Toolbox app
+
 ### License
 
 MIT
 
 [google-play-badge]: https://play.google.com/intl/en_us/badges/images/badge_new.png
 [google-play-download]: https://play.google.com/store/apps/details?id=me.kepinski.weldingtoolbox2
+[welding-toolbox]: https://github.com/xxczaki/welding-toolbox/
