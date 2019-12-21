@@ -9,6 +9,7 @@ import {useStopwatch} from '../hooks/use-stopwatch';
 
 import Container from '../components/container';
 import InputBox from '../components/input-box';
+import ButtonBox from '../components/button-box';
 import Inline from '../components/inline';
 
 const validationSchema = Yup.object().shape({
@@ -16,7 +17,7 @@ const validationSchema = Yup.object().shape({
 		.required('Required'),
 	voltage: Yup.string()
 		.required('Required'),
-	lenght: Yup.string()
+	length: Yup.string()
 		.required('Required'),
 	time: Yup.string()
 		.required('Required'),
@@ -26,12 +27,13 @@ const validationSchema = Yup.object().shape({
 
 export default function HeatInputScreen() {
 	const [result, setResult] = useState(0);
+	const [isDiameter, setDiameter] = useState(false);
 	const {ms, start, stop, reset, isRunning} = useStopwatch();
 	const formik = useFormik({
 		initialValues: {
 			amperage: '',
 			voltage: '',
-			lenght: '',
+			length: '',
 			time: '',
 			efficiencyFactor: ''
 		},
@@ -42,8 +44,12 @@ export default function HeatInputScreen() {
 			const keys = Object.keys(values);
 			const formattedValues = Object.values(values).map(e => Number(e.toString().replace(/,/g, '.')));
 
-			// TODO: Replace with Object.fromEntries() 
-			const data = keys.reduce((o, k, i) => ({...o, [k]: formattedValues[i]}), {})
+			// TODO: Replace with Object.fromEntries()
+			const data = keys.reduce((o, k, i) => ({...o, [k]: formattedValues[i]}), {});
+
+			if (isDiameter) {
+				data.length = Number((data.length * Math.PI).toFixed(2));
+			}
 
 			const raw = heatInput(data);
 
@@ -134,17 +140,17 @@ export default function HeatInputScreen() {
 					<TextInput
 						style={{marginRight: 10, width: 150}}
 						keyboardType="numeric"
-						label="Lenght (mm)"
-						value={formik.values.lenght}
+						label={isDiameter ? 'Diameter (mm)' : 'Length (mm)'}
+						value={formik.values.length}
 						maxLength={10}
-						onChangeText={formik.handleChange('lenght')}
-						onBlur={formik.handleBlur('lenght')}
+						onChangeText={formik.handleChange('length')}
+						onBlur={formik.handleBlur('length')}
 					/>
 					<HelperText
 						type="error"
-						visible={formik.errors.lenght}
+						visible={formik.errors.length}
 					>
-						{formik.errors.lenght}
+						{formik.errors.length}
 					</HelperText>
 				</View>
 				<View>
@@ -165,15 +171,26 @@ export default function HeatInputScreen() {
 					</HelperText>
 				</View>
 			</InputBox>
-			<Button
-				style={{width: 150, marginTop: 10, marginLeft: 'auto', marginRight: 25}}
-				color="#00b0ff"
-				icon={isRunning ? 'pause' : (ms !== 0 ? 'play' : 'timer')}
-				mode="contained"
-				onPress={handleStartStop}
-			>
-				{isRunning ? 'Pause' : (ms !== 0 ? 'Resume' : 'Measure')}
-			</Button>
+			<ButtonBox>
+				<Button
+					style={{width: 150, marginRight: 10}}
+					color="#00b0ff"
+					icon={isDiameter ? 'diameter-variant' : 'ruler'}
+					mode="contained"
+					onPress={() => isDiameter ? setDiameter(false) : setDiameter(true)}
+				>
+					{isDiameter ? 'Diameter' : 'Length'}
+				</Button>
+				<Button
+					style={{width: 150, marginLeft: 10}}
+					color="#00b0ff"
+					icon={isRunning ? 'pause' : (ms !== 0 ? 'play' : 'timer')}
+					mode="contained"
+					onPress={handleStartStop}
+				>
+					{isRunning ? 'Pause' : (ms !== 0 ? 'Resume' : 'Measure')}
+				</Button>
+			</ButtonBox>
 			<ModalSelector
 				style={{width: 300, paddingTop: 20, paddingBottom: 20}}
 				selectTextStyle={{color: '#fff'}}
