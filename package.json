@@ -20,6 +20,7 @@
         "react-navigation": "^4.0.10",
         "react-navigation-material-bottom-tabs": "^2.1.5",
         "react-navigation-stack": "^1.10.3",
+        "sec": "^1.0.0",
         "styled-components": "^4.4.1",
         "welding-utils": "^1.0.1",
         "yup": "^0.28.0"
