@@ -127,8 +127,8 @@ android {
         applicationId "me.kepinski.weldingtoolbox2"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "1.3.3"
+        versionCode 9
+        versionName "1.4.0"
     }
     splits {
         abi {
