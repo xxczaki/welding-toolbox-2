@@ -5,6 +5,8 @@ import ModalSelector from 'react-native-modal-selector';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {heatInput} from 'welding-utils';
+import sec from 'sec';
+
 import {useStopwatch} from '../hooks/use-stopwatch';
 
 import Container from '../components/container';
@@ -42,10 +44,18 @@ export default function HeatInputScreen() {
 			Keyboard.dismiss();
 
 			const keys = Object.keys(values);
-			const formattedValues = Object.values(values).map(e => Number(e.toString().replace(/,/g, '.')));
+			const formattedValues = Object.values(values).map(e => {
+				if (typeof e === 'string' && e.includes(':')) {
+					return e;
+				}
+
+				return Number(e.toString().replace(/,/g, '.'));
+			});
 
 			// TODO: Replace with Object.fromEntries()
 			const data = keys.reduce((o, k, i) => ({...o, [k]: formattedValues[i]}), {});
+
+			data.time = sec((data.time).toString());
 
 			if (isDiameter) {
 				data.length = Number((data.length * Math.PI).toFixed(2));
@@ -53,7 +63,7 @@ export default function HeatInputScreen() {
 
 			const raw = heatInput(data);
 
-			const result = Math.round(raw * 100) / 100;
+			const result = Math.round((raw + Number.EPSILON) * 1000) / 1000;
 
 			if (isNaN(result)) {
 				setResult(0);
@@ -158,7 +168,7 @@ export default function HeatInputScreen() {
 						style={{marginLeft: 10, width: 150}}
 						keyboardType="numeric"
 						label="Time (sec)"
-						value={ms === 0 ? formik.values.time : (ms / 1000).toString()}
+						value={ms === 0 ? formik.values.time : new Date(ms).toISOString().slice(11, -5).toString()}
 						maxLength={10}
 						onChangeText={formik.handleChange('time')}
 						onBlur={formik.handleBlur('time')}
