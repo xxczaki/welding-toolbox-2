@@ -60,3 +60,4 @@ buck-out/
 
 # Release keystore
 /android/app/keystore.jks
+android/gradle.properties
