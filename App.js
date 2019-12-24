@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {DarkTheme, Provider as PaperProvider} from 'react-native-paper';
 import {enableScreens} from 'react-native-screens';
+import RNBootSplash from 'react-native-bootsplash';
 
 import AppNavigator from './navigation/AppNavigator';
 
@@ -17,6 +18,10 @@ const theme = {
 enableScreens();
 
 export default function App() {
+	useEffect(() => {
+		RNBootSplash.hide({duration: 250});
+	}, []);
+
 	return (
 		<PaperProvider theme={theme}>
 			<StatusBar
