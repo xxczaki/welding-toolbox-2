@@ -19,7 +19,7 @@ export default function AboutScreen() {
 			<Button style={{width: 200}} color="#009cde" icon="paypal" mode="contained" onPress={() => Linking.openURL('https://paypal.me/akepinski')}>
 			Donate
 			</Button>
-			<Caption style={{paddingTop: 20}}>MIT © Antoni Kepinski</Caption>
+			<Caption style={{paddingTop: 20}}>MIT License © Antoni Kepinski</Caption>
 		</Container>
 	);
 }
