@@ -14,10 +14,10 @@ export default function AboutScreen() {
 			<Title style={{fontSize: 28}}>Welding Toolbox 2</Title>
 			<Text style={{paddingBottom: 20}}>If you enjoy using this app, please rate it :)</Text>
 			<Button style={{marginBottom: 10, width: 200}} color="#333" icon="github-circle" mode="contained" onPress={() => Linking.openURL('https://github.com/xxczaki/welding-toolbox-2')}>
-			Source code
+				Source code
 			</Button>
-			<Button style={{width: 200}} color="#009cde" icon="paypal" mode="contained" onPress={() => Linking.openURL('https://paypal.me/akepinski')}>
-			Donate
+			<Button style={{width: 200}} color="#009cde" icon="paypal" mode="contained" onPress={() => Linking.openURL('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=566SHGMB98D7L&source=url')}>
+				Donate
 			</Button>
 			<Caption style={{paddingTop: 20}}>MIT License © Antoni Kepinski</Caption>
 		</Container>
