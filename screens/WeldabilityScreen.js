@@ -230,5 +230,6 @@ export default function WeldabilityScreen() {
 }
 
 WeldabilityScreen.navigationOptions = {
-	header: null
+	headerShown: false,
+	cardStyle: {backgroundColor: '#121212'}
 };

@@ -223,5 +223,6 @@ export default function HeatInputScreen() {
 }
 
 HeatInputScreen.navigationOptions = {
-	header: null
+	headerShown: false,
+	cardStyle: {backgroundColor: '#121212'}
 };

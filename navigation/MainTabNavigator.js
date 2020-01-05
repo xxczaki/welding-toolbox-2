@@ -21,8 +21,7 @@ HeatInputStack.navigationOptions = {
 			name="fire"
 		/>
 	),
-	tabBarColor: '#ff9800',
-	cardStyle: {backgroundColor: '#121212'}
+	tabBarColor: '#ff9800'
 };
 
 HeatInputStack.path = '';
@@ -30,9 +29,6 @@ HeatInputStack.path = '';
 const WeldabilityStack = createStackNavigator(
 	{
 		Weldability: WeldabilityScreen
-	},
-	{
-		cardStyle: {backgroundColor: '#121212'}
 	}
 );
 
@@ -41,8 +37,7 @@ WeldabilityStack.navigationOptions = {
 	tabBarIcon: ({focused}) => (
 		<TabBarIcon focused={focused} name="calculator"/>
 	),
-	tabBarColor: '#c66900',
-	cardStyle: {backgroundColor: '#121212'}
+	tabBarColor: '#c66900'
 };
 
 WeldabilityStack.path = '';
@@ -50,9 +45,6 @@ WeldabilityStack.path = '';
 const AboutStack = createStackNavigator(
 	{
 		About: AboutScreen
-	},
-	{
-		cardStyle: {backgroundColor: '#121212'}
 	}
 );
 
@@ -61,8 +53,7 @@ AboutStack.navigationOptions = {
 	tabBarIcon: ({focused}) => (
 		<TabBarIcon focused={focused} name="information-outline"/>
 	),
-	tabBarColor: '#ffb74d',
-	cardStyle: {backgroundColor: '#121212'}
+	tabBarColor: '#ffb74d'
 };
 
 AboutStack.path = '';
