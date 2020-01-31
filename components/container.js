@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Container = styled(ScrollView)`
     flexGrow: 1;
-    paddingTop: 50px;
+    backgroundColor: #121212;
 `;
 
 export default Container;
