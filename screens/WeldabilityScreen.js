@@ -96,7 +96,7 @@ export default function WeldabilityScreen() {
 				pren: prenResult
 			});
 		},
-		onReset: (values, {resetForm}) => {
+		handleReset: ({resetForm}) => {
 			resetForm();
 			setResult({
 				ceq: '0',
@@ -113,7 +113,7 @@ export default function WeldabilityScreen() {
 			contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}
 			keyboardShouldPersistTaps="handled"
 		>
-			<Title style={{fontSize: 32}}>Weldability Calculator</Title>
+			<Title style={{fontSize: 32, paddingTop: 25}}>Weldability Calculator</Title>
 			<Grid style={{marginTop: 25}}>
 				<Col style={{paddingLeft: 20, justifyContent: 'center'}}>
 					<TextInput
@@ -228,8 +228,3 @@ export default function WeldabilityScreen() {
 		</Container>
 	);
 }
-
-WeldabilityScreen.navigationOptions = {
-	headerShown: false,
-	cardStyle: {backgroundColor: '#121212'}
-};
