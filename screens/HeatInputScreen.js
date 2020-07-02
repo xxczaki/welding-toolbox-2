@@ -138,7 +138,7 @@ const HeatInputScreen = () => {
 				keyboardShouldPersistTaps="handled"
 			>
 				<Card style={{height: 100, width: '90%', marginTop: 20}}>
-					<Card.Title title={`Result: ${result} kJ/${settings?.resultUnit}`}/>
+					<Card.Title title={`Result: ${result} kJ/${settings?.resultUnit ?? 'mm'}`}/>
 					<Card.Actions>
 						<Button onPress={() => Clipboard.setString(`${result}`)}>Copy</Button>
 					</Card.Actions>
