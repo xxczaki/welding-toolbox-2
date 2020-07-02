@@ -7,8 +7,4 @@
         <item name="android:colorControlNormal">#616161</item>
     </style>
 
-    <style name="BootTheme" parent="AppTheme">
-        <item name="android:background">@drawable/bootsplash</item>
-    </style>
-
 </resources>
