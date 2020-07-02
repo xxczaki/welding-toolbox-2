@@ -3,9 +3,9 @@
 > An app containing a set of useful welding tools, written in React Native ⚛️
 
 <div style="display: flex; flex-direction: row; flex-wrap: wrap">
-  <img src="media/screenshot_1.png" height="400">
-  <img src="media/screenshot_2.png" height="400">
-  <img src="media/screenshot_3.png" height="400">
+  <img src="media/screenshot_1.jpeg" height="400">
+  <img src="media/screenshot_2.jpeg" height="400">
+  <img src="media/screenshot_3.jpeg" height="400">
 </div>
 
 ## Installation
