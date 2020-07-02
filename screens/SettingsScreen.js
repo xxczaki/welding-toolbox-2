@@ -1,19 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {Picker} from 'react-native';
-import {List, Switch, Button, Checkbox, Dialog, Portal, Paragraph, Snackbar} from 'react-native-paper';
+import {Linking} from 'react-native';
+import {Picker} from '@react-native-community/picker';
+import {List, Switch, Appbar} from 'react-native-paper';
 import storage from '../storage.js';
 
 import Container from '../components/container';
 
-export default function SettingsScreen() {
+const SettingsScreen = () => {
 	const [settings, setSettings] = useState({});
-	const [visibleDialog, setVisibleDialog] = useState(false);
-	const [visibleSnack, setVisibleSnack] = useState(false);
 
 	useEffect(() => {
-		storage.get('settings').then(data => {
+		(async () => {
+			const data = await storage.get('settings');
+
 			setSettings(JSON.parse(data));
-		});
+		})();
 	}, []);
 
 	useEffect(() => {
@@ -22,6 +23,10 @@ export default function SettingsScreen() {
 
 	return (
 		<>
+			<Appbar.Header>
+				<Appbar.Content title="Welding Toolbox 2"/>
+				<Appbar.Action icon="gift-outline" onPress={() => Linking.openURL('https://www.paypal.me/akepinski')}/>
+			</Appbar.Header>
 			<Container scrollEnabled={false}>
 				<List.Section>
 					<List.Subheader>Heat Input</List.Subheader>
@@ -65,69 +70,9 @@ export default function SettingsScreen() {
 						)}
 					/>
 				</List.Section>
-				<List.Section>
-					<List.Subheader>Miscellaneous</List.Subheader>
-					<List.Item
-						title="Automatically send crash reports"
-						left={() => (
-							<Checkbox
-								status={settings?.sentryDisable ? 'unchecked' : 'checked'}
-								onPress={() => {
-									if (!settings?.sentryDisable) {
-										setVisibleDialog(true);
-									} else {
-										setSettings({...settings, sentryDisable: !settings?.sentryDisable});
-										setVisibleSnack(true);
-									}
-								}}
-							/>
-						)}
-					/>
-					<Portal>
-						<Dialog
-							visible={visibleDialog}
-							onDismiss={() => setVisibleDialog(false)}
-						>
-							<Dialog.Content>
-								<Paragraph>We use Sentry to automatically collect anonymous information about crashes and errors.</Paragraph>
-								<Paragraph>This information helps us improve Welding Toolbox 2.</Paragraph>
-							</Dialog.Content>
-							<Dialog.Actions>
-								<Button
-									onPress={() => {
-										setVisibleDialog(false);
-									}}
-								>
-									Close
-								</Button>
-								<Button
-									onPress={() => {
-										setSettings({...settings, sentryDisable: !settings?.sentryDisable});
-										setVisibleDialog(false);
-										setVisibleSnack(true);
-									}}
-								>
-									Disable anyway
-								</Button>
-							</Dialog.Actions>
-						</Dialog>
-					</Portal>
-				</List.Section>
 			</Container>
-			<Snackbar
-				style={{}}
-				visible={visibleSnack}
-				duration={2000}
-				action={{
-					label: 'Dismiss',
-					onPress: () => {
-						setVisibleSnack(false);
-					}
-				}}
-				onDismiss={() => setVisibleSnack(false)}
-			>
-				Please restart this app
-			</Snackbar>
 		</>
 	);
-}
+};
+
+export default SettingsScreen;

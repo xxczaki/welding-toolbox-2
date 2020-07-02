@@ -12,8 +12,7 @@ const storage = AsyncStorageFactory.create(legacyStorage);
 	const defaults = {
 		resultUnit: 'mm',
 		lengthImperial: false,
-		totalEnergy: false,
-		sentryDisable: false
+		totalEnergy: false
 	};
 
 	if (!data || Object.entries(JSON.parse(data)).length === 0) {
