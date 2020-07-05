@@ -29,4 +29,6 @@ target 'weldingtoolbox2' do
 
   use_unimodules!
 
+  pod 'RNShare', :path => '../node_modules/react-native-share'
+
 end

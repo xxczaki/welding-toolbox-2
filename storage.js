@@ -12,11 +12,13 @@ const storage = AsyncStorageFactory.create(legacyStorage);
 	const defaults = {
 		resultUnit: 'mm',
 		lengthImperial: false,
-		totalEnergy: false
+		totalEnergy: false,
+		resultHistory: [],
+		customFields: []
 	};
 
 	if (!data || Object.entries(JSON.parse(data)).length === 0) {
-		storage.set('settings', JSON.stringify(defaults));
+		await storage.set('settings', JSON.stringify(defaults));
 	}
 })();
 

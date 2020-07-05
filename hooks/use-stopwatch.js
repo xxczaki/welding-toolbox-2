@@ -22,7 +22,7 @@ export const useStopwatch = () => {
 		isRunning: started,
 		start: () => setStarted(true),
 		stop: () => setStarted(false),
-		reset: () => {
+		resetStopwatch: () => {
 			setMs(0);
 			setStarted(false);
 		}

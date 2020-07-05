@@ -1,10 +1,11 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {Keyboard, View} from 'react-native';
+import {Keyboard, View, ScrollView} from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import Clipboard from '@react-native-community/clipboard';
 import {TextInput, Button, Text, HelperText, FAB as Fab, Card, Appbar} from 'react-native-paper';
-import {useFormik} from 'formik';
+import {useForm, Controller} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers';
 import {object, string} from 'yup';
 import {heatInput} from 'welding-utils';
 import sec from 'sec';
@@ -12,15 +13,11 @@ import storage from '../storage.js';
 
 import {useStopwatch} from '../hooks/use-stopwatch';
 
-import Container from '../components/container';
-import InputBox from '../components/input-box';
-import ButtonBox from '../components/button-box';
-
-const HeatInputScreen = () => {
+const HeatInputScreen = ({navigation}) => {
 	const [settings, setSettings] = useState({});
 	const [result, setResult] = useState(0);
 	const [isDiameter, setDiameter] = useState(false);
-	const {ms, start, stop, reset, isRunning} = useStopwatch();
+	const {ms, start, stop, resetStopwatch, isRunning} = useStopwatch();
 
 	const fullValidationSchema = object().shape({
 		amperage: string()
@@ -42,8 +39,8 @@ const HeatInputScreen = () => {
 			.required('Required')
 	});
 
-	const formik = useFormik({
-		initialValues: {
+	const {control, handleSubmit, errors, reset, setValue} = useForm({
+		defaultValues: {
 			amperage: '',
 			voltage: '',
 			length: '',
@@ -51,56 +48,7 @@ const HeatInputScreen = () => {
 			efficiencyFactor: '',
 			totalEnergy: ''
 		},
-		validationSchema: settings?.totalEnergy ? partialValidationSchema : fullValidationSchema,
-		onSubmit: values => {
-			Keyboard.dismiss();
-
-			const keys = Object.keys(values);
-			const formattedValues = Object.values(values).map(element => {
-				if (typeof element === 'string' && element.includes(':')) {
-					return element;
-				}
-
-				return Number(element.toString().replace(/,/g, '.'));
-			});
-
-			const data = Object.fromEntries(keys.map((_, i) => [keys[i], formattedValues[i]]));
-			let result;
-
-			if (settings?.lengthImperial && settings?.resultUnit !== 'in') {
-				data.length *= 25.4;
-			}
-
-			if (settings?.totalEnergy) {
-				result = data.totalEnergy / data.length;
-			} else {
-				data.time = sec((data.time).toString());
-
-				if (isDiameter) {
-					data.length = Number((data.length * Math.PI).toFixed(2));
-				}
-
-				result = heatInput(data);
-			}
-
-			if (settings?.resultUnit === 'cm') {
-				result *= 10;
-			} else if (settings?.resultUnit === 'in' && !settings?.lengthImperial) {
-				result *= 25.4;
-			}
-
-			if (Number.isNaN(result)) {
-				setResult(0);
-			} else {
-				setResult(Math.round((result + Number.EPSILON) * 1000) / 1000);
-			}
-		},
-		onReset: () => {
-			reset();
-			setResult(0);
-		},
-		validateOnBlur: false,
-		validateOnChange: false
+		resolver: yupResolver(settings?.totalEnergy ? partialValidationSchema : fullValidationSchema)
 	});
 
 	useFocusEffect(
@@ -118,191 +66,350 @@ const HeatInputScreen = () => {
 		}, [])
 	);
 
+	useEffect(() => {
+		(async () => {
+			const data = await storage.get('settings');
+
+			await storage.set('settings', JSON.stringify({...JSON.parse(data), ...settings}));
+		})();
+	}, [settings]);
+
+	useMemo(() => {
+		if (isRunning) {
+			setValue('time', new Date(ms).toISOString().slice(11, -5).toString());
+		}
+	}, [isRunning, ms, setValue]);
+
 	const handleStartStop = () => {
 		if (isRunning) {
 			stop();
-			formik.setFieldValue('time', ms / 1000);
 		} else {
 			start();
 		}
 	};
 
+	const toCamelCase = string_ => string_.replace(/^\w|[A-Z]|\b\w/g, (ltr, idx) => idx === 0 ? ltr.toLowerCase() : ltr.toUpperCase()).replace(/\s+/g, '');
+
+	const onSubmit = _data => {
+		Keyboard.dismiss();
+
+		const standardFields = new Set([
+			'amperage',
+			'voltage',
+			'length',
+			'time',
+			'efficiencyFactor',
+			'totalEnergy'
+		]);
+
+		const keys = Object.keys(_data);
+		const formattedValues = Object.values(_data).map((element, index) => {
+			if (typeof element === 'string' && (element.includes(':') || !standardFields.has(keys[index]))) {
+				return element;
+			}
+
+			return Number(element.toString().replace(/,/g, '.'));
+		});
+
+		const data = Object.fromEntries(keys.map((_, i) => [keys[i], formattedValues[i]]));
+		let result;
+
+		if (settings?.lengthImperial && settings?.resultUnit !== 'in') {
+			data.length *= 25.4;
+		}
+
+		if (settings?.totalEnergy) {
+			result = data.totalEnergy / data.length;
+		} else {
+			data.time = sec((data.time).toString());
+
+			if (isDiameter) {
+				data.length = Number((data.length * Math.PI).toFixed(2));
+			}
+
+			result = heatInput(data);
+		}
+
+		if (settings?.resultUnit === 'cm') {
+			result *= 10;
+		} else if (settings?.resultUnit === 'in' && !settings?.lengthImperial) {
+			result *= 25.4;
+		}
+
+		if (Number.isNaN(result)) {
+			setResult(0);
+		} else {
+			setResult(Math.round((result + Number.EPSILON) * 1000) / 1000);
+		}
+
+		const custom = settings?.customFields?.map(element => {
+			const index = Object.keys(data).indexOf(toCamelCase(element.name));
+
+			return {
+				[element.name]: Object.values(data)[index]
+			};
+		});
+
+		setSettings({...settings, resultHistory: [
+			Object.assign({
+				timestamp: Date.now().toString(),
+				amperage: data.amperage,
+				voltage: data.voltage,
+				totalEnergy: data.totalEnergy,
+				length: `${data.length} ${settings?.lengthImperial ? 'in' : 'mm'}`,
+				time: sec((data.time).toString()),
+				efficiencyFactor: data.efficiencyFactor,
+				result: `${Math.round((result + Number.EPSILON) * 1000) / 1000} kJ/${settings?.resultUnit}`
+			}, ...custom),
+			...settings?.resultHistory
+		]});
+	};
+
+	const resetForm = () => {
+		reset();
+		resetStopwatch();
+		setResult(0);
+	};
+
 	return (
-		<>
+		<View style={{flex: 1}}>
 			<Appbar.Header>
 				<Appbar.Content title="Welding Toolbox 2"/>
-				<Appbar.Action icon="delete" onPress={formik.resetForm}/>
+				<Appbar.Action icon="delete" onPress={resetForm}/>
 			</Appbar.Header>
-			<Container
-				contentContainerStyle={{alignItems: 'center', height: '100%'}}
+			<ScrollView
+				contentContainerStyle={{flexGrow: 1, backgroundColor: '#121212', padding: 20}}
 				keyboardShouldPersistTaps="handled"
 			>
-				<Card style={{height: 100, width: '90%', marginTop: 20}}>
+				<Card style={{height: 100, width: '100%', marginBottom: 10}}>
 					<Card.Title title={`Result: ${result} kJ/${settings?.resultUnit ?? 'mm'}`}/>
 					<Card.Actions>
 						<Button onPress={() => Clipboard.setString(`${result}`)}>Copy</Button>
+						<Button onPress={() => navigation.navigate('History')}>History</Button>
 					</Card.Actions>
 				</Card>
 				{!settings?.totalEnergy &&
-					<InputBox>
-						<View>
-							<TextInput
-								style={{marginRight: 10, width: 165}}
-								keyboardType="numeric"
-								label="Amps"
-								value={formik.values.amperage}
-								maxLength={10}
-								onChangeText={formik.handleChange('amperage')}
-								onBlur={formik.handleBlur('amperage')}
+					<View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+						<View style={{width: '45%'}}>
+							<Controller
+								control={control}
+								render={({onChange, onBlur, value}) => (
+									<TextInput
+										keyboardType="numeric"
+										label="Amps"
+										value={value}
+										maxLength={10}
+										onBlur={onBlur}
+										onChangeText={value => onChange(value)}
+									/>
+								)}
+								name="amperage"
+								rules={{required: true}}
+								defaultValue=""
 							/>
 							<HelperText
 								type="error"
-								visible={formik.errors.amperage}
+								visible={errors.amperage}
 							>
-								{formik.errors.amperage}
+								{errors.amperage}
 							</HelperText>
 						</View>
-						<View>
-							<TextInput
-								style={{marginLeft: 10, width: 165}}
-								keyboardType="numeric"
-								label="Volts"
-								value={formik.values.voltage}
-								maxLength={10}
-								onChangeText={formik.handleChange('voltage')}
-								onBlur={formik.handleBlur('voltage')}
+						<View style={{width: '45%'}}>
+							<Controller
+								control={control}
+								render={({onChange, onBlur, value}) => (
+									<TextInput
+										keyboardType="numeric"
+										label="Volts"
+										value={value}
+										maxLength={10}
+										onBlur={onBlur}
+										onChangeText={value => onChange(value)}
+									/>
+								)}
+								name="voltage"
+								rules={{required: true}}
+								defaultValue=""
 							/>
 							<HelperText
 								type="error"
-								visible={formik.errors.voltage}
+								visible={errors.voltage}
 							>
-								{formik.errors.voltage}
+								{errors.voltage}
 							</HelperText>
 						</View>
-					</InputBox>}
-				<InputBox>
-					<View>
+					</View>}
+				<View>
+					<View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
 						{!settings?.totalEnergy ?
-							<>
-								<TextInput
-									style={{marginRight: 10, width: 165}}
-									keyboardType="numeric"
-									label={isDiameter ? `Diameter (${settings?.lengthImperial ? 'in' : 'mm'})` : `Length (${settings?.lengthImperial ? 'in' : 'mm'})`}
-									value={formik.values.length}
-									maxLength={10}
-									onChangeText={formik.handleChange('length')}
-									onBlur={formik.handleBlur('length')}
+							<View style={{width: '45%'}}>
+								<Controller
+									control={control}
+									render={({onChange, onBlur, value}) => (
+										<TextInput
+											keyboardType="numeric"
+											label={isDiameter ? `Diameter (${settings?.lengthImperial ? 'in' : 'mm'})` : `Length (${settings?.lengthImperial ? 'in' : 'mm'})`}
+											value={value}
+											maxLength={10}
+											onBlur={onBlur}
+											onChangeText={value => onChange(value)}
+										/>
+									)}
+									name="length"
+									rules={{required: true}}
+									defaultValue=""
 								/>
 								<HelperText
 									type="error"
-									visible={formik.errors.length}
+									visible={errors.length}
 								>
-									{formik.errors.length}
+									{errors.length}
 								</HelperText>
-							</> :
-							<>
-								<TextInput
-									style={{marginRight: 10, width: 165}}
-									keyboardType="numeric"
-									label="Total energy (kJ)"
-									value={formik.values.totalEnergy}
-									maxLength={10}
-									onChangeText={formik.handleChange('totalEnergy')}
-									onBlur={formik.handleBlur('totalEnergy')}
+							</View> :
+							<View style={{width: '45%'}}>
+								<Controller
+									control={control}
+									render={({onChange, onBlur, value}) => (
+										<TextInput
+											keyboardType="numeric"
+											label="Total energy (kJ)"
+											value={value}
+											maxLength={10}
+											onBlur={onBlur}
+											onChangeText={value => onChange(value)}
+										/>
+									)}
+									name="totalEnergy"
+									rules={{required: true}}
+									defaultValue=""
 								/>
 								<HelperText
 									type="error"
-									visible={formik.errors.totalEnergy}
+									visible={errors.totalEnergy}
 								>
-									{formik.errors.totalEnergy}
+									{errors.totalEnergy}
 								</HelperText>
-							</>}
-					</View>
-					<View>
+							</View>}
 						{!settings?.totalEnergy ?
-							<>
-								<TextInput
-									style={{marginLeft: 10, width: 165}}
-									keyboardType="numeric"
-									label="Time (sec)"
-									value={ms === 0 ? formik.values.time : new Date(ms).toISOString().slice(11, -5).toString()}
-									maxLength={10}
-									onChangeText={formik.handleChange('time')}
-									onBlur={formik.handleBlur('time')}
+							<View style={{width: '45%'}}>
+								<Controller
+									control={control}
+									render={({onChange, onBlur, value}) => (
+										<TextInput
+											label="Time (sec)"
+											value={value}
+											maxLength={10}
+											onBlur={onBlur}
+											onChangeText={value => onChange(value)}
+										/>
+									)}
+									name="time"
+									rules={{required: true}}
+									defaultValue=""
 								/>
 								<HelperText
 									type="error"
-									visible={formik.errors.time}
+									visible={errors.time}
 								>
-									{formik.errors.time}
+									{errors.time}
 								</HelperText>
-							</> :
-							<>
-								<TextInput
-									style={{marginLeft: 10, width: 165}}
-									keyboardType="numeric"
-									label={`Length (${settings?.lengthImperial ? 'in' : 'mm'})`}
-									value={formik.values.length}
-									maxLength={10}
-									onChangeText={formik.handleChange('length')}
-									onBlur={formik.handleBlur('length')}
+							</View> :
+							<View style={{width: '45%'}}>
+								<Controller
+									control={control}
+									render={({onChange, onBlur, value}) => (
+										<TextInput
+											keyboardType="numeric"
+											label={`Length (${settings?.lengthImperial ? 'in' : 'mm'})`}
+											value={value}
+											maxLength={10}
+											onBlur={onBlur}
+											onChangeText={value => onChange(value)}
+										/>
+									)}
+									name="length"
+									rules={{required: true}}
+									defaultValue=""
 								/>
 								<HelperText
 									type="error"
-									visible={formik.errors.length}
+									visible={errors.length}
 								>
-									{formik.errors.length}
+									{errors.length}
 								</HelperText>
-							</>}
+							</View>}
 					</View>
-				</InputBox>
+				</View>
 				{!settings?.totalEnergy &&
-					<>
-						<ButtonBox>
-							<Button
-								style={{width: 165, marginRight: 10}}
-								color="#ff9800"
-								icon={isDiameter ? 'diameter-variant' : 'ruler'}
-								mode="contained"
-								onPress={() => isDiameter ? setDiameter(false) : setDiameter(true)}
-							>
-								{isDiameter ? 'Diameter' : 'Length'}
-							</Button>
+					<View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+						<Button
+							style={{width: '45%'}}
+							color="#ff9800"
+							icon={isDiameter ? 'diameter-variant' : 'ruler'}
+							mode="contained"
+							onPress={() => isDiameter ? setDiameter(false) : setDiameter(true)}
+						>
+							{isDiameter ? 'Diameter' : 'Length'}
+						</Button>
 
-							<Button
-								style={{width: 165, marginLeft: 10}}
-								color="#ff9800"
-								icon={isRunning ? 'pause' : (ms !== 0 ? 'play' : 'timer')}
-								mode="contained"
-								onPress={handleStartStop}
-							>
-								{isRunning ? 'Pause' : (ms !== 0 ? 'Resume' : 'Measure')}
-							</Button>
+						<Button
+							style={{width: '45%'}}
+							color="#ff9800"
+							icon={isRunning ? 'pause' : (ms !== 0 ? 'play' : 'timer-outline')}
+							mode="contained"
+							onPress={handleStartStop}
+						>
+							{isRunning ? 'Pause' : (ms !== 0 ? 'Resume' : 'Measure')}
+						</Button>
 
-						</ButtonBox>
-						<View style={{width: '80%'}}>
-							<Picker
-								selectedValue={formik.values.efficiencyFactor}
-								style={{color: 'gray'}}
-								onValueChange={value => formik.setFieldValue('efficiencyFactor', value)}
-							>
-								<Picker.Item label="Select efficiency factor" value={null}/>
-								<Picker.Item label="0.6 - 141, 15" value="0.6"/>
-								<Picker.Item label="0.8 - 111, 114, 131, 135, 136, 138" value="0.8"/>
-								<Picker.Item label="1 - 121" value="1"/>
-							</Picker>
-							{formik.errors.efficiencyFactor ? <Text style={{color: '#cf6679', textAlign: 'center'}}>Please select the efficiency factor</Text> : null}
-						</View>
-					</>}
-				<Fab
-					style={{position: 'absolute', right: 20, bottom: 20, backgroundColor: '#4caf50'}}
-					color="#000"
-					icon="check"
-					label="Calculate"
-					onPress={formik.handleSubmit}
-				/>
-			</Container>
-		</>
+					</View>}
+				{settings?.customFields?.map(element => (
+					<Controller
+						key={element.timestamp}
+						control={control}
+						render={({onChange, onBlur, value}) => (
+							<TextInput
+								label={element.name}
+								value={value}
+								onBlur={onBlur}
+								onChangeText={value => onChange(value)}
+							/>
+						)}
+						name={toCamelCase(element.name)}
+						defaultValue=""
+					/>
+				))}
+				{!settings?.totalEnergy &&
+					<View style={{alignItems: 'center', paddingTop: 20, paddingBottom: 80}}>
+						<Controller
+							control={control}
+							render={({onChange, value}) => (
+								<Picker
+									selectedValue={value}
+									style={{color: 'gray', width: '80%'}}
+									onValueChange={value => onChange(value)}
+								>
+									<Picker.Item label="Select efficiency factor" value={null}/>
+									<Picker.Item label="0.6 - 141, 15" value="0.6"/>
+									<Picker.Item label="0.8 - 111, 114, 131, 135, 136, 138" value="0.8"/>
+									<Picker.Item label="1 - 121" value="1"/>
+								</Picker>
+							)}
+							name="efficiencyFactor"
+							rules={{required: true}}
+							defaultValue=""
+						/>
+						{errors.efficiencyFactor ? <Text style={{color: '#cf6679', textAlign: 'center'}}>Please select the efficiency factor</Text> : null}
+					</View>}
+			</ScrollView>
+			<Fab
+				style={{position: 'absolute', right: 20, bottom: 20, backgroundColor: '#4caf50'}}
+				color="#000"
+				icon="check"
+				label="Calculate"
+				onPress={handleSubmit(onSubmit)}
+			/>
+		</View>
 	);
 };
 

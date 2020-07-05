@@ -4,11 +4,14 @@ import React from 'react';
 import {StatusBar} from 'react-native';
 import {DarkTheme, Provider as PaperProvider} from 'react-native-paper';
 import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {enableScreens} from 'react-native-screens';
 import AnimatedTabBar from '@gorhom/animated-tabbar';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import HeatInputScreen from './screens/HeatInputScreen';
+import HistoryScreen from './screens/HistoryScreen';
 import WeldabilityScreen from './screens/WeldabilityScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
@@ -49,7 +52,7 @@ const tabs = {
 			color: '#ff9800'
 		},
 		icon: {
-			component: () => <Icon name="settings-outline" color="#ff9800" size={26}/>
+			component: () => <Icon name="cog-outline" color="#ff9800" size={26}/>
 		},
 		background: {
 			activeColor: '#424242'
@@ -57,7 +60,17 @@ const tabs = {
 	}
 };
 
+enableScreens();
+
+const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const HeatInputStack = () => (
+	<Stack.Navigator screenOptions={{headerShown: false}}>
+		<Stack.Screen name="Home" component={HeatInputScreen}/>
+		<Stack.Screen name="History" component={HistoryScreen}/>
+	</Stack.Navigator>
+);
 
 const App = () => (
 	<NavigationContainer>
@@ -79,7 +92,7 @@ const App = () => (
 					options={{
 						tabBarLabel: 'Heat Input'
 					}}
-					component={HeatInputScreen}
+					component={HeatInputStack}
 				/>
 				<Tab.Screen
 					name="Weldability"
