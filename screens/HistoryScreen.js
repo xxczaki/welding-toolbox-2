@@ -67,7 +67,7 @@ const HistoryScreen = ({navigation}) => {
 									await share.open({
 										title: 'Result history',
 										message: 'Download result history as a XLS file.',
-										filename: 'history.xlsx',
+										filename: 'result-history.xlsx',
 										type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 										url: `file://${file}`
 									});
