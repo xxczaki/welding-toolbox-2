@@ -29,7 +29,7 @@ const SettingsScreen = () => {
 		(async () => {
 			const data = await storage.get('settings');
 
-			await storage.set('settings', JSON.stringify({...JSON.parse(data), ...settings}));
+			await storage.set('settings', JSON.stringify({...settings, ...JSON.parse(data)}));
 		})();
 	}, [settings]);
 
@@ -38,7 +38,7 @@ const SettingsScreen = () => {
 			{
 				name: data.name,
 				unit: data.unit,
-				timestamp: Date.now().toString()
+				timestamp: Date.now()
 			},
 			...settings?.customFields
 		]});
