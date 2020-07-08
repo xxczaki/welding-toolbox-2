@@ -9,8 +9,9 @@ import {yupResolver} from '@hookform/resolvers';
 import {object, string} from 'yup';
 import {heatInput} from 'welding-utils';
 import sec from 'sec';
-import storage from '../storage.js';
+import camelCase from 'camelcase';
 
+import storage from '../storage.js';
 import {useStopwatch} from '../hooks/use-stopwatch';
 
 const HeatInputScreen = ({navigation}) => {
@@ -48,7 +49,8 @@ const HeatInputScreen = ({navigation}) => {
 			efficiencyFactor: '',
 			totalEnergy: ''
 		},
-		resolver: yupResolver(settings?.totalEnergy ? partialValidationSchema : fullValidationSchema)
+		resolver: yupResolver(settings?.totalEnergy ? partialValidationSchema : fullValidationSchema),
+		reValidateMode: 'onSubmit'
 	});
 
 	useFocusEffect(
@@ -87,8 +89,6 @@ const HeatInputScreen = ({navigation}) => {
 			start();
 		}
 	};
-
-	const toCamelCase = string_ => string_.replace(/^\w|[A-Z]|\b\w/g, (ltr, idx) => idx === 0 ? ltr.toLowerCase() : ltr.toUpperCase()).replace(/\s+/g, '');
 
 	const onSubmit = _data => {
 		Keyboard.dismiss();
@@ -142,24 +142,24 @@ const HeatInputScreen = ({navigation}) => {
 			setResult(Math.round((result + Number.EPSILON) * 1000) / 1000);
 		}
 
-		const custom = settings?.customFields?.map(element => {
-			const index = Object.keys(data).indexOf(toCamelCase(element.name));
+		const custom = settings?.customFields.map(element => {
+			const index = Object.keys(data).indexOf(camelCase(element.name));
 
 			return {
-				[element.name]: Object.values(data)[index]
+				[element.name]: `${Object.values(data)[index] ?? ''} ${Object.values(data)[index] ? element.unit : ''}`
 			};
 		});
 
 		setSettings({...settings, resultHistory: [
 			Object.assign({
 				timestamp: Date.now().toString(),
-				amperage: data.amperage,
-				voltage: data.voltage,
-				totalEnergy: data.totalEnergy,
-				length: `${data.length} ${settings?.lengthImperial ? 'in' : 'mm'}`,
-				time: sec((data.time).toString()),
-				efficiencyFactor: data.efficiencyFactor,
-				result: `${Math.round((result + Number.EPSILON) * 1000) / 1000} kJ/${settings?.resultUnit}`
+				Amperage: data.amperage,
+				Voltage: data.voltage,
+				'Total energy': data.totalEnergy,
+				Length: `${data.length} ${settings?.lengthImperial ? 'in' : 'mm'}`,
+				Time: sec((data.time).toString()),
+				'Efficiency factor': data.efficiencyFactor,
+				Result: `${Math.round((result + Number.EPSILON) * 1000) / 1000} kJ/${settings?.resultUnit}`
 			}, ...custom),
 			...settings?.resultHistory
 		]});
@@ -211,7 +211,7 @@ const HeatInputScreen = ({navigation}) => {
 								type="error"
 								visible={errors.amperage}
 							>
-								{errors.amperage}
+								{errors.amperage?.message}
 							</HelperText>
 						</View>
 						<View style={{width: '45%'}}>
@@ -235,7 +235,7 @@ const HeatInputScreen = ({navigation}) => {
 								type="error"
 								visible={errors.voltage}
 							>
-								{errors.voltage}
+								{errors.voltage?.message}
 							</HelperText>
 						</View>
 					</View>}
@@ -263,7 +263,7 @@ const HeatInputScreen = ({navigation}) => {
 									type="error"
 									visible={errors.length}
 								>
-									{errors.length}
+									{errors.length?.message}
 								</HelperText>
 							</View> :
 							<View style={{width: '45%'}}>
@@ -287,7 +287,7 @@ const HeatInputScreen = ({navigation}) => {
 									type="error"
 									visible={errors.totalEnergy}
 								>
-									{errors.totalEnergy}
+									{errors.totalEnergy?.message}
 								</HelperText>
 							</View>}
 						{!settings?.totalEnergy ?
@@ -311,7 +311,7 @@ const HeatInputScreen = ({navigation}) => {
 									type="error"
 									visible={errors.time}
 								>
-									{errors.time}
+									{errors.time?.message}
 								</HelperText>
 							</View> :
 							<View style={{width: '45%'}}>
@@ -335,7 +335,7 @@ const HeatInputScreen = ({navigation}) => {
 									type="error"
 									visible={errors.length}
 								>
-									{errors.length}
+									{errors.length?.message}
 								</HelperText>
 							</View>}
 					</View>
@@ -375,8 +375,7 @@ const HeatInputScreen = ({navigation}) => {
 								onChangeText={value => onChange(value)}
 							/>
 						)}
-						name={toCamelCase(element.name)}
-						defaultValue=""
+						name={camelCase(element.name)}
 					/>
 				))}
 				{!settings?.totalEnergy &&
