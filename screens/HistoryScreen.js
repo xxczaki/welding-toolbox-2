@@ -56,7 +56,9 @@ const HistoryScreen = ({navigation}) => {
 
 							const saveAndShare = async () => {
 								try {
-									const ws = XLSX.utils.json_to_sheet(settings?.resultHistory);
+									const newArray = settings?.resultHistory.sort((a, b) => a.timestamp - b.timestamp).map(({timestamp, ...rest}) => rest);
+
+									const ws = XLSX.utils.json_to_sheet(newArray);
 									const wb = XLSX.utils.book_new();
 									XLSX.utils.book_append_sheet(wb, ws, 'WeldingToolbox2History');
 
@@ -66,7 +68,7 @@ const HistoryScreen = ({navigation}) => {
 
 									await share.open({
 										title: 'Result history',
-										message: 'Download result history as a XLS file.',
+										message: 'Download result history as a XLSX spreadsheet file.',
 										filename: 'result-history.xlsx',
 										type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 										url: `file://${file}`
@@ -99,13 +101,13 @@ const HistoryScreen = ({navigation}) => {
 				<List.Section>
 					{settings?.resultHistory?.length === 0 || !settings?.resultHistory ? (
 						<List.Item title="The history is empty."/>
-					) : settings?.resultHistory?.map(element => (
+					) : settings?.resultHistory.sort((a, b) => a.timestamp - b.timestamp).map(element => (
 						<List.Item
 							key={element.timestamp}
-							title={`Result: ${element.result}`}
-							description={element.totalEnergy ?
-								`Total Energy: ${element.totalEnergy}, Length: ${element.length}` :
-								`V: ${element.voltage}, A: ${element.amperage}, L: ${element.length}, T: ${element.time}s, EF: ${element.efficiencyFactor}`}
+							title={`Result: ${element.Result}`}
+							description={element['Total energy'] ?
+								`Total Energy: ${element['Total energy']}, Length: ${element.Length}` :
+								`V: ${element.Voltage}, A: ${element.Amperage}, L: ${element.Length}, T: ${element.Time}s, EF: ${element['Efficiency factor']}`}
 							right={() => (
 								<Button onPress={() => setSettings({...settings, resultHistory: settings?.resultHistory.filter(key => key.timestamp !== element.timestamp)})}>
 									Delete
