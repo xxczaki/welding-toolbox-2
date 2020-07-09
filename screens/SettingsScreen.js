@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {Linking, ScrollView, View} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {Picker} from '@react-native-community/picker';
 import {List, Switch, Appbar, Button, Portal, Dialog, TextInput, Snackbar} from 'react-native-paper';
 import {useForm, Controller} from 'react-hook-form';
@@ -17,19 +18,21 @@ const SettingsScreen = () => {
 		}
 	});
 
+	useFocusEffect(
+		useCallback(() => {
+			(async () => {
+				const data = await storage.get('settings');
+
+				setSettings(JSON.parse(data));
+			})();
+		}, [])
+	);
+
 	useEffect(() => {
 		(async () => {
 			const data = await storage.get('settings');
 
-			setSettings(JSON.parse(data));
-		})();
-	}, []);
-
-	useEffect(() => {
-		(async () => {
-			const data = await storage.get('settings');
-
-			await storage.set('settings', JSON.stringify({...settings, ...JSON.parse(data)}));
+			await storage.set('settings', JSON.stringify({...JSON.parse(data), ...settings}));
 		})();
 	}, [settings]);
 
