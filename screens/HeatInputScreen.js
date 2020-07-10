@@ -159,7 +159,7 @@ const HeatInputScreen = ({navigation}) => {
 				Length: `${data.length} ${settings?.lengthImperial ? 'in' : 'mm'}`,
 				Time: sec((data.time).toString()),
 				'Efficiency factor': data.efficiencyFactor,
-				Result: `${Math.round((result + Number.EPSILON) * 1000) / 1000} kJ/${settings?.resultUnit}`
+				'Heat Input': `${Math.round((result + Number.EPSILON) * 1000) / 1000} kJ/${settings?.resultUnit}`
 			}, ...custom),
 			...settings?.resultHistory
 		]});
