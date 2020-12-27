@@ -399,7 +399,7 @@ const HeatInputScreen = ({navigation}) => {
 						/>
 					))}
 					{!settings?.totalEnergy &&
-						<View style={{alignItems: 'center', paddingTop: Platform.OS === 'android' ? 20 : 0}}>
+						<View style={{alignItems: 'center', marginTop: Platform.OS === 'android' ? 20 : -40}}>
 							<Controller
 								control={control}
 								render={({onChange, value}) => (

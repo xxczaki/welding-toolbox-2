@@ -6,6 +6,7 @@
   <img src="media/screenshot_1.jpeg" height="400">
   <img src="media/screenshot_2.jpeg" height="400">
   <img src="media/screenshot_3.jpeg" height="400">
+  <img src="media/screenshot_4.jpeg" height="400">
 </div>
 
 ## Installation

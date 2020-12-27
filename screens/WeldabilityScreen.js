@@ -18,7 +18,7 @@ const WeldabilityScreen = () => {
 
 	const {control, handleSubmit, reset} = useForm({
 		defaultValues: {
-			coal: '',
+			carbon: '',
 			manganese: '',
 			chromium: '',
 			molybdenum: '',
@@ -34,7 +34,7 @@ const WeldabilityScreen = () => {
 	const onSubmit = data => {
 		Keyboard.dismiss();
 
-		const coal = Number(data.coal.replace(/,/g, '.'));
+		const carbon = Number(data.carbon.replace(/,/g, '.'));
 		const manganese = Number(data.manganese.replace(/,/g, '.'));
 		const chromium = Number(data.chromium.replace(/,/g, '.'));
 		const molybdenum = Number(data.molybdenum.replace(/,/g, '.'));
@@ -46,7 +46,7 @@ const WeldabilityScreen = () => {
 		const nitrogen = Number(data.nitrogen.replace(/,/g, '.'));
 
 		const ceqCetData = {
-			coal,
+			carbon,
 			manganese,
 			chromium,
 			molybdenum,
@@ -57,7 +57,7 @@ const WeldabilityScreen = () => {
 
 		const ceAwsData = {
 			silicon,
-			coal,
+			carbon,
 			manganese,
 			chromium,
 			molybdenum,
@@ -69,7 +69,7 @@ const WeldabilityScreen = () => {
 		const pcmData = {
 			silicon,
 			boron,
-			coal,
+			carbon,
 			manganese,
 			chromium,
 			molybdenum,
@@ -141,7 +141,7 @@ const WeldabilityScreen = () => {
 									<TextInput
 										style={{width: 160, marginBottom: 15}}
 										keyboardType="numeric"
-										label="Coal (C)"
+										label="Carbon (C)"
 										value={value}
 										maxLength={10}
 										mode="outlined"
@@ -149,7 +149,7 @@ const WeldabilityScreen = () => {
 										onChangeText={value => onChange(value)}
 									/>
 								)}
-								name="coal"
+								name="carbon"
 								rules={{required: true}}
 								defaultValue=""
 							/>
