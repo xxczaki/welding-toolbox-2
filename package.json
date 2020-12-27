@@ -5,40 +5,38 @@
         "ios": "react-native run-ios"
     },
     "dependencies": {
-        "@gorhom/animated-tabbar": "^2.0.0",
-        "@hookform/resolvers": "0.0.6",
-        "@react-native-community/async-storage": "^2.0.0-rc.3",
-        "@react-native-community/async-storage-backend-legacy": "^2.0.0-rc.0",
-        "@react-native-community/clipboard": "^1.2.3",
+        "@gorhom/animated-tabbar": "^2.1.0",
+        "@hookform/resolvers": "1.2.0",
+        "@react-native-async-storage/async-storage": "^1.13.2",
+        "@react-native-community/clipboard": "^1.5.1",
         "@react-native-community/masked-view": "^0.1.10",
-        "@react-native-community/picker": "^1.6.5",
-        "@react-navigation/bottom-tabs": "^5.7.2",
-        "@react-navigation/native": "^5.7.1",
-        "camelcase": "^6.0.0",
+        "@react-native-picker/picker": "^1.9.8",
+        "@react-navigation/bottom-tabs": "^5.11.2",
+        "@react-navigation/native": "^5.8.10",
+        "camelcase": "^6.2.0",
+        "nanoid": "^3.1.20",
         "react": "16.13.1",
-        "react-dom": "16.13.1",
-        "react-hook-form": "^6.0.8",
+        "react-hook-form": "^6.13.1",
         "react-native": "0.63.1",
         "react-native-easy-grid": "^0.2.2",
         "react-native-fs": "^2.16.6",
-        "react-native-gesture-handler": "~1.6.1",
-        "react-native-paper": "^4.0.1",
+        "react-native-gesture-handler": "~1.9.0",
+        "react-native-paper": "^4.5.0",
         "react-native-reanimated": "~1.9.0",
-        "react-native-safe-area-context": "^3.1.1",
+        "react-native-safe-area-context": "^3.1.9",
         "react-native-screens": "2.9.0",
-        "react-native-share": "^3.7.0",
+        "react-native-share": "^5.1.0",
         "react-native-svg": "^12.1.0",
-        "react-native-vector-icons": "^7.0.0",
+        "react-native-vector-icons": "^7.1.0",
         "sec": "^1.0.0",
-        "styled-components": "^5.1.1",
+        "styled-components": "^5.2.1",
         "welding-utils": "^1.1.0",
-        "xlsx": "^0.16.4",
+        "xlsx": "^0.16.9",
         "yup": "^0.29.1"
     },
     "devDependencies": {
         "@babel/core": "^7.10.5",
         "@babel/runtime": "^7.10.5",
-        "babel-eslint": "^10.1.0",
         "babel-jest": "26.1.0",
         "eslint-config-xo-react": "^0.23.0",
         "eslint-plugin-react": "^7.20.3",
@@ -47,21 +45,15 @@
         "jetifier": "^1.6.6",
         "metro-react-native-babel-preset": "0.60.0",
         "react-test-renderer": "16.13.1",
-        "xo": "^0.32.1"
+        "xo": "^0.36.1"
     },
     "private": true,
     "xo": {
-        "parser": "babel-eslint",
         "envs": [
             "node",
             "browser"
         ],
         "extends": "xo-react",
-        "settings": {
-            "react": {
-                "version": "16.11"
-            }
-        },
         "rules": {
             "unicorn/filename-case": "off",
             "react/prop-types": "off",

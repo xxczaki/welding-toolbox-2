@@ -1,13 +1,8 @@
-import AsyncStorageFactory from '@react-native-community/async-storage';
-import LegacyStorage from '@react-native-community/async-storage-backend-legacy';
-
-const legacyStorage = new LegacyStorage();
-
-const storage = AsyncStorageFactory.create(legacyStorage);
+import storage from '@react-native-async-storage/async-storage';
 
 // If the storage is empty, supply some defaults
 (async () => {
-	const data = await storage.get('settings');
+	const data = await storage.getItem('settings');
 
 	const defaults = {
 		resultUnit: 'mm',
@@ -18,7 +13,7 @@ const storage = AsyncStorageFactory.create(legacyStorage);
 	};
 
 	if (!data || Object.entries(JSON.parse(data)).length === 0) {
-		await storage.set('settings', JSON.stringify(defaults));
+		await storage.setItem('settings', JSON.stringify(defaults));
 	}
 })();
 

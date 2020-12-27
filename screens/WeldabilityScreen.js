@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Keyboard, ScrollView, View} from 'react-native';
+import {Keyboard, ScrollView, View, KeyboardAvoidingView} from 'react-native';
 import {Card, TextInput, Text, FAB as Fab, Appbar} from 'react-native-paper';
 import {Col, Grid} from 'react-native-easy-grid';
 import {useForm, Controller} from 'react-hook-form';
@@ -116,199 +116,211 @@ const WeldabilityScreen = () => {
 				<Appbar.Content title="Welding Toolbox 2"/>
 				<Appbar.Action icon="delete" onPress={resetForm}/>
 			</Appbar.Header>
-			<ScrollView
-				contentContainerStyle={{alignItems: 'center', flexGrow: 1, backgroundColor: '#121212'}}
-				keyboardShouldPersistTaps="handled"
-			>
-				<Card style={{height: 100, width: '95%', marginTop: 20, marginBottom: 10}}>
-					<Card.Title title="Results"/>
-					<Card.Content>
-						<Inline>
-							<Text>CEQ: {result.ceq}</Text>
-							<Text>CET: {result.cet}</Text>
-							<Text>CE (AWS): {result.ceAws}</Text>
-							<Text>PCM: {result.pcm}</Text>
-							<Text>PREN: {result.pren}</Text>
-						</Inline>
-					</Card.Content>
-				</Card>
-				<Grid style={{paddingBottom: 70}}>
-					<Col style={{alignItems: 'center'}}>
-						<Controller
-							control={control}
-							render={({onChange, onBlur, value}) => (
-								<TextInput
-									style={{width: 160, marginBottom: 15}}
-									keyboardType="numeric"
-									label="Coal (C)"
-									value={value}
-									maxLength={10}
-									onBlur={onBlur}
-									onChangeText={value => onChange(value)}
-								/>
-							)}
-							name="coal"
-							rules={{required: true}}
-							defaultValue=""
-						/>
-						<Controller
-							control={control}
-							render={({onChange, onBlur, value}) => (
-								<TextInput
-									style={{width: 160, marginBottom: 15}}
-									keyboardType="numeric"
-									label="Manganese (Mn)"
-									value={value}
-									maxLength={10}
-									onBlur={onBlur}
-									onChangeText={value => onChange(value)}
-								/>
-							)}
-							name="manganese"
-							rules={{required: true}}
-							defaultValue=""
-						/>
-						<Controller
-							control={control}
-							render={({onChange, onBlur, value}) => (
-								<TextInput
-									style={{width: 160, marginBottom: 15}}
-									keyboardType="numeric"
-									label="Silicon (Si)"
-									value={value}
-									maxLength={10}
-									onBlur={onBlur}
-									onChangeText={value => onChange(value)}
-								/>
-							)}
-							name="silicon"
-							rules={{required: true}}
-							defaultValue=""
-						/>
-						<Controller
-							control={control}
-							render={({onChange, onBlur, value}) => (
-								<TextInput
-									style={{width: 160, marginBottom: 15}}
-									keyboardType="numeric"
-									label="Chromium (Cr)"
-									value={value}
-									maxLength={10}
-									onBlur={onBlur}
-									onChangeText={value => onChange(value)}
-								/>
-							)}
-							name="chromium"
-							rules={{required: true}}
-							defaultValue=""
-						/>
-						<Controller
-							control={control}
-							render={({onChange, onBlur, value}) => (
-								<TextInput
-									style={{width: 160, marginBottom: 15}}
-									keyboardType="numeric"
-									label="Nickel (Ni)"
-									value={value}
-									maxLength={10}
-									onBlur={onBlur}
-									onChangeText={value => onChange(value)}
-								/>
-							)}
-							name="nickel"
-							rules={{required: true}}
-							defaultValue=""
-						/>
-					</Col>
-					<Col style={{alignItems: 'center'}}>
-						<Controller
-							control={control}
-							render={({onChange, onBlur, value}) => (
-								<TextInput
-									style={{width: 160, marginBottom: 15}}
-									keyboardType="numeric"
-									label="Molybdenum (Mo)"
-									value={value}
-									maxLength={10}
-									onBlur={onBlur}
-									onChangeText={value => onChange(value)}
-								/>
-							)}
-							name="molybdenum"
-							rules={{required: true}}
-							defaultValue=""
-						/>
-						  					<Controller
-							control={control}
-							render={({onChange, onBlur, value}) => (
-								<TextInput
-									style={{width: 160, marginBottom: 15}}
-									keyboardType="numeric"
-									label="Copper (Cu)"
-									value={value}
-									maxLength={10}
-									onBlur={onBlur}
-									onChangeText={value => onChange(value)}
-								/>
-							)}
-							name="copper"
-							rules={{required: true}}
-							defaultValue=""
-						/>
-						  					<Controller
-							control={control}
-							render={({onChange, onBlur, value}) => (
-								<TextInput
-									style={{width: 160, marginBottom: 15}}
-									keyboardType="numeric"
-									label="Vanadium (V)"
-									value={value}
-									maxLength={10}
-									onBlur={onBlur}
-									onChangeText={value => onChange(value)}
-								/>
-							)}
-							name="vanadium"
-							rules={{required: true}}
-							defaultValue=""
-						/>
-						  					<Controller
-							control={control}
-							render={({onChange, onBlur, value}) => (
-								<TextInput
-									style={{width: 160, marginBottom: 15}}
-									keyboardType="numeric"
-									label="Nitrogen (N)"
-									value={value}
-									maxLength={10}
-									onBlur={onBlur}
-									onChangeText={value => onChange(value)}
-								/>
-							)}
-							name="nitrogen"
-							rules={{required: true}}
-							defaultValue=""
-						/>
-						  					<Controller
-							control={control}
-							render={({onChange, onBlur, value}) => (
-								<TextInput
-									style={{width: 160, marginBottom: 15}}
-									keyboardType="numeric"
-									label="Boron (B)"
-									value={value}
-									maxLength={10}
-									onBlur={onBlur}
-									onChangeText={value => onChange(value)}
-								/>
-							)}
-							name="boron"
-							rules={{required: true}}
-							defaultValue=""
-						/>
-					</Col>
-				</Grid>
-			</ScrollView>
+			<KeyboardAvoidingView enabled style={{flex: 1, flexDirection: 'column', justifyContent: 'center', backgroundColor: '#121212'}} behavior="padding" keyboardVerticalOffset={50}>
+				<ScrollView
+					contentContainerStyle={{alignItems: 'center', flexGrow: 1, backgroundColor: '#121212'}}
+					keyboardShouldPersistTaps="handled"
+				>
+					<Card style={{height: 100, width: '95%', marginTop: 15, marginBottom: 10}}>
+						<Card.Title title="Results"/>
+						<Card.Content>
+							<Inline>
+								<Text>CEQ: {result.ceq}</Text>
+								<Text>CET: {result.cet}</Text>
+								<Text>CE (AWS): {result.ceAws}</Text>
+								<Text>PCM: {result.pcm}</Text>
+								<Text>PREN: {result.pren}</Text>
+							</Inline>
+						</Card.Content>
+					</Card>
+					<Grid style={{paddingBottom: 70}}>
+						<Col style={{alignItems: 'center'}}>
+							<Controller
+								control={control}
+								render={({onChange, onBlur, value}) => (
+									<TextInput
+										style={{width: 160, marginBottom: 15}}
+										keyboardType="numeric"
+										label="Coal (C)"
+										value={value}
+										maxLength={10}
+										mode="outlined"
+										onBlur={onBlur}
+										onChangeText={value => onChange(value)}
+									/>
+								)}
+								name="coal"
+								rules={{required: true}}
+								defaultValue=""
+							/>
+							<Controller
+								control={control}
+								render={({onChange, onBlur, value}) => (
+									<TextInput
+										style={{width: 160, marginBottom: 15}}
+										keyboardType="numeric"
+										label="Manganese (Mn)"
+										value={value}
+										maxLength={10}
+										mode="outlined"
+										onBlur={onBlur}
+										onChangeText={value => onChange(value)}
+									/>
+								)}
+								name="manganese"
+								rules={{required: true}}
+								defaultValue=""
+							/>
+							<Controller
+								control={control}
+								render={({onChange, onBlur, value}) => (
+									<TextInput
+										style={{width: 160, marginBottom: 15}}
+										keyboardType="numeric"
+										label="Silicon (Si)"
+										value={value}
+										maxLength={10}
+										mode="outlined"
+										onBlur={onBlur}
+										onChangeText={value => onChange(value)}
+									/>
+								)}
+								name="silicon"
+								rules={{required: true}}
+								defaultValue=""
+							/>
+							<Controller
+								control={control}
+								render={({onChange, onBlur, value}) => (
+									<TextInput
+										style={{width: 160, marginBottom: 15}}
+										keyboardType="numeric"
+										label="Chromium (Cr)"
+										value={value}
+										maxLength={10}
+										mode="outlined"
+										onBlur={onBlur}
+										onChangeText={value => onChange(value)}
+									/>
+								)}
+								name="chromium"
+								rules={{required: true}}
+								defaultValue=""
+							/>
+							<Controller
+								control={control}
+								render={({onChange, onBlur, value}) => (
+									<TextInput
+										style={{width: 160, marginBottom: 15}}
+										keyboardType="numeric"
+										label="Nickel (Ni)"
+										value={value}
+										maxLength={10}
+										mode="outlined"
+										onBlur={onBlur}
+										onChangeText={value => onChange(value)}
+									/>
+								)}
+								name="nickel"
+								rules={{required: true}}
+								defaultValue=""
+							/>
+						</Col>
+						<Col style={{alignItems: 'center'}}>
+							<Controller
+								control={control}
+								render={({onChange, onBlur, value}) => (
+									<TextInput
+										style={{width: 160, marginBottom: 15}}
+										keyboardType="numeric"
+										label="Molybdenum (Mo)"
+										value={value}
+										maxLength={10}
+										mode="outlined"
+										onBlur={onBlur}
+										onChangeText={value => onChange(value)}
+									/>
+								)}
+								name="molybdenum"
+								rules={{required: true}}
+								defaultValue=""
+							/>
+							<Controller
+								control={control}
+								render={({onChange, onBlur, value}) => (
+									<TextInput
+										style={{width: 160, marginBottom: 15}}
+										keyboardType="numeric"
+										label="Copper (Cu)"
+										value={value}
+										maxLength={10}
+										mode="outlined"
+										onBlur={onBlur}
+										onChangeText={value => onChange(value)}
+									/>
+								)}
+								name="copper"
+								rules={{required: true}}
+								defaultValue=""
+							/>
+							<Controller
+								control={control}
+								render={({onChange, onBlur, value}) => (
+									<TextInput
+										style={{width: 160, marginBottom: 15}}
+										keyboardType="numeric"
+										label="Vanadium (V)"
+										value={value}
+										maxLength={10}
+										mode="outlined"
+										onBlur={onBlur}
+										onChangeText={value => onChange(value)}
+									/>
+								)}
+								name="vanadium"
+								rules={{required: true}}
+								defaultValue=""
+							/>
+							<Controller
+								control={control}
+								render={({onChange, onBlur, value}) => (
+									<TextInput
+										style={{width: 160, marginBottom: 15}}
+										keyboardType="numeric"
+										label="Nitrogen (N)"
+										value={value}
+										maxLength={10}
+										mode="outlined"
+										onBlur={onBlur}
+										onChangeText={value => onChange(value)}
+									/>
+								)}
+								name="nitrogen"
+								rules={{required: true}}
+								defaultValue=""
+							/>
+							<Controller
+								control={control}
+								render={({onChange, onBlur, value}) => (
+									<TextInput
+										style={{width: 160, marginBottom: 15}}
+										keyboardType="numeric"
+										label="Boron (B)"
+										value={value}
+										maxLength={10}
+										mode="outlined"
+										onBlur={onBlur}
+										onChangeText={value => onChange(value)}
+									/>
+								)}
+								name="boron"
+								rules={{required: true}}
+								defaultValue=""
+							/>
+						</Col>
+					</Grid>
+				</ScrollView>
+			</KeyboardAvoidingView>
 			<Fab
 				style={{position: 'absolute', right: 20, bottom: 20, backgroundColor: '#4caf50'}}
 				color="#000"
