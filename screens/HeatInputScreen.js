@@ -326,7 +326,6 @@ const HeatInputScreen = ({navigation}) => {
 											icon="stop"
 											onPress={() => {
 												resetStopwatch();
-												setValue('time', '');
 											}}
 										/>
 									)}
@@ -399,13 +398,13 @@ const HeatInputScreen = ({navigation}) => {
 						/>
 					))}
 					{!settings?.totalEnergy &&
-						<View style={{alignItems: 'center', marginTop: Platform.OS === 'android' ? 20 : -40}}>
+						<View style={{alignItems: 'center', marginTop: Platform.OS === 'android' ? 20 : (settings?.customFields?.length > 0 ? -20 : -45)}}>
 							<Controller
 								control={control}
 								render={({onChange, value}) => (
 									<Picker
 										selectedValue={value}
-										style={{color: 'gray', width: '85%'}}
+										style={{color: 'gray', width: '100%'}}
 										itemStyle={{color: 'gray'}}
 										onValueChange={value => onChange(value)}
 									>
