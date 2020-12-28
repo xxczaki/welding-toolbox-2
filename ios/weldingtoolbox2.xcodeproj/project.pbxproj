@@ -15,11 +15,11 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* weldingtoolbox2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* weldingtoolbox2Tests.m */; };
-		328865737314972D03D046C8 /* libPods-weldingtoolbox2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D689134932E2F6FBB7A3430 /* libPods-weldingtoolbox2.a */; };
-		71CE3C2926CA80F1AD651C79 /* libPods-weldingtoolbox2-weldingtoolbox2Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CBB44DF55ECABB04FE74F02 /* libPods-weldingtoolbox2-weldingtoolbox2Tests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		A723F86D8F9455E534794B19 /* libPods-weldingtoolbox2-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A017E9749D28200F6AA7D5AF /* libPods-weldingtoolbox2-tvOSTests.a */; };
-		FC2CE3853FFD7CFB37215B69 /* libPods-weldingtoolbox2-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A75BF3F2E514F7CED00418DE /* libPods-weldingtoolbox2-tvOS.a */; };
+		9ECC0FF26801295F11B9FA95 /* libPods-weldingtoolbox2-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 864F968EE49F3B31E36CD87B /* libPods-weldingtoolbox2-tvOSTests.a */; };
+		A2659D1038938BC8DA8B2FFA /* libPods-weldingtoolbox2-weldingtoolbox2Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D24E645B38983BD60D018ADA /* libPods-weldingtoolbox2-weldingtoolbox2Tests.a */; };
+		A6C9B88ACFF3906BFD91F649 /* libPods-weldingtoolbox2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D5BC12F1255DD47EC39946 /* libPods-weldingtoolbox2.a */; };
+		F4E1D012C90B3D0EE2696AF8 /* libPods-weldingtoolbox2-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD28957F5B95D129FAD996EC /* libPods-weldingtoolbox2-tvOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,23 +50,23 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = weldingtoolbox2/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = weldingtoolbox2/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = weldingtoolbox2/main.m; sourceTree = "<group>"; };
+		1D762963B32D0EBE3563F33F /* Pods-weldingtoolbox2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2.debug.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2/Pods-weldingtoolbox2.debug.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* weldingtoolbox2-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "weldingtoolbox2-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* weldingtoolbox2-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "weldingtoolbox2-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		39CAF863DC71816FFF66AE4F /* Pods-weldingtoolbox2-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2-tvOSTests/Pods-weldingtoolbox2-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		3D689134932E2F6FBB7A3430 /* libPods-weldingtoolbox2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-weldingtoolbox2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		40449910FEC0B1B54B150361 /* Pods-weldingtoolbox2-weldingtoolbox2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2-weldingtoolbox2Tests.release.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2-weldingtoolbox2Tests/Pods-weldingtoolbox2-weldingtoolbox2Tests.release.xcconfig"; sourceTree = "<group>"; };
-		56D042B4864EE69558DD4ED8 /* Pods-weldingtoolbox2-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2-tvOS.release.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2-tvOS/Pods-weldingtoolbox2-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		6760D6CB78D2F4DD8B4DDAE7 /* Pods-weldingtoolbox2-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2-tvOS/Pods-weldingtoolbox2-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		6A350811A9566119A2B40A9F /* Pods-weldingtoolbox2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2.release.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2/Pods-weldingtoolbox2.release.xcconfig"; sourceTree = "<group>"; };
-		7C60ADCFEC754DB3948498B6 /* Pods-weldingtoolbox2-weldingtoolbox2Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2-weldingtoolbox2Tests.debug.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2-weldingtoolbox2Tests/Pods-weldingtoolbox2-weldingtoolbox2Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		2E48978578A725E65A9716A0 /* Pods-weldingtoolbox2-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2-tvOS.release.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2-tvOS/Pods-weldingtoolbox2-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		3CAD3CDDD56585C9A1152247 /* Pods-weldingtoolbox2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2.release.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2/Pods-weldingtoolbox2.release.xcconfig"; sourceTree = "<group>"; };
+		43AD57202E6E16D1C0FB9AA0 /* Pods-weldingtoolbox2-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2-tvOS/Pods-weldingtoolbox2-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		51D5BC12F1255DD47EC39946 /* libPods-weldingtoolbox2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-weldingtoolbox2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		759FBBDED18343F7BF1B0AD2 /* Pods-weldingtoolbox2-weldingtoolbox2Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2-weldingtoolbox2Tests.debug.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2-weldingtoolbox2Tests/Pods-weldingtoolbox2-weldingtoolbox2Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = weldingtoolbox2/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		87FBC1C354D686A45E46D58C /* Pods-weldingtoolbox2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2.debug.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2/Pods-weldingtoolbox2.debug.xcconfig"; sourceTree = "<group>"; };
-		9CBB44DF55ECABB04FE74F02 /* libPods-weldingtoolbox2-weldingtoolbox2Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-weldingtoolbox2-weldingtoolbox2Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A017E9749D28200F6AA7D5AF /* libPods-weldingtoolbox2-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-weldingtoolbox2-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A75BF3F2E514F7CED00418DE /* libPods-weldingtoolbox2-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-weldingtoolbox2-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC185531C67E6C7001354911 /* Pods-weldingtoolbox2-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2-tvOSTests/Pods-weldingtoolbox2-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		864F968EE49F3B31E36CD87B /* libPods-weldingtoolbox2-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-weldingtoolbox2-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6C7213BC38360ED25A1E7C5 /* Pods-weldingtoolbox2-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2-tvOSTests/Pods-weldingtoolbox2-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		A8B8180F5ED3F1CD3A0B2892 /* Pods-weldingtoolbox2-weldingtoolbox2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2-weldingtoolbox2Tests.release.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2-weldingtoolbox2Tests/Pods-weldingtoolbox2-weldingtoolbox2Tests.release.xcconfig"; sourceTree = "<group>"; };
+		CD28957F5B95D129FAD996EC /* libPods-weldingtoolbox2-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-weldingtoolbox2-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D24E645B38983BD60D018ADA /* libPods-weldingtoolbox2-weldingtoolbox2Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-weldingtoolbox2-weldingtoolbox2Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F3E6A2F39057B49A814DC4BF /* Pods-weldingtoolbox2-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weldingtoolbox2-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-weldingtoolbox2-tvOSTests/Pods-weldingtoolbox2-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71CE3C2926CA80F1AD651C79 /* libPods-weldingtoolbox2-weldingtoolbox2Tests.a in Frameworks */,
+				A2659D1038938BC8DA8B2FFA /* libPods-weldingtoolbox2-weldingtoolbox2Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				328865737314972D03D046C8 /* libPods-weldingtoolbox2.a in Frameworks */,
+				A6C9B88ACFF3906BFD91F649 /* libPods-weldingtoolbox2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC2CE3853FFD7CFB37215B69 /* libPods-weldingtoolbox2-tvOS.a in Frameworks */,
+				F4E1D012C90B3D0EE2696AF8 /* libPods-weldingtoolbox2-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A723F86D8F9455E534794B19 /* libPods-weldingtoolbox2-tvOSTests.a in Frameworks */,
+				9ECC0FF26801295F11B9FA95 /* libPods-weldingtoolbox2-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,10 +141,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				3D689134932E2F6FBB7A3430 /* libPods-weldingtoolbox2.a */,
-				A75BF3F2E514F7CED00418DE /* libPods-weldingtoolbox2-tvOS.a */,
-				A017E9749D28200F6AA7D5AF /* libPods-weldingtoolbox2-tvOSTests.a */,
-				9CBB44DF55ECABB04FE74F02 /* libPods-weldingtoolbox2-weldingtoolbox2Tests.a */,
+				51D5BC12F1255DD47EC39946 /* libPods-weldingtoolbox2.a */,
+				CD28957F5B95D129FAD996EC /* libPods-weldingtoolbox2-tvOS.a */,
+				864F968EE49F3B31E36CD87B /* libPods-weldingtoolbox2-tvOSTests.a */,
+				D24E645B38983BD60D018ADA /* libPods-weldingtoolbox2-weldingtoolbox2Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -152,14 +152,14 @@
 		7EA3B26CB98B5385FF3F8D9F /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				87FBC1C354D686A45E46D58C /* Pods-weldingtoolbox2.debug.xcconfig */,
-				6A350811A9566119A2B40A9F /* Pods-weldingtoolbox2.release.xcconfig */,
-				6760D6CB78D2F4DD8B4DDAE7 /* Pods-weldingtoolbox2-tvOS.debug.xcconfig */,
-				56D042B4864EE69558DD4ED8 /* Pods-weldingtoolbox2-tvOS.release.xcconfig */,
-				39CAF863DC71816FFF66AE4F /* Pods-weldingtoolbox2-tvOSTests.debug.xcconfig */,
-				DC185531C67E6C7001354911 /* Pods-weldingtoolbox2-tvOSTests.release.xcconfig */,
-				7C60ADCFEC754DB3948498B6 /* Pods-weldingtoolbox2-weldingtoolbox2Tests.debug.xcconfig */,
-				40449910FEC0B1B54B150361 /* Pods-weldingtoolbox2-weldingtoolbox2Tests.release.xcconfig */,
+				1D762963B32D0EBE3563F33F /* Pods-weldingtoolbox2.debug.xcconfig */,
+				3CAD3CDDD56585C9A1152247 /* Pods-weldingtoolbox2.release.xcconfig */,
+				43AD57202E6E16D1C0FB9AA0 /* Pods-weldingtoolbox2-tvOS.debug.xcconfig */,
+				2E48978578A725E65A9716A0 /* Pods-weldingtoolbox2-tvOS.release.xcconfig */,
+				A6C7213BC38360ED25A1E7C5 /* Pods-weldingtoolbox2-tvOSTests.debug.xcconfig */,
+				F3E6A2F39057B49A814DC4BF /* Pods-weldingtoolbox2-tvOSTests.release.xcconfig */,
+				759FBBDED18343F7BF1B0AD2 /* Pods-weldingtoolbox2-weldingtoolbox2Tests.debug.xcconfig */,
+				A8B8180F5ED3F1CD3A0B2892 /* Pods-weldingtoolbox2-weldingtoolbox2Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -204,11 +204,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "weldingtoolbox2Tests" */;
 			buildPhases = (
-				D31CDCA9DDFC3F7E9945B9CC /* [CP] Check Pods Manifest.lock */,
+				EBF2BDC4AA546254CED24138 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				60F6A40340C3BFEB332C47DD /* [CP] Copy Pods Resources */,
+				E4E576059E2BAA5ACA817B02 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -224,13 +224,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "weldingtoolbox2" */;
 			buildPhases = (
-				F10930F2B4AFD4248BF4F04F /* [CP] Check Pods Manifest.lock */,
+				21E281883858407B4C9AD165 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				607A2B04F7E3EC93E60EB691 /* [CP] Copy Pods Resources */,
+				DA12FE613359E89D1EBD4CE6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -245,7 +245,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "weldingtoolbox2-tvOS" */;
 			buildPhases = (
-				EF6D0ABD51CE843C8FA59AC6 /* [CP] Check Pods Manifest.lock */,
+				16C76B53787C08C4FCAB60B1 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
@@ -265,7 +265,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "weldingtoolbox2-tvOSTests" */;
 			buildPhases = (
-				3730B61FD3F18AF452574F53 /* [CP] Check Pods Manifest.lock */,
+				DC0E80273969E1DFB55A488F /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -377,21 +377,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native Code And Images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		3730B61FD3F18AF452574F53 /* [CP] Check Pods Manifest.lock */ = {
+		16C76B53787C08C4FCAB60B1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -406,14 +392,50 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-weldingtoolbox2-tvOSTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-weldingtoolbox2-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		607A2B04F7E3EC93E60EB691 /* [CP] Copy Pods Resources */ = {
+		21E281883858407B4C9AD165 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-weldingtoolbox2-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native Code And Images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		DA12FE613359E89D1EBD4CE6 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -463,7 +485,29 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-weldingtoolbox2/Pods-weldingtoolbox2-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		60F6A40340C3BFEB332C47DD /* [CP] Copy Pods Resources */ = {
+		DC0E80273969E1DFB55A488F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-weldingtoolbox2-tvOSTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E4E576059E2BAA5ACA817B02 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -513,7 +557,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-weldingtoolbox2-weldingtoolbox2Tests/Pods-weldingtoolbox2-weldingtoolbox2Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D31CDCA9DDFC3F7E9945B9CC /* [CP] Check Pods Manifest.lock */ = {
+		EBF2BDC4AA546254CED24138 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -529,50 +573,6 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-weldingtoolbox2-weldingtoolbox2Tests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EF6D0ABD51CE843C8FA59AC6 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-weldingtoolbox2-tvOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F10930F2B4AFD4248BF4F04F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-weldingtoolbox2-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -672,7 +672,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C60ADCFEC754DB3948498B6 /* Pods-weldingtoolbox2-weldingtoolbox2Tests.debug.xcconfig */;
+			baseConfigurationReference = 759FBBDED18343F7BF1B0AD2 /* Pods-weldingtoolbox2-weldingtoolbox2Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -695,7 +695,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40449910FEC0B1B54B150361 /* Pods-weldingtoolbox2-weldingtoolbox2Tests.release.xcconfig */;
+			baseConfigurationReference = A8B8180F5ED3F1CD3A0B2892 /* Pods-weldingtoolbox2-weldingtoolbox2Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -715,7 +715,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 87FBC1C354D686A45E46D58C /* Pods-weldingtoolbox2.debug.xcconfig */;
+			baseConfigurationReference = 1D762963B32D0EBE3563F33F /* Pods-weldingtoolbox2.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -739,7 +739,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6A350811A9566119A2B40A9F /* Pods-weldingtoolbox2.release.xcconfig */;
+			baseConfigurationReference = 3CAD3CDDD56585C9A1152247 /* Pods-weldingtoolbox2.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -761,7 +761,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6760D6CB78D2F4DD8B4DDAE7 /* Pods-weldingtoolbox2-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 43AD57202E6E16D1C0FB9AA0 /* Pods-weldingtoolbox2-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -789,7 +789,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 56D042B4864EE69558DD4ED8 /* Pods-weldingtoolbox2-tvOS.release.xcconfig */;
+			baseConfigurationReference = 2E48978578A725E65A9716A0 /* Pods-weldingtoolbox2-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -817,7 +817,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39CAF863DC71816FFF66AE4F /* Pods-weldingtoolbox2-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = A6C7213BC38360ED25A1E7C5 /* Pods-weldingtoolbox2-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -844,7 +844,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DC185531C67E6C7001354911 /* Pods-weldingtoolbox2-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = F3E6A2F39057B49A814DC4BF /* Pods-weldingtoolbox2-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;

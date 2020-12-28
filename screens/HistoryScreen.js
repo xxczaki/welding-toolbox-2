@@ -110,7 +110,7 @@ const HistoryScreen = ({navigation}) => {
 									`Total Energy: ${element['Total energy']}, Length: ${element.Length}` :
 									`V: ${element.Voltage}, A: ${element.Amperage}, L: ${element.Length}, T: ${element.Time}, EF: ${element['Efficiency factor']}`}
 								right={() => (
-									<Button onPress={() => setSettings({...settings, resultHistory: settings?.resultHistory.filter(key => key.timestamp !== element.timestamp)})}>
+									<Button onPress={() => setSettings({...settings, resultHistory: settings?.resultHistory.filter(key => key.Date !== element.Date)})}>
 										Delete
 									</Button>
 								)}
