@@ -191,7 +191,7 @@ const HeatInputScreen = ({navigation}) => {
 					</Card>
 					{!settings?.totalEnergy &&
 						<View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-							<View style={{width: '45%'}}>
+							<View style={{width: '48%'}}>
 								<Controller
 									control={control}
 									render={({onChange, onBlur, value}) => (
@@ -216,7 +216,7 @@ const HeatInputScreen = ({navigation}) => {
 									{errors.amperage?.message}
 								</HelperText>
 							</View>
-							<View style={{width: '45%'}}>
+							<View style={{width: '48%'}}>
 								<Controller
 									control={control}
 									render={({onChange, onBlur, value}) => (
@@ -245,7 +245,7 @@ const HeatInputScreen = ({navigation}) => {
 					<View>
 						<View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
 							{!settings?.totalEnergy ?
-								<View style={{width: '45%'}}>
+								<View style={{width: '48%'}}>
 									<Controller
 										control={control}
 										render={({onChange, onBlur, value}) => (
@@ -270,7 +270,7 @@ const HeatInputScreen = ({navigation}) => {
 										{errors.length?.message}
 									</HelperText>
 								</View> :
-								<View style={{width: '45%'}}>
+								<View style={{width: '48%'}}>
 									<Controller
 										control={control}
 										render={({onChange, onBlur, value}) => (
@@ -296,7 +296,7 @@ const HeatInputScreen = ({navigation}) => {
 									</HelperText>
 								</View>}
 							{!settings?.totalEnergy ?
-								<View style={{width: '45%', position: 'relative'}}>
+								<View style={{width: '48%', position: 'relative'}}>
 									<Controller
 										control={control}
 										render={({onChange, onBlur, value}) => (
@@ -330,7 +330,7 @@ const HeatInputScreen = ({navigation}) => {
 										/>
 									)}
 								</View> :
-								<View style={{width: '45%'}}>
+								<View style={{width: '48%'}}>
 									<Controller
 										control={control}
 										render={({onChange, onBlur, value}) => (
@@ -360,7 +360,7 @@ const HeatInputScreen = ({navigation}) => {
 					{!settings?.totalEnergy &&
 						<View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 30}}>
 							<Button
-								style={{width: '45%'}}
+								style={{width: '48%'}}
 								color="#ff9800"
 								icon={isDiameter ? 'diameter-variant' : 'ruler'}
 								mode="contained"
@@ -369,7 +369,7 @@ const HeatInputScreen = ({navigation}) => {
 								{isDiameter ? 'Diameter' : 'Length'}
 							</Button>
 							<Button
-								style={{width: '45%'}}
+								style={{width: '48%'}}
 								color="#ff9800"
 								icon={isRunning ? 'pause' : (ms > 1000 ? 'play' : 'timer-outline')}
 								mode="contained"

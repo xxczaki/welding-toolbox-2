@@ -139,7 +139,7 @@ const WeldabilityScreen = () => {
 								control={control}
 								render={({onChange, onBlur, value}) => (
 									<TextInput
-										style={{width: 160, marginBottom: 15}}
+										style={{width: '90%', marginBottom: 15}}
 										keyboardType="numeric"
 										label="Carbon (C)"
 										value={value}
@@ -157,7 +157,7 @@ const WeldabilityScreen = () => {
 								control={control}
 								render={({onChange, onBlur, value}) => (
 									<TextInput
-										style={{width: 160, marginBottom: 15}}
+										style={{width: '90%', marginBottom: 15}}
 										keyboardType="numeric"
 										label="Manganese (Mn)"
 										value={value}
@@ -175,7 +175,7 @@ const WeldabilityScreen = () => {
 								control={control}
 								render={({onChange, onBlur, value}) => (
 									<TextInput
-										style={{width: 160, marginBottom: 15}}
+										style={{width: '90%', marginBottom: 15}}
 										keyboardType="numeric"
 										label="Silicon (Si)"
 										value={value}
@@ -193,7 +193,7 @@ const WeldabilityScreen = () => {
 								control={control}
 								render={({onChange, onBlur, value}) => (
 									<TextInput
-										style={{width: 160, marginBottom: 15}}
+										style={{width: '90%', marginBottom: 15}}
 										keyboardType="numeric"
 										label="Chromium (Cr)"
 										value={value}
@@ -211,7 +211,7 @@ const WeldabilityScreen = () => {
 								control={control}
 								render={({onChange, onBlur, value}) => (
 									<TextInput
-										style={{width: 160, marginBottom: 15}}
+										style={{width: '90%', marginBottom: 15}}
 										keyboardType="numeric"
 										label="Nickel (Ni)"
 										value={value}
@@ -231,7 +231,7 @@ const WeldabilityScreen = () => {
 								control={control}
 								render={({onChange, onBlur, value}) => (
 									<TextInput
-										style={{width: 160, marginBottom: 15}}
+										style={{width: '90%', marginBottom: 15}}
 										keyboardType="numeric"
 										label="Molybdenum (Mo)"
 										value={value}
@@ -249,7 +249,7 @@ const WeldabilityScreen = () => {
 								control={control}
 								render={({onChange, onBlur, value}) => (
 									<TextInput
-										style={{width: 160, marginBottom: 15}}
+										style={{width: '90%', marginBottom: 15}}
 										keyboardType="numeric"
 										label="Copper (Cu)"
 										value={value}
@@ -267,7 +267,7 @@ const WeldabilityScreen = () => {
 								control={control}
 								render={({onChange, onBlur, value}) => (
 									<TextInput
-										style={{width: 160, marginBottom: 15}}
+										style={{width: '90%', marginBottom: 15}}
 										keyboardType="numeric"
 										label="Vanadium (V)"
 										value={value}
@@ -285,7 +285,7 @@ const WeldabilityScreen = () => {
 								control={control}
 								render={({onChange, onBlur, value}) => (
 									<TextInput
-										style={{width: 160, marginBottom: 15}}
+										style={{width: '90%', marginBottom: 15}}
 										keyboardType="numeric"
 										label="Nitrogen (N)"
 										value={value}
@@ -303,7 +303,7 @@ const WeldabilityScreen = () => {
 								control={control}
 								render={({onChange, onBlur, value}) => (
 									<TextInput
-										style={{width: 160, marginBottom: 15}}
+										style={{width: '90%', marginBottom: 15}}
 										keyboardType="numeric"
 										label="Boron (B)"
 										value={value}
