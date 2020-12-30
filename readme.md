@@ -11,8 +11,8 @@
 
 ## Installation
 
-<div style="display: flex; flex-direction: row; flex-wrap: wrap; width: 500px; height: 83px">
-    <a href='https://play.google.com/store/apps/details?id=me.kepinski.weldingtoolbox2&hl=en&gl=US&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://raw.githubusercontent.com/steverichey/google-play-badge-svg/master/img/en_get.svg'/></a>
+<div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+    <a href='https://play.google.com/store/apps/details?id=me.kepinski.weldingtoolbox2&hl=en&gl=US&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/badge_new.png'/></a>
     <a href="https://apps.apple.com/us/app/welding-toolbox-2/id1546617906?itsct=apps_box&amp;itscg=30200"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-US?size=250x83&amp;releaseDate=1609200000&h=57f788796e99241f7aa376a56910a7ea" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;"></a>
 </div>
 
