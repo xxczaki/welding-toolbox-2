@@ -2,39 +2,33 @@ import {useState, useEffect, useRef} from 'react';
 
 export const useStopwatch = () => {
 	const [started, setStarted] = useState(false);
-	const [ms, setMs] = useState(1000);
+	const [startTime, setStartTime] = useState(undefined);
+	const [ms, setMs] = useState(0);
 
-	const timeoutRef = useRef();
-	const deltaRef = useRef();
+	const intervalRef = useRef();
 
 	useEffect(() => {
 		if (started) {
-			const id = setTimeout(step, 1000);
+			const id = setInterval(() => {
+				setMs(Date.now() - startTime);
+			}, 50);
 
-			// eslint-disable-next-line no-inner-declarations
-			function step() {
-				const drift = Date.now() - ms;
-
-				setMs(ms + 1000);
-				const id = setTimeout(step, Math.max(0, 1000 - drift));
-				deltaRef.current = id;
-			}
-
-			timeoutRef.current = id;
+			intervalRef.current = id;
 		}
 
-		return () => {
-			clearTimeout(timeoutRef.current);
-			clearTimeout(deltaRef.current);
-		};
+		return () => clearTimeout(intervalRef.current);
 	});
+
 	return {
 		ms,
 		isRunning: started,
-		start: () => setStarted(true),
+		start: () => {
+			setStartTime(Date.now());
+			setStarted(true);
+		},
 		stop: () => setStarted(false),
 		resetStopwatch: () => {
-			setMs(1000);
+			setMs(0);
 			setStarted(false);
 		}
 	};

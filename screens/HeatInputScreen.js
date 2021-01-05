@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {Keyboard, View, ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
@@ -18,6 +18,7 @@ const HeatInputScreen = ({navigation}) => {
 	const [settings, setSettings] = useState({});
 	const [result, setResult] = useState(0);
 	const [isDiameter, setDiameter] = useState(false);
+	const [time, setTime] = useState(0);
 	const {ms, start, stop, resetStopwatch, isRunning} = useStopwatch();
 
 	const fullValidationSchema = object().shape({
@@ -76,15 +77,16 @@ const HeatInputScreen = ({navigation}) => {
 		})();
 	}, [settings]);
 
-	useMemo(() => {
+	useEffect(() => {
 		if (isRunning) {
-			setValue('time', new Date(ms).toISOString().slice(11, -5).toString());
+			setValue('time', new Date(ms + time).toISOString().slice(11, -5).toString());
 		}
-	}, [isRunning, ms, setValue]);
+	}, [isRunning, ms]);
 
 	const handleStartStop = () => {
 		if (isRunning) {
 			stop();
+			setTime(previous => previous + ms);
 		} else {
 			start();
 		}
@@ -168,6 +170,7 @@ const HeatInputScreen = ({navigation}) => {
 	const resetForm = () => {
 		reset();
 		resetStopwatch();
+		setTime(0);
 		setResult(0);
 	};
 
@@ -319,13 +322,14 @@ const HeatInputScreen = ({navigation}) => {
 									>
 										{errors.time?.message}
 									</HelperText>
-									{(isRunning || ms > 1000) && (
+									{(isRunning || ms > 0) && (
 										<IconButton
 											style={{position: 'absolute', right: 0, top: 12, zIndex: 2}}
 											color="#ff9800"
 											icon="stop"
 											onPress={() => {
 												resetStopwatch();
+												setTime(0);
 											}}
 										/>
 									)}
@@ -360,7 +364,7 @@ const HeatInputScreen = ({navigation}) => {
 					{!settings?.totalEnergy &&
 						<View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 30}}>
 							<Button
-								style={{width: '48%'}}
+								style={{width: '48%', height: 40, justifyContent: 'center'}}
 								color="#ff9800"
 								icon={isDiameter ? 'diameter-variant' : 'ruler'}
 								mode="contained"
@@ -369,13 +373,13 @@ const HeatInputScreen = ({navigation}) => {
 								{isDiameter ? 'Diameter' : 'Length'}
 							</Button>
 							<Button
-								style={{width: '48%'}}
+								style={{width: '48%', height: 40, justifyContent: 'center'}}
 								color="#ff9800"
-								icon={isRunning ? 'pause' : (ms > 1000 ? 'play' : 'timer-outline')}
+								icon={isRunning ? 'pause' : (ms > 0 ? 'play' : 'timer-outline')}
 								mode="contained"
 								onPress={handleStartStop}
 							>
-								{isRunning ? 'Pause' : (ms > 1000 ? 'Resume' : 'Measure')}
+								{isRunning ? 'Pause' : (ms > 0 ? 'Resume' : 'Measure')}
 							</Button>
 
 						</View>}
