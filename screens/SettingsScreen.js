@@ -57,8 +57,10 @@ const SettingsScreen = () => {
 	return (
 		<View style={{flex: 1}}>
 			<Appbar.Header>
-				<Appbar.Content title="Welding Toolbox 2"/>
-				<Appbar.Action icon="gift-outline" onPress={() => Linking.openURL('https://www.paypal.me/akepinski')}/>
+                <Appbar.Content title="Welding Toolbox 2" />
+                {Platform.OS === 'android' && (
+                    <Appbar.Action icon="gift-outline" onPress={() => Linking.openURL('https://www.paypal.me/akepinski')}/>
+                )}
 			</Appbar.Header>
 			<KeyboardAvoidingView enabled style={{flex: 1, flexDirection: 'column', justifyContent: 'center', backgroundColor: '#121212'}} behavior="padding" keyboardVerticalOffset={50}>
 				<ScrollView contentContainerStyle={{flexGrow: 1, backgroundColor: '#121212'}} keyboardShouldPersistTaps="handled">
@@ -129,7 +131,12 @@ const SettingsScreen = () => {
 						<List.Accordion
 							title="Custom fields"
 						>
-							<Button icon={settings?.customFields?.length >= 4 ? null : 'plus'} disabled={settings?.customFields?.length >= 4} onPress={showDialog}>
+							<Button
+								icon={settings?.customFields?.length >= 4 ? null : 'plus'}
+								disabled={settings?.customFields?.length >= 4}
+								style={{height: 40, justifyContent: 'center'}}
+								onPress={showDialog}
+							>
 								{settings?.customFields?.length >= 4 ? 'Custom fields limit reached' : 'Add new'}
 							</Button>
 							{settings?.customFields?.length === 0 || !settings?.customFields ? (
