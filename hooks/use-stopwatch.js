@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const useStopwatch = () => {
 	const [started, setStarted] = useState(false);
@@ -30,6 +30,6 @@ export const useStopwatch = () => {
 		resetStopwatch: () => {
 			setMs(0);
 			setStarted(false);
-		}
+		},
 	};
 };

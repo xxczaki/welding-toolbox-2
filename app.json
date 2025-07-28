@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Welding Toolbox 2",
+    "slug": "weldingtoolbox2",
+    "version": "1.11.0",
+    "icon": "assets/images/icon.png",
+    "android": {
+      "package": "me.kepinski.weldingtoolbox2",
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=me.kepinski.weldingtoolbox2",
+      "adaptiveIcon": {
+        "foregroundImage": "assets/images/foreground.png",
+        "monochromeImage": "assets/images/foreground.png",
+        "backgroundColor": "#ff9800",
+        "backgroundImage": "assets/images/background.png"
+      },
+      "versionCode": 3145768
+    },
+    "ios": {
+      "bundleIdentifier": "me.kepinski.weldingtoolbox2",
+      "appleTeamId": "34P8Q35U2Y",
+      "appStoreUrl": "https://apps.apple.com/us/app/welding-toolbox-2/id1546617906",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "githubUrl": "https://github.com/xxczaki/welding-toolbox-2",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#212121",
+    "primaryColor": "#ff9800",
+    "splash": {
+      "backgroundColor": "#212121"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3e28a9e9-36c3-4129-ba51-629ae79ad022"
+      }
+    }
+  }
+}

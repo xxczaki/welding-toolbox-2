@@ -9,7 +9,7 @@ import storage from '@react-native-async-storage/async-storage';
 		lengthImperial: false,
 		totalEnergy: false,
 		resultHistory: [],
-		customFields: []
+		customFields: [],
 	};
 
 	if (!data || Object.entries(JSON.parse(data)).length === 0) {

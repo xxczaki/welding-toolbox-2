@@ -1,4 +1,6 @@
-import {AppRegistry} from 'react-native';
+import 'react-native-gesture-handler';
+
+import {registerRootComponent} from 'expo';
 import App from './App';
 
-AppRegistry.registerComponent('weldingtoolbox2', () => App);
+registerRootComponent(App);
