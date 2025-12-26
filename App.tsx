@@ -1,19 +1,23 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import * as SplashScreen from 'expo-splash-screen';
+import { setBackgroundColorAsync } from 'expo-system-ui';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StatusBar } from 'react-native';
 import { MD3DarkTheme, Provider as PaperProvider } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import {
 	SafeAreaProvider,
 	useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HeatInputScreen from './screens/HeatInputScreen';
 import HistoryScreen from './screens/HistoryScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import WeldabilityScreen from './screens/WeldabilityScreen';
+
+// Prevent the splash screen from auto-hiding
+SplashScreen.preventAutoHideAsync();
 
 const theme = {
 	...MD3DarkTheme,
@@ -97,10 +101,43 @@ const AppContent = () => {
 	);
 };
 
-const App = () => (
-	<SafeAreaProvider>
-		<AppContent />
-	</SafeAreaProvider>
-);
+const App = () => {
+	const [appIsReady, setAppIsReady] = useState(false);
+
+	useEffect(() => {
+		async function prepare() {
+			try {
+				// Set the system UI background color to match the app theme
+				await setBackgroundColorAsync('#212121');
+				// Simulate any async initialization here if needed
+				// For example: loading fonts, data, etc.
+			} catch (e) {
+				console.warn(e);
+			} finally {
+				// Tell the app to render
+				setAppIsReady(true);
+			}
+		}
+
+		prepare();
+	}, []);
+
+	const onLayoutRootView = useCallback(async () => {
+		if (appIsReady) {
+			// Hide the splash screen once the app is ready
+			await SplashScreen.hideAsync();
+		}
+	}, [appIsReady]);
+
+	if (!appIsReady) {
+		return null;
+	}
+
+	return (
+		<SafeAreaProvider onLayout={onLayoutRootView}>
+			<AppContent />
+		</SafeAreaProvider>
+	);
+};
 
 export default App;

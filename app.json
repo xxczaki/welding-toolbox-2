@@ -28,7 +28,9 @@
     "backgroundColor": "#212121",
     "primaryColor": "#ff9800",
     "splash": {
-      "backgroundColor": "#212121"
+      "image": "assets/images/splash.png",
+      "backgroundColor": "#212121",
+      "resizeMode": "contain"
     },
     "extra": {
       "eas": {
