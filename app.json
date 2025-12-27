@@ -1,59 +1,59 @@
 {
-	"expo": {
-		"scheme": "weldingtoolbox2",
-		"name": "Welding Toolbox 2",
-		"slug": "weldingtoolbox2",
-		"version": "1.11.0",
-		"icon": "assets/images/icon.png",
-		"android": {
-			"package": "me.kepinski.weldingtoolbox2",
-			"playStoreUrl": "https://play.google.com/store/apps/details?id=me.kepinski.weldingtoolbox2",
-			"adaptiveIcon": {
-				"foregroundImage": "assets/images/foreground.png",
-				"monochromeImage": "assets/images/foreground.png",
-				"backgroundColor": "#ff9800"
-			},
-			"versionCode": 3145768,
-			"userInterfaceStyle": "dark"
-		},
-		"ios": {
-			"bundleIdentifier": "me.kepinski.weldingtoolbox2",
-			"appleTeamId": "34P8Q35U2Y",
-			"appStoreUrl": "https://apps.apple.com/us/app/welding-toolbox-2/id1546617906",
-			"infoPlist": {
-				"ITSAppUsesNonExemptEncryption": false,
-				"UIUserInterfaceStyle": "Dark"
-			}
-		},
-		"githubUrl": "https://github.com/xxczaki/welding-toolbox-2",
-		"userInterfaceStyle": "dark",
-		"backgroundColor": "#212121",
-		"primaryColor": "#ff9800",
-		"splash": {
-			"image": "assets/images/splash.png",
-			"backgroundColor": "#212121",
-			"resizeMode": "contain"
-		},
-		"extra": {
-			"eas": {
-				"projectId": "3e28a9e9-36c3-4129-ba51-629ae79ad022"
-			}
-		},
-		"plugins": [
-			"expo-router",
-			[
-				"expo-build-properties",
-				{
-					"android": {
-						"enableProguardInReleaseBuilds": true,
-						"enableShrinkResourcesInReleaseBuilds": true,
-						"extraProguardRules": "-keep class com.swmansion.reanimated.** { *; }\n-keep class com.facebook.react.turbomodule.** { *; }"
-					},
-					"ios": {
-						"deploymentTarget": "15.1"
-					}
-				}
-			]
-		]
-	}
+  "expo": {
+    "scheme": "weldingtoolbox2",
+    "name": "Welding Toolbox 2",
+    "slug": "weldingtoolbox2",
+    "version": "1.11.0",
+    "icon": "assets/images/icon.png",
+    "android": {
+      "package": "me.kepinski.weldingtoolbox2",
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=me.kepinski.weldingtoolbox2",
+      "adaptiveIcon": {
+        "foregroundImage": "assets/images/foreground.png",
+        "monochromeImage": "assets/images/foreground.png",
+        "backgroundColor": "#ff9800"
+      },
+      "versionCode": 3145770,
+      "userInterfaceStyle": "dark"
+    },
+    "ios": {
+      "bundleIdentifier": "me.kepinski.weldingtoolbox2",
+      "appleTeamId": "34P8Q35U2Y",
+      "appStoreUrl": "https://apps.apple.com/us/app/welding-toolbox-2/id1546617906",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIUserInterfaceStyle": "Dark"
+      }
+    },
+    "githubUrl": "https://github.com/xxczaki/welding-toolbox-2",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#212121",
+    "primaryColor": "#ff9800",
+    "splash": {
+      "image": "assets/images/splash.png",
+      "backgroundColor": "#212121",
+      "resizeMode": "contain"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3e28a9e9-36c3-4129-ba51-629ae79ad022"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableProguardInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "extraProguardRules": "-keep class com.swmansion.reanimated.** { *; }\n-keep class com.facebook.react.turbomodule.** { *; }"
+          },
+          "ios": {
+            "deploymentTarget": "15.1"
+          }
+        }
+      ]
+    ]
+  }
 }
