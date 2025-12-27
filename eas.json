@@ -5,6 +5,7 @@
 	},
 	"build": {
 		"development": {
+      "credentialsSource": "local",
 			"developmentClient": true,
 			"distribution": "internal",
 			"env": {

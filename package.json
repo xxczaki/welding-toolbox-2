@@ -17,6 +17,7 @@
     "expo": "~54.0.30",
     "expo-clipboard": "~8.0.8",
     "expo-constants": "~18.0.12",
+    "expo-dev-client": "~6.0.20",
     "expo-file-system": "~19.0.21",
     "expo-glass-effect": "~0.1.8",
     "expo-linking": "~8.0.11",

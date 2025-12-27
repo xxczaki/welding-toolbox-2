@@ -79,3 +79,4 @@ dist/
 web-build/
 android/
 ios/
+credentials.json
