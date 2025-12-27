@@ -3,7 +3,7 @@
     "scheme": "weldingtoolbox2",
     "name": "Welding Toolbox 2",
     "slug": "weldingtoolbox2",
-    "version": "1.11.0",
+    "version": "2.0.0",
     "icon": "assets/images/icon.png",
     "android": {
       "package": "me.kepinski.weldingtoolbox2",
