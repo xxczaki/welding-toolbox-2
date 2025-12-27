@@ -1,21 +1,40 @@
 {
-  "cli": {
-    "version": ">= 15.0.10",
-    "appVersionSource": "local"
-  },
-  "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
-    },
-    "preview": {
-      "distribution": "internal"
-    },
-    "production": {
-      "autoIncrement": true
-    }
-  },
-  "submit": {
-    "production": {}
-  }
+	"cli": {
+		"version": ">= 15.0.10",
+		"appVersionSource": "local"
+	},
+	"build": {
+		"development": {
+			"developmentClient": true,
+			"distribution": "internal",
+			"env": {
+				"NODE_ENV": "development"
+			}
+		},
+		"preview": {
+			"distribution": "internal",
+			"env": {
+				"NODE_ENV": "production"
+			}
+		},
+		"production": {
+			"autoIncrement": true,
+			"env": {
+				"NODE_ENV": "production",
+				"EXPO_USE_METRO_WORKSPACE_ROOT": "1"
+			},
+			"android": {
+				"buildType": "app-bundle"
+			},
+			"ios": {
+				"buildConfiguration": "Release"
+			},
+			"cache": {
+				"key": "production-v1"
+			}
+		}
+	},
+	"submit": {
+		"production": {}
+	}
 }
