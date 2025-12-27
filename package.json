@@ -15,6 +15,7 @@
     "@react-native-async-storage/async-storage": "^2.2.0",
     "camelcase": "^9.0.0",
     "expo": "~54.0.30",
+    "expo-build-properties": "^1.0.10",
     "expo-clipboard": "~8.0.8",
     "expo-constants": "~18.0.12",
     "expo-dev-client": "~6.0.20",
@@ -42,7 +43,6 @@
     "@biomejs/biome": "1.9.4",
     "@types/react": "~19.1.10",
     "babel-plugin-transform-remove-console": "^6.9.4",
-    "expo-build-properties": "^1.0.10",
     "typescript": "~5.9.2"
   },
   "private": true,
