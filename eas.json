@@ -9,12 +9,18 @@
 			"distribution": "internal",
 			"env": {
 				"NODE_ENV": "development"
+			},
+			"postInstall": {
+				"command": "pnpm build"
 			}
 		},
 		"preview": {
 			"distribution": "internal",
 			"env": {
 				"NODE_ENV": "production"
+			},
+			"postInstall": {
+				"command": "pnpm build"
 			}
 		},
 		"production": {
@@ -31,6 +37,9 @@
 			},
 			"cache": {
 				"key": "production-v1"
+			},
+			"postInstall": {
+				"command": "pnpm build"
 			}
 		}
 	},
