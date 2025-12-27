@@ -18,22 +18,7 @@
 
 ## Usage
 
-```bash
-# Install dependencies
-$ npm install
-
-# Run Metro bundler
-$ npm start
-
-# Run on Android in development
-$ npm run android
-
-# Run on IOS in development
-$ npm run ios
-
-# Lint
-$ npm test
-```
+WIP
 
 ## Related
 
@@ -43,6 +28,6 @@ $ npm test
 
 MIT
 
-*Google Play and the Google Play logo are trademarks of Google LLC.*
+_Google Play and the Google Play logo are trademarks of Google LLC._
 
-*Apple and the Apple logo are trademarks of Apple Inc., registered in the U.S. and other countries.*
+_Apple and the Apple logo are trademarks of Apple Inc., registered in the U.S. and other countries._

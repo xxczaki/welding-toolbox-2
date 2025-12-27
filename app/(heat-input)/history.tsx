@@ -1,11 +1,11 @@
-import { GlassView } from 'expo-glass-effect';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as FileSystem from 'expo-file-system/legacy';
+import { GlassView } from 'expo-glass-effect';
 import { useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import { SymbolView } from 'expo-symbols';
 import { nanoid } from 'nanoid/non-secure';
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	Alert,
 	KeyboardAvoidingView,
@@ -199,7 +199,8 @@ const HistoryScreen = () => {
 								glassEffectStyle="clear"
 								style={[
 									styles.liquidGlassButtonSmall,
-									Platform.OS === 'android' && styles.glassButtonAndroidFallback,
+									Platform.OS === 'android' &&
+										styles.glassButtonAndroidFallback,
 								]}
 							>
 								<TouchableOpacity
@@ -228,7 +229,8 @@ const HistoryScreen = () => {
 								style={[
 									styles.liquidGlassButtonSquare,
 									{ marginLeft: spacing.xs },
-									Platform.OS === 'android' && styles.glassButtonAndroidFallback,
+									Platform.OS === 'android' &&
+										styles.glassButtonAndroidFallback,
 								]}
 							>
 								<TouchableOpacity
@@ -291,7 +293,8 @@ const HistoryScreen = () => {
 									glassEffectStyle="clear"
 									style={[
 										styles.historyCard,
-										Platform.OS === 'android' && styles.glassCardAndroidFallback,
+										Platform.OS === 'android' &&
+											styles.glassCardAndroidFallback,
 									]}
 								>
 									<View style={styles.historyHeader}>

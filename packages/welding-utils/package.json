@@ -1,0 +1,54 @@
+{
+	"name": "welding-utils",
+	"version": "2.0.0",
+	"description": "Useful utilities related to welding",
+	"author": "Antoni Kępiński",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/xxczaki/welding-toolbox-2.git",
+		"directory": "packages/welding-utils"
+	},
+	"homepage": "https://github.com/xxczaki/welding-toolbox-2/tree/main/packages/welding-utils",
+	"bugs": {
+		"url": "https://github.com/xxczaki/welding-toolbox-2/issues"
+	},
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"default": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
+	"scripts": {
+		"build": "tsc",
+		"clean": "rm -rf dist",
+		"lint": "biome check --write ./src",
+		"tsc": "tsc --noEmit",
+		"test": "node --test --import tsx src/**/*.test.ts",
+		"test:watch": "node --test --watch --import tsx src/**/*.test.ts",
+		"prepublishOnly": "pnpm clean && pnpm build && pnpm test"
+	},
+	"engines": {
+		"node": ">=24"
+	},
+	"sideEffects": false,
+	"devDependencies": {
+		"@biomejs/biome": "2.3.10",
+		"tsx": "^4.19.2",
+		"typescript": "~5.9.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"packageManager": "pnpm@10.26.2"
+}

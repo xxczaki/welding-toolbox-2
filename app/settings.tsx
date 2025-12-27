@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { SymbolView } from 'expo-symbols';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
 	ActionSheetIOS,
 	Alert,
@@ -153,29 +153,22 @@ const SettingsScreen = () => {
 
 	return (
 		<View style={styles.container}>
-			{/* Header */}
-			<View style={styles.header}>
-				<Text style={styles.headerTitle}>Settings</Text>
+		{/* Header */}
+		<View style={styles.header}>
+			<Text style={styles.headerTitle}>Settings</Text>
+			{Platform.OS === 'android' && (
 				<TouchableOpacity
 					onPress={() => Linking.openURL('https://liberapay.com/xxczaki/')}
 					style={styles.headerButton}
 				>
-					{Platform.OS === 'ios' ? (
-						<SymbolView
-							name="gift"
-							size={22}
-							type="hierarchical"
-							tintColor={colors.primary}
-						/>
-					) : (
-						<MaterialCommunityIcons
-							name="gift-outline"
-							size={24}
-							color={colors.primary}
-						/>
-					)}
+					<MaterialCommunityIcons
+						name="gift-outline"
+						size={24}
+						color={colors.primary}
+					/>
 				</TouchableOpacity>
-			</View>
+			)}
+		</View>
 
 			<KeyboardAvoidingView
 				enabled

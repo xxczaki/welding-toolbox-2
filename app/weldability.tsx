@@ -1,19 +1,19 @@
-import { GlassView } from 'expo-glass-effect';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
+import { GlassView } from 'expo-glass-effect';
 import { SymbolView } from 'expo-symbols';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-	KeyboardAvoidingView,
+	Keyboard,
 	Platform,
 	ScrollView,
 	StyleSheet,
 	Text,
 	TextInput,
 	TouchableOpacity,
+	TouchableWithoutFeedback,
 	View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ceAws, ceq, cet, pcm, pren } from 'welding-utils';
 
 import {
@@ -25,7 +25,17 @@ import {
 } from '../theme';
 
 const WeldabilityScreen = () => {
-	const insets = useSafeAreaInsets();
+	// Refs for keyboard navigation
+	const carbonRef = useRef<TextInput>(null);
+	const manganeseRef = useRef<TextInput>(null);
+	const siliconRef = useRef<TextInput>(null);
+	const chromiumRef = useRef<TextInput>(null);
+	const nickelRef = useRef<TextInput>(null);
+	const molybdenumRef = useRef<TextInput>(null);
+	const copperRef = useRef<TextInput>(null);
+	const vanadiumRef = useRef<TextInput>(null);
+	const nitrogenRef = useRef<TextInput>(null);
+	const boronRef = useRef<TextInput>(null);
 
 	// Form state
 	const [carbon, setCarbon] = useState('');
@@ -173,17 +183,20 @@ const WeldabilityScreen = () => {
 	return (
 		<View style={styles.container}>
 			{/* Header */}
-			<View style={styles.header}>
-				<Text style={styles.headerTitle}>Weldability</Text>
-				{hasInputs && (
-					<TouchableOpacity onPress={resetForm} style={styles.headerButton}>
-						<Text style={styles.headerButtonText}>Clear</Text>
-					</TouchableOpacity>
-				)}
-			</View>
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<View style={styles.header}>
+					<Text style={styles.headerTitle}>Weldability</Text>
+					{hasInputs && (
+						<TouchableOpacity onPress={resetForm} style={styles.headerButton}>
+							<Text style={styles.headerButtonText}>Clear</Text>
+						</TouchableOpacity>
+					)}
+				</View>
+			</TouchableWithoutFeedback>
 
 			{/* Results Card - Fixed at top */}
-			<GlassView
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<GlassView
 				glassEffectStyle="clear"
 				style={[
 					styles.resultsCard,
@@ -240,107 +253,173 @@ const WeldabilityScreen = () => {
 					</View>
 				</View>
 			</GlassView>
+			</TouchableWithoutFeedback>
 
-			<KeyboardAvoidingView
-				enabled
-				style={{ flex: 1 }}
-				behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-				keyboardVerticalOffset={0}
+			<ScrollView
+				contentContainerStyle={[
+					styles.scrollContent,
+					{
+						paddingBottom: Platform.OS === 'ios' ? 300 : 20,
+					},
+				]}
+				keyboardShouldPersistTaps="handled"
+				keyboardDismissMode="interactive"
 			>
-				<ScrollView
-					contentContainerStyle={[
-						styles.scrollContent,
-						{
-							paddingBottom: Platform.OS === 'ios' ? insets.bottom + 90 : 20,
-						},
-					]}
-					keyboardShouldPersistTaps="handled"
-				>
 					{/* Input Fields */}
 					<View style={styles.inputsContainer}>
 						<View style={styles.column}>
 							<InputField
+								ref={carbonRef}
 								label="Carbon (C)"
 								value={carbon}
 								onChangeText={setCarbon}
+								returnKeyType="next"
+								onSubmitEditing={() => manganeseRef.current?.focus()}
+								accessibilityLabel="Carbon input field"
+								accessibilityHint="Enter carbon percentage"
 							/>
 							<InputField
+								ref={manganeseRef}
 								label="Manganese (Mn)"
 								value={manganese}
 								onChangeText={setManganese}
+								returnKeyType="next"
+								onSubmitEditing={() => siliconRef.current?.focus()}
+								accessibilityLabel="Manganese input field"
+								accessibilityHint="Enter manganese percentage"
 							/>
 							<InputField
+								ref={siliconRef}
 								label="Silicon (Si)"
 								value={silicon}
 								onChangeText={setSilicon}
+								returnKeyType="next"
+								onSubmitEditing={() => chromiumRef.current?.focus()}
+								accessibilityLabel="Silicon input field"
+								accessibilityHint="Enter silicon percentage"
 							/>
 							<InputField
+								ref={chromiumRef}
 								label="Chromium (Cr)"
 								value={chromium}
 								onChangeText={setChromium}
+								returnKeyType="next"
+								onSubmitEditing={() => nickelRef.current?.focus()}
+								accessibilityLabel="Chromium input field"
+								accessibilityHint="Enter chromium percentage"
 							/>
 							<InputField
+								ref={nickelRef}
 								label="Nickel (Ni)"
 								value={nickel}
 								onChangeText={setNickel}
+								returnKeyType="next"
+								onSubmitEditing={() => molybdenumRef.current?.focus()}
+								accessibilityLabel="Nickel input field"
+								accessibilityHint="Enter nickel percentage"
 							/>
 						</View>
 						<View style={styles.column}>
 							<InputField
+								ref={molybdenumRef}
 								label="Molybdenum (Mo)"
 								value={molybdenum}
 								onChangeText={setMolybdenum}
+								returnKeyType="next"
+								onSubmitEditing={() => copperRef.current?.focus()}
+								accessibilityLabel="Molybdenum input field"
+								accessibilityHint="Enter molybdenum percentage"
 							/>
 							<InputField
+								ref={copperRef}
 								label="Copper (Cu)"
 								value={copper}
 								onChangeText={setCopper}
+								returnKeyType="next"
+								onSubmitEditing={() => vanadiumRef.current?.focus()}
+								accessibilityLabel="Copper input field"
+								accessibilityHint="Enter copper percentage"
 							/>
 							<InputField
+								ref={vanadiumRef}
 								label="Vanadium (V)"
 								value={vanadium}
 								onChangeText={setVanadium}
+								returnKeyType="next"
+								onSubmitEditing={() => nitrogenRef.current?.focus()}
+								accessibilityLabel="Vanadium input field"
+								accessibilityHint="Enter vanadium percentage"
 							/>
 							<InputField
+								ref={nitrogenRef}
 								label="Nitrogen (N)"
 								value={nitrogen}
 								onChangeText={setNitrogen}
+								returnKeyType="next"
+								onSubmitEditing={() => boronRef.current?.focus()}
+								accessibilityLabel="Nitrogen input field"
+								accessibilityHint="Enter nitrogen percentage"
 							/>
 							<InputField
+								ref={boronRef}
 								label="Boron (B)"
 								value={boron}
 								onChangeText={setBoron}
+								returnKeyType="done"
+								accessibilityLabel="Boron input field"
+								accessibilityHint="Enter boron percentage"
 							/>
 						</View>
 					</View>
 				</ScrollView>
-			</KeyboardAvoidingView>
 		</View>
 	);
 };
 
 // Reusable Input Field Component
-const InputField = ({
-	label,
-	value,
-	onChangeText,
-}: {
-	label: string;
-	value: string;
-	onChangeText: (text: string) => void;
-}) => (
-	<View style={styles.inputContainer}>
-		<Text style={styles.inputLabel}>{label}</Text>
-		<TextInput
-			style={styles.input}
-			value={value}
-			onChangeText={onChangeText}
-			keyboardType="decimal-pad"
-			maxLength={10}
-			placeholder="0"
-			placeholderTextColor={colors.textSecondary}
-		/>
-	</View>
+const InputField = React.forwardRef<
+	TextInput,
+	{
+		label: string;
+		value: string;
+		onChangeText: (text: string) => void;
+		returnKeyType?: 'next' | 'done';
+		onSubmitEditing?: () => void;
+		accessibilityLabel?: string;
+		accessibilityHint?: string;
+	}
+>(
+	(
+		{
+			label,
+			value,
+			onChangeText,
+			returnKeyType = 'done',
+			onSubmitEditing,
+			accessibilityLabel,
+			accessibilityHint,
+		},
+		ref,
+	) => (
+		<View style={styles.inputContainer}>
+			<Text style={styles.inputLabel}>{label}</Text>
+			<TextInput
+				ref={ref}
+				style={styles.input}
+				value={value}
+				onChangeText={onChangeText}
+				keyboardType="decimal-pad"
+				maxLength={10}
+				placeholder="0"
+				placeholderTextColor={colors.textSecondary}
+				returnKeyType={returnKeyType}
+				onSubmitEditing={onSubmitEditing}
+				blurOnSubmit={returnKeyType === 'done'}
+				accessibilityLabel={accessibilityLabel}
+				accessibilityHint={accessibilityHint}
+			/>
+		</View>
+	),
 );
 
 const styles = StyleSheet.create({

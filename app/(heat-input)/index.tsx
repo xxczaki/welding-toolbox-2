@@ -1,25 +1,25 @@
-import { GlassView } from 'expo-glass-effect';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
+import { GlassView } from 'expo-glass-effect';
 import { useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { nanoid } from 'nanoid/non-secure';
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
 	ActionSheetIOS,
 	Alert,
-	KeyboardAvoidingView,
+	Keyboard,
 	Platform,
 	ScrollView,
 	StyleSheet,
 	Text,
 	TextInput,
 	TouchableOpacity,
+	TouchableWithoutFeedback,
 	View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import sec from 'sec';
 import { heatInput } from 'welding-utils';
 
 import { useStopwatch } from '../../hooks/use-stopwatch';
@@ -32,10 +32,17 @@ import {
 	typography,
 } from '../../theme';
 import type { HistoryEntry, Settings } from '../../types';
+import { toSeconds } from '../../utils/to-seconds';
 
 const HeatInputScreen = () => {
 	const router = useRouter();
-	const insets = useSafeAreaInsets();
+
+	// Refs for keyboard navigation
+	const amperageRef = useRef<TextInput>(null);
+	const voltageRef = useRef<TextInput>(null);
+	const lengthRef = useRef<TextInput>(null);
+	const timeRef = useRef<TextInput>(null);
+	const totalEnergyRef = useRef<TextInput>(null);
 
 	// Settings
 	const [settings, setSettings] = useState<Settings>({});
@@ -121,7 +128,7 @@ const HeatInputScreen = () => {
 				// Full heat input calculation
 				const amp = Number((amperage || '0').replace(/,/g, '.'));
 				const volt = Number((voltage || '0').replace(/,/g, '.'));
-				const timeInSeconds = sec(time.toString());
+				const timeInSeconds = toSeconds(time.toString());
 				const efficiency = Number((efficiencyFactor || '0').replace(/,/g, '.'));
 
 				// Apply diameter conversion if needed
@@ -152,7 +159,7 @@ const HeatInputScreen = () => {
 			}
 
 			return Math.round((result + Number.EPSILON) * 1000) / 1000;
-		} catch (error) {
+		} catch {
 			return 0;
 		}
 	}, [
@@ -205,7 +212,7 @@ const HeatInputScreen = () => {
 		const amp = Number((amperage || '0').replace(/,/g, '.'));
 		const volt = Number((voltage || '0').replace(/,/g, '.'));
 		const len = Number((length || '0').replace(/,/g, '.'));
-		const timeInSeconds = time ? sec(time.toString()) : null;
+		const timeInSeconds = time ? toSeconds(time.toString()) : null;
 		const efficiency = Number((efficiencyFactor || '0').replace(/,/g, '.'));
 		const energy = Number((totalEnergy || '0').replace(/,/g, '.'));
 
@@ -293,8 +300,9 @@ const HeatInputScreen = () => {
 	return (
 		<View style={styles.container}>
 			{/* Header */}
-			<View style={styles.header}>
-				<Text style={styles.headerTitle}>Heat Input</Text>
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<View style={styles.header}>
+					<Text style={styles.headerTitle}>Heat Input</Text>
 				<View style={styles.headerActions}>
 					<GlassView
 						glassEffectStyle="clear"
@@ -343,8 +351,10 @@ const HeatInputScreen = () => {
 					)}
 				</View>
 			</View>
+			</TouchableWithoutFeedback>
 
-			{/* Result Card - Always Visible at Top */}
+		{/* Result Card - Always Visible at Top */}
+		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 			<GlassView
 				glassEffectStyle="clear"
 				style={[
@@ -376,7 +386,8 @@ const HeatInputScreen = () => {
 								glassEffectStyle="clear"
 								style={[
 									styles.actionButtonGlass,
-									Platform.OS === 'android' && styles.glassButtonAndroidFallback,
+									Platform.OS === 'android' &&
+										styles.glassButtonAndroidFallback,
 								]}
 							>
 								<TouchableOpacity
@@ -406,7 +417,8 @@ const HeatInputScreen = () => {
 								glassEffectStyle="clear"
 								style={[
 									styles.actionButtonGlass,
-									Platform.OS === 'android' && styles.glassButtonAndroidFallback,
+									Platform.OS === 'android' &&
+										styles.glassButtonAndroidFallback,
 								]}
 							>
 								<TouchableOpacity
@@ -434,36 +446,38 @@ const HeatInputScreen = () => {
 					)}
 				</View>
 			</GlassView>
+			</TouchableWithoutFeedback>
 
-			<KeyboardAvoidingView
-				enabled
-				style={{ flex: 1 }}
-				behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-				keyboardVerticalOffset={0}
-			>
-				<ScrollView
-					contentContainerStyle={[
-						styles.scrollContent,
-						{
-							paddingBottom: Platform.OS === 'ios' ? insets.bottom + 20 : 20,
-						},
-					]}
-					keyboardShouldPersistTaps="handled"
-				>
+			<ScrollView
+			contentContainerStyle={[
+				styles.scrollContent,
+				{
+					paddingBottom: Platform.OS === 'ios' ? 300 : 20,
+				},
+			]}
+			keyboardShouldPersistTaps="handled"
+			keyboardDismissMode="interactive"
+		>
 					{/* Total Energy Mode Toggle */}
 					{!settings?.totalEnergy && (
 						<View style={styles.section}>
 							<View style={styles.inputContainer}>
 								<Text style={styles.inputLabel}>Amperage</Text>
 								<View style={styles.inputWithUnit}>
-									<TextInput
-										style={styles.inputFlex}
-										value={amperage}
-										onChangeText={setAmperage}
-										keyboardType="decimal-pad"
-										placeholder="0"
-										placeholderTextColor={colors.textSecondary}
-									/>
+								<TextInput
+									ref={amperageRef}
+									style={styles.inputFlex}
+									value={amperage}
+									onChangeText={setAmperage}
+									keyboardType="decimal-pad"
+									placeholder="0"
+									placeholderTextColor={colors.textSecondary}
+									returnKeyType="next"
+									onSubmitEditing={() => voltageRef.current?.focus()}
+									blurOnSubmit={false}
+									accessibilityLabel="Amperage input field"
+									accessibilityHint="Enter welding amperage in amps"
+								/>
 									<Text style={styles.unitText}>A</Text>
 								</View>
 							</View>
@@ -471,14 +485,20 @@ const HeatInputScreen = () => {
 							<View style={styles.inputContainer}>
 								<Text style={styles.inputLabel}>Voltage</Text>
 								<View style={styles.inputWithUnit}>
-									<TextInput
-										style={styles.inputFlex}
-										value={voltage}
-										onChangeText={setVoltage}
-										keyboardType="decimal-pad"
-										placeholder="0"
-										placeholderTextColor={colors.textSecondary}
-									/>
+								<TextInput
+									ref={voltageRef}
+									style={styles.inputFlex}
+									value={voltage}
+									onChangeText={setVoltage}
+									keyboardType="decimal-pad"
+									placeholder="0"
+									placeholderTextColor={colors.textSecondary}
+									returnKeyType="next"
+									onSubmitEditing={() => lengthRef.current?.focus()}
+									blurOnSubmit={false}
+									accessibilityLabel="Voltage input field"
+									accessibilityHint="Enter welding voltage in volts"
+								/>
 									<Text style={styles.unitText}>V</Text>
 								</View>
 							</View>
@@ -488,78 +508,44 @@ const HeatInputScreen = () => {
 					{/* Length Input */}
 					<View style={styles.section}>
 						<View style={styles.inputContainer}>
-							{/* Segmented Control */}
-							<View style={styles.segmentedControl}>
-								<TouchableOpacity
-									style={[styles.segment, !isDiameter && styles.segmentActive]}
-									onPress={() => setDiameter(false)}
-								>
-									{Platform.OS === 'ios' ? (
-										<SymbolView
-											name="ruler"
-											size={16}
-											type="hierarchical"
-											tintColor={
-												!isDiameter ? colors.text : colors.textSecondary
-											}
-											style={styles.iconTiny}
-										/>
-									) : (
-										<MaterialCommunityIcons
-											name="ruler"
-											size={16}
-											color={!isDiameter ? colors.text : colors.textSecondary}
-										/>
-									)}
-									<Text
-										style={[
-											styles.segmentText,
-											!isDiameter && styles.segmentTextActive,
-										]}
-									>
-										Length
-									</Text>
-								</TouchableOpacity>
-								<TouchableOpacity
-									style={[styles.segment, isDiameter && styles.segmentActive]}
-									onPress={() => setDiameter(true)}
-								>
-									{Platform.OS === 'ios' ? (
-										<SymbolView
-											name="circle.slash"
-											size={16}
-											type="hierarchical"
-											tintColor={
-												isDiameter ? colors.text : colors.textSecondary
-											}
-											style={styles.iconTiny}
-										/>
-									) : (
-										<MaterialCommunityIcons
-											name="diameter-outline"
-											size={16}
-											color={isDiameter ? colors.text : colors.textSecondary}
-										/>
-									)}
-									<Text
-										style={[
-											styles.segmentText,
-											isDiameter && styles.segmentTextActive,
-										]}
-									>
-										Diameter
-									</Text>
-								</TouchableOpacity>
-							</View>
+							<SegmentedControl
+								values={['Length', 'Diameter']}
+								selectedIndex={isDiameter ? 1 : 0}
+								onChange={(event) => {
+									setDiameter(event.nativeEvent.selectedSegmentIndex === 1);
+								}}
+								style={styles.segmentedControl}
+								backgroundColor={colors.background}
+								tintColor={colors.surfaceVariant}
+								fontStyle={{ color: colors.textSecondary, fontSize: 15 }}
+								activeFontStyle={{
+									color: colors.text,
+									fontSize: 15,
+									fontWeight: '600',
+								}}
+								appearance="dark"
+							/>
 
 							<View style={styles.inputWithUnit}>
 								<TextInput
+									ref={lengthRef}
 									style={styles.inputFlex}
 									value={length}
 									onChangeText={setLength}
 									keyboardType="decimal-pad"
 									placeholder="0"
 									placeholderTextColor={colors.textSecondary}
+									returnKeyType={settings?.totalEnergy ? 'next' : 'next'}
+									onSubmitEditing={() => {
+										if (settings?.totalEnergy) {
+											totalEnergyRef.current?.focus();
+										} else {
+											timeRef.current?.focus();
+										}
+									}}
+									blurOnSubmit={false}
+									accessibilityLabel={`${isDiameter ? 'Diameter' : 'Length'} input field`}
+									accessibilityHint={`Enter weld ${isDiameter ? 'diameter' : 'length'} in ${settings?.lengthImperial ? 'inches' : 'millimeters'}`}
 								/>
 								<Text style={styles.unitText}>
 									{settings?.lengthImperial ? 'in' : 'mm'}
@@ -574,14 +560,18 @@ const HeatInputScreen = () => {
 							<View style={styles.inputContainer}>
 								<Text style={styles.inputLabel}>Total Energy</Text>
 								<View style={styles.inputWithUnit}>
-									<TextInput
-										style={styles.inputFlex}
-										value={totalEnergy}
-										onChangeText={setTotalEnergy}
-										keyboardType="decimal-pad"
-										placeholder="0"
-										placeholderTextColor={colors.textSecondary}
-									/>
+								<TextInput
+									ref={totalEnergyRef}
+									style={styles.inputFlex}
+									value={totalEnergy}
+									onChangeText={setTotalEnergy}
+									keyboardType="decimal-pad"
+									placeholder="0"
+									placeholderTextColor={colors.textSecondary}
+									returnKeyType="done"
+									accessibilityLabel="Total energy input field"
+									accessibilityHint="Enter total welding energy in kilojoules"
+								/>
 									<Text style={styles.unitText}>kJ</Text>
 								</View>
 							</View>
@@ -590,55 +580,62 @@ const HeatInputScreen = () => {
 						<>
 							<View style={styles.section}>
 								<View style={styles.inputContainer}>
-									<View style={styles.labelRow}>
-										<Text style={styles.inputLabel}>Time</Text>
-										<View style={styles.timerControls}>
+									<Text style={styles.inputLabel}>Time</Text>
+									<View style={styles.inputWithButtons}>
+									<TextInput
+										ref={timeRef}
+										style={styles.inputFlexTime}
+										value={time}
+										onChangeText={setTime}
+										placeholder="HH:MM:SS"
+										placeholderTextColor={colors.textSecondary}
+										keyboardType="numbers-and-punctuation"
+										returnKeyType="done"
+										accessibilityLabel="Time input field"
+										accessibilityHint="Enter welding time in hours, minutes, and seconds format"
+									/>
+										<View style={styles.timerControlsInline}>
 											{hasTimerValue && (
 												<GlassView
 													glassEffectStyle="clear"
 													style={[
-														styles.timerButtonGlass,
+														styles.timerIconGlass,
 														Platform.OS === 'android' &&
-															styles.glassTimerButtonAndroidFallback,
+															styles.glassButtonAndroidFallback,
 													]}
 												>
 													<TouchableOpacity
 														onPress={handleStopTimer}
-														style={styles.stopwatchButton}
+														style={styles.stopwatchButtonInline}
 													>
 														{Platform.OS === 'ios' ? (
 															<SymbolView
 																name="stop.fill"
-																size={10}
+																size={16}
 																type="monochrome"
 																tintColor={colors.text}
 															/>
 														) : (
 															<MaterialCommunityIcons
 																name="stop"
-																size={10}
+																size={16}
 																color={colors.text}
 															/>
 														)}
-														<Text style={styles.stopwatchText}>Stop</Text>
 													</TouchableOpacity>
 												</GlassView>
 											)}
 											<GlassView
 												glassEffectStyle="clear"
 												style={[
-													styles.timerButtonGlass,
-													isRunning && styles.timerButtonActiveGlass,
+													styles.timerIconGlass,
 													Platform.OS === 'android' &&
-														styles.glassTimerButtonAndroidFallback,
-													Platform.OS === 'android' &&
-														isRunning &&
-														styles.glassTimerButtonActiveAndroidFallback,
+														styles.glassButtonAndroidFallback,
 												]}
 											>
 												<TouchableOpacity
 													onPress={handleStartStop}
-													style={styles.stopwatchButton}
+													style={styles.stopwatchButtonInline}
 												>
 													{Platform.OS === 'ios' ? (
 														<SymbolView
@@ -649,7 +646,7 @@ const HeatInputScreen = () => {
 																		? 'play.fill'
 																		: 'timer'
 															}
-															size={!isRunning && !hasTimerValue ? 12 : 10}
+															size={16}
 															type="monochrome"
 															tintColor={
 																isRunning ? colors.text : colors.primary
@@ -664,34 +661,14 @@ const HeatInputScreen = () => {
 																		? 'play'
 																		: 'timer-outline'
 															}
-															size={!isRunning && !hasTimerValue ? 16 : 10}
+															size={16}
 															color={isRunning ? colors.text : colors.primary}
 														/>
 													)}
-													<Text
-														style={[
-															styles.stopwatchText,
-															isRunning && styles.stopwatchTextActive,
-														]}
-													>
-														{isRunning
-															? 'Pause'
-															: hasTimerValue
-																? 'Resume'
-																: 'Start timer'}
-													</Text>
 												</TouchableOpacity>
 											</GlassView>
 										</View>
 									</View>
-									<TextInput
-										style={styles.input}
-										value={time}
-										onChangeText={setTime}
-										placeholder="HH:MM:SS"
-										placeholderTextColor={colors.textSecondary}
-										keyboardType="numbers-and-punctuation"
-									/>
 								</View>
 							</View>
 
@@ -731,7 +708,6 @@ const HeatInputScreen = () => {
 						</>
 					)}
 				</ScrollView>
-			</KeyboardAvoidingView>
 		</View>
 	);
 };
@@ -926,43 +902,52 @@ const styles = StyleSheet.create({
 	inputLabel: {
 		...commonStyles.inputLabel,
 	},
-	labelRow: {
+	inputWithButtons: {
 		flexDirection: 'row',
-		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginBottom: spacing.xs,
+		backgroundColor: colors.surfaceVariant,
+		borderRadius: borderRadius.md,
+		paddingLeft: spacing.md,
+		paddingRight: spacing.sm,
+		paddingVertical: spacing.xs,
+		minHeight: 44,
+		borderWidth: Platform.OS === 'ios' ? 0 : StyleSheet.hairlineWidth,
+		borderColor: colors.border,
 	},
-	timerControls: {
+	inputFlexTime: {
+		flex: 1,
+		...typography.body,
+		color: colors.text,
+		paddingVertical: spacing.xs,
+		paddingRight: spacing.sm,
+	},
+	timerControlsInline: {
 		flexDirection: 'row',
+		alignItems: 'center',
 		gap: spacing.xs,
 	},
-	timerButtonGlass: {
-		borderRadius: borderRadius.md,
+	timerIconGlass: {
+		width: 32,
+		height: 32,
+		borderRadius: 16,
 		overflow: 'hidden',
 		...Platform.select({
 			ios: {
 				shadowColor: '#000',
-				shadowOffset: { width: 0, height: 2 },
+				shadowOffset: { width: 0, height: 1 },
 				shadowOpacity: 0.2,
-				shadowRadius: 3,
+				shadowRadius: 2,
 			},
 			android: {
-				elevation: 3,
+				elevation: 2,
 			},
 		}),
 	},
-	timerButtonActiveGlass: {
-		...Platform.select({
-			ios: {
-				shadowColor: colors.primary,
-				shadowOffset: { width: 0, height: 2 },
-				shadowOpacity: 0.3,
-				shadowRadius: 4,
-			},
-			android: {
-				elevation: 4,
-			},
-		}),
+	stopwatchButtonInline: {
+		width: 32,
+		height: 32,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	input: {
 		...commonStyles.input,
@@ -998,59 +983,8 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.surfaceVariant,
 	},
 	segmentedControl: {
-		flexDirection: 'row',
-		backgroundColor: colors.surfaceVariant,
-		borderRadius: borderRadius.md,
-		padding: 2,
+		height: 32,
 		marginBottom: spacing.sm,
-	},
-	segment: {
-		flex: 1,
-		flexDirection: 'row',
-		gap: spacing.xs,
-		paddingVertical: spacing.sm,
-		paddingHorizontal: spacing.sm,
-		borderRadius: borderRadius.sm,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	segmentActive: {
-		backgroundColor: colors.surface,
-		...Platform.select({
-			ios: {
-				shadowColor: '#000',
-				shadowOffset: { width: 0, height: 1 },
-				shadowOpacity: 0.1,
-				shadowRadius: 2,
-			},
-			android: {
-				elevation: 2,
-			},
-		}),
-	},
-	segmentText: {
-		...typography.subheadline,
-		color: colors.textSecondary,
-		fontWeight: '500',
-	},
-	segmentTextActive: {
-		color: colors.text,
-		fontWeight: '600',
-	},
-	stopwatchButton: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: spacing.xs,
-		paddingHorizontal: spacing.sm,
-		paddingVertical: spacing.xs,
-	},
-	stopwatchText: {
-		...typography.caption1,
-		color: colors.text,
-		fontWeight: '600',
-	},
-	stopwatchTextActive: {
-		color: colors.text,
 	},
 	selectButton: {
 		backgroundColor: colors.surfaceVariant,
@@ -1081,16 +1015,6 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.surface,
 		borderWidth: StyleSheet.hairlineWidth,
 		borderColor: colors.border,
-	},
-	glassTimerButtonAndroidFallback: {
-		backgroundColor: colors.surfaceVariant,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: colors.border,
-	},
-	glassTimerButtonActiveAndroidFallback: {
-		backgroundColor: colors.surface,
-		borderColor: colors.primary,
-		borderWidth: 1,
 	},
 });
 

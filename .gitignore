@@ -34,11 +34,13 @@ local.properties
 *.keystore
 !debug.keystore
 
-# node.js
+# node.js & pnpm
 #
 node_modules/
 npm-debug.log
 yarn-error.log
+pnpm-debug.log
+.pnpm-store/
 
 # fastlane
 #
@@ -75,8 +77,13 @@ yarn-error.log
 
 # Expo
 .expo
-dist/
 web-build/
+credentials.json
+
+# Expo prebuild generated folders (regenerated via `npx expo prebuild`)
 android/
 ios/
-credentials.json
+
+# Package build outputs
+packages/*/dist/
+packages/*/coverage/
