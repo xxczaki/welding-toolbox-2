@@ -16,7 +16,7 @@
 			"monochromeImage": "assets/images/foreground.png",
 			"backgroundColor": "#ff9800"
 		},
-		"versionCode": 3145770,
+		"versionCode": 3145771,
 		"userInterfaceStyle": "dark",
 		"blockedPermissions": [
 			"android.permission.INTERNET",
@@ -31,6 +31,7 @@
 		"bundleIdentifier": "me.kepinski.weldingtoolbox2",
 		"appleTeamId": "34P8Q35U2Y",
 		"appStoreUrl": "https://apps.apple.com/us/app/welding-toolbox-2/id1546617906",
+		"buildNumber": "3",
 		"supportsTablet": true,
 		"infoPlist": {
 			"ITSAppUsesNonExemptEncryption": false,
