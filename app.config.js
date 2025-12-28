@@ -19,7 +19,7 @@ module.exports = {
 				monochromeImage: 'assets/images/foreground.png',
 				backgroundColor: '#ff9800',
 			},
-			versionCode: 3145772,
+			versionCode: 3145773,
 			userInterfaceStyle: 'dark',
 			// Only block permissions in production builds
 			blockedPermissions: IS_PRODUCTION
@@ -44,7 +44,7 @@ module.exports = {
 			appleTeamId: '34P8Q35U2Y',
 			appStoreUrl:
 				'https://apps.apple.com/us/app/welding-toolbox-2/id1546617906',
-			buildNumber: '4',
+			buildNumber: '5',
 			supportsTablet: true,
 			infoPlist: {
 				ITSAppUsesNonExemptEncryption: false,
