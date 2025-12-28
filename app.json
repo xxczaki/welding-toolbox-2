@@ -19,15 +19,16 @@
 			"versionCode": 3145770,
 			"userInterfaceStyle": "dark"
 		},
-		"ios": {
-			"bundleIdentifier": "me.kepinski.weldingtoolbox2",
-			"appleTeamId": "34P8Q35U2Y",
-			"appStoreUrl": "https://apps.apple.com/us/app/welding-toolbox-2/id1546617906",
-			"infoPlist": {
-				"ITSAppUsesNonExemptEncryption": false,
-				"UIUserInterfaceStyle": "Dark"
-			}
-		},
+	"ios": {
+		"bundleIdentifier": "me.kepinski.weldingtoolbox2",
+		"appleTeamId": "34P8Q35U2Y",
+		"appStoreUrl": "https://apps.apple.com/us/app/welding-toolbox-2/id1546617906",
+		"supportsTablet": true,
+		"infoPlist": {
+			"ITSAppUsesNonExemptEncryption": false,
+			"UIUserInterfaceStyle": "Dark"
+		}
+	},
 		"githubUrl": "https://github.com/xxczaki/welding-toolbox-2",
 		"userInterfaceStyle": "dark",
 		"backgroundColor": "#212121",
