@@ -7,12 +7,10 @@ import {
 } from 'expo-router/unstable-native-tabs';
 import { setBackgroundColorAsync } from 'expo-system-ui';
 import { useEffect } from 'react';
-import { Platform, PlatformColor } from 'react-native';
+import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { initializeStorage } from '../storage';
-
-// Detect if running on iPad
-const isIPad = Platform.OS === 'ios' && Platform.isPad;
+import { isIPad } from '../utils/platform';
 
 export default function TabLayout() {
 	useEffect(() => {
@@ -28,7 +26,7 @@ export default function TabLayout() {
 			<NativeTabs
 				minimizeBehavior="onScrollDown"
 				tintColor="#ff9800"
-				backgroundColor={isIPad ? '#1c1c1e' : '#121212'}
+				backgroundColor={isIPad() ? '#1c1c1e' : '#121212'}
 				indicatorColor="#ff9800"
 				labelStyle={{
 					color: '#ff9800',
@@ -55,10 +53,7 @@ export default function TabLayout() {
 					) : (
 						<Icon
 							src={
-								<VectorIcon
-									family={MaterialCommunityIcons}
-									name="calculator"
-								/>
+								<VectorIcon family={MaterialCommunityIcons} name="calculator" />
 							}
 						/>
 					)}
@@ -70,7 +65,10 @@ export default function TabLayout() {
 					) : (
 						<Icon
 							src={
-								<VectorIcon family={MaterialCommunityIcons} name="cog-outline" />
+								<VectorIcon
+									family={MaterialCommunityIcons}
+									name="cog-outline"
+								/>
 							}
 						/>
 					)}

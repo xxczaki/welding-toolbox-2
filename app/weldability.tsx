@@ -15,9 +15,6 @@ import {
 	View,
 } from 'react-native';
 import { ceAws, ceq, cet, pcm, pren } from 'welding-utils';
-
-const isIPad = Platform.OS === 'ios' && (Platform as any).isPad;
-
 import {
 	borderRadius,
 	colors,
@@ -25,6 +22,7 @@ import {
 	spacing,
 	typography,
 } from '../theme';
+import { isIPad } from '../utils/platform';
 
 const WeldabilityScreen = () => {
 	// Refs for keyboard navigation
@@ -99,50 +97,82 @@ const WeldabilityScreen = () => {
 		const n = Number((nitrogen || '0').replace(/,/g, '.'));
 
 		// Calculate results
-		const ceqCetData = {
-			carbon: c,
-			manganese: mn,
-			chromium: cr,
-			molybdenum: mo,
-			vanadium: v,
-			nickel: ni,
-			copper: cu,
-		};
-		const ceAwsData = {
-			silicon: si,
-			carbon: c,
-			manganese: mn,
-			chromium: cr,
-			molybdenum: mo,
-			vanadium: v,
-			nickel: ni,
-			copper: cu,
-		};
-		const pcmData = {
-			silicon: si,
-			boron: b,
-			carbon: c,
-			manganese: mn,
-			chromium: cr,
-			molybdenum: mo,
-			vanadium: v,
-			nickel: ni,
-			copper: cu,
-		};
-		const prenData = { nitrogen: n, chromium: cr, molybdenum: mo };
+		// CEQ/CET: Require at least carbon to calculate
+		const hasCeqCetData = carbon;
+		let ceqResult = '0';
+		let cetResult = '0';
 
-		const ceqResult = Math.round(ceq(ceqCetData) * 100) / 100;
-		const cetResult = Math.round(cet(ceqCetData) * 100) / 100;
-		const ceAwsResult = Math.round(ceAws(ceAwsData) * 100) / 100;
-		const pcmResult = Math.round(pcm(pcmData) * 100) / 100;
-		const prenResult = Math.round(pren(prenData) * 100) / 100;
+		if (hasCeqCetData) {
+			const ceqCetData = {
+				carbon: c,
+				manganese: mn,
+				chromium: cr,
+				molybdenum: mo,
+				vanadium: v,
+				nickel: ni,
+				copper: cu,
+			};
+			const ceqValue = Math.round(ceq(ceqCetData) * 100) / 100;
+			const cetValue = Math.round(cet(ceqCetData) * 100) / 100;
+			ceqResult = Number.isNaN(ceqValue) ? '0' : ceqValue.toString();
+			cetResult = Number.isNaN(cetValue) ? '0' : cetValue.toString();
+		}
+
+		// CE AWS: Require at least carbon to calculate
+		const hasCeAwsData = carbon;
+		let ceAwsResult = '0';
+
+		if (hasCeAwsData) {
+			const ceAwsData = {
+				silicon: si,
+				carbon: c,
+				manganese: mn,
+				chromium: cr,
+				molybdenum: mo,
+				vanadium: v,
+				nickel: ni,
+				copper: cu,
+			};
+			const ceAwsValue = Math.round(ceAws(ceAwsData) * 100) / 100;
+			ceAwsResult = Number.isNaN(ceAwsValue) ? '0' : ceAwsValue.toString();
+		}
+
+		// PCM: Require at least carbon to calculate
+		const hasPcmData = carbon;
+		let pcmResult = '0';
+
+		if (hasPcmData) {
+			const pcmData = {
+				silicon: si,
+				boron: b,
+				carbon: c,
+				manganese: mn,
+				chromium: cr,
+				molybdenum: mo,
+				vanadium: v,
+				nickel: ni,
+				copper: cu,
+			};
+			const pcmValue = Math.round(pcm(pcmData) * 100) / 100;
+			pcmResult = Number.isNaN(pcmValue) ? '0' : pcmValue.toString();
+		}
+
+		// PREN: Require at least one of chromium, molybdenum, or nitrogen
+		const hasPrenData = chromium || molybdenum || nitrogen;
+		let prenResult = '0';
+
+		if (hasPrenData) {
+			const prenData = { nitrogen: n, chromium: cr, molybdenum: mo };
+			const prenValue = Math.round(pren(prenData) * 100) / 100;
+			prenResult = Number.isNaN(prenValue) ? '0' : prenValue.toString();
+		}
 
 		setResults({
-			ceq: Number.isNaN(ceqResult) ? '0' : ceqResult.toString(),
-			cet: Number.isNaN(cetResult) ? '0' : cetResult.toString(),
-			ceAws: Number.isNaN(ceAwsResult) ? '0' : ceAwsResult.toString(),
-			pcm: Number.isNaN(pcmResult) ? '0' : pcmResult.toString(),
-			pren: Number.isNaN(prenResult) ? '0' : prenResult.toString(),
+			ceq: ceqResult,
+			cet: cetResult,
+			ceAws: ceAwsResult,
+			pcm: pcmResult,
+			pren: prenResult,
 		});
 	}, [
 		carbon,
@@ -189,9 +219,20 @@ const WeldabilityScreen = () => {
 				<View style={styles.header}>
 					<Text style={styles.headerTitle}>Weldability</Text>
 					{hasInputs && (
-						<TouchableOpacity onPress={resetForm} style={styles.headerButton}>
-							<Text style={styles.headerButtonText}>Clear</Text>
-						</TouchableOpacity>
+						<GlassView
+							glassEffectStyle="clear"
+							style={[
+								styles.liquidGlassButtonSquare,
+								Platform.OS === 'android' && styles.glassButtonAndroidFallback,
+							]}
+						>
+							<TouchableOpacity
+								onPress={resetForm}
+								style={styles.headerTextButton}
+							>
+								<Text style={styles.clearButtonText}>Clear</Text>
+							</TouchableOpacity>
+						</GlassView>
 					)}
 				</View>
 			</TouchableWithoutFeedback>
@@ -199,72 +240,147 @@ const WeldabilityScreen = () => {
 			{/* Results Card - Fixed at top */}
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 				<GlassView
-				glassEffectStyle="clear"
-				style={[
-					styles.resultsCard,
-					Platform.OS === 'android' && styles.glassAndroidFallback,
-				]}
-			>
-				<View style={styles.resultsHeader}>
-					<Text style={styles.resultsTitle}>Results</Text>
-					{(results.ceq !== '0' || results.cet !== '0') && (
-						<TouchableOpacity
-							onPress={async () => {
-								const text = `CEQ: ${results.ceq}, CET: ${results.cet}, CE (AWS): ${results.ceAws}, PCM: ${results.pcm}, PREN: ${results.pren}`;
-								await Clipboard.setStringAsync(text);
-							}}
-							style={styles.iconButton}
-						>
-							{Platform.OS === 'ios' ? (
-								<SymbolView
-									name="doc.on.doc"
-									size={18}
-									type="hierarchical"
-									tintColor={colors.textSecondary}
-								/>
-							) : (
-								<MaterialCommunityIcons
-									name="content-copy"
-									size={18}
-									color={colors.textSecondary}
-								/>
-							)}
-						</TouchableOpacity>
-					)}
-				</View>
-				<View style={styles.resultsGrid}>
-					<View style={styles.resultItem}>
-						<Text style={styles.resultLabel}>CEQ</Text>
-						<Text style={results.ceq === '0' ? styles.resultValueEmpty : styles.resultValue}>
-							{results.ceq === '0' ? '—' : results.ceq}
-						</Text>
+					glassEffectStyle="clear"
+					style={[
+						styles.resultsCard,
+						Platform.OS === 'android' && styles.glassAndroidFallback,
+					]}
+				>
+					<View style={styles.resultsHeader}>
+						<Text style={styles.resultsTitle}>Results</Text>
+						{(results.ceq !== '0' || results.cet !== '0') && (
+							<TouchableOpacity
+								onPress={async () => {
+									const text = `CEQ: ${results.ceq}, CET: ${results.cet}, CE (AWS): ${results.ceAws}, PCM: ${results.pcm}, PREN: ${results.pren}`;
+									await Clipboard.setStringAsync(text);
+								}}
+								style={styles.iconButton}
+							>
+								{Platform.OS === 'ios' ? (
+									<SymbolView
+										name="doc.on.doc"
+										size={18}
+										type="hierarchical"
+										tintColor={colors.textSecondary}
+									/>
+								) : (
+									<MaterialCommunityIcons
+										name="content-copy"
+										size={18}
+										color={colors.textSecondary}
+									/>
+								)}
+							</TouchableOpacity>
+						)}
 					</View>
-					<View style={styles.resultItem}>
-						<Text style={styles.resultLabel}>CET</Text>
-						<Text style={results.cet === '0' ? styles.resultValueEmpty : styles.resultValue}>
-							{results.cet === '0' ? '—' : results.cet}
-						</Text>
+					<View style={styles.resultsGrid}>
+						<View style={styles.resultItem}>
+							<Text style={styles.resultLabel}>CEQ</Text>
+							<TouchableOpacity
+								onPress={async () => {
+									if (results.ceq !== '0') {
+										await Clipboard.setStringAsync(results.ceq);
+									}
+								}}
+								disabled={results.ceq === '0'}
+							>
+								<Text
+									style={
+										results.ceq === '0'
+											? styles.resultValueEmpty
+											: styles.resultValue
+									}
+								>
+									{results.ceq === '0' ? '—' : results.ceq}
+								</Text>
+							</TouchableOpacity>
+						</View>
+						<View style={styles.resultItem}>
+							<Text style={styles.resultLabel}>CET</Text>
+							<TouchableOpacity
+								onPress={async () => {
+									if (results.cet !== '0') {
+										await Clipboard.setStringAsync(results.cet);
+									}
+								}}
+								disabled={results.cet === '0'}
+							>
+								<Text
+									style={
+										results.cet === '0'
+											? styles.resultValueEmpty
+											: styles.resultValue
+									}
+								>
+									{results.cet === '0' ? '—' : results.cet}
+								</Text>
+							</TouchableOpacity>
+						</View>
+						<View style={styles.resultItem}>
+							<Text style={styles.resultLabel}>CE (AWS)</Text>
+							<TouchableOpacity
+								onPress={async () => {
+									if (results.ceAws !== '0') {
+										await Clipboard.setStringAsync(results.ceAws);
+									}
+								}}
+								disabled={results.ceAws === '0'}
+							>
+								<Text
+									style={
+										results.ceAws === '0'
+											? styles.resultValueEmpty
+											: styles.resultValue
+									}
+								>
+									{results.ceAws === '0' ? '—' : results.ceAws}
+								</Text>
+							</TouchableOpacity>
+						</View>
+						<View style={styles.resultItem}>
+							<Text style={styles.resultLabel}>PCM</Text>
+							<TouchableOpacity
+								onPress={async () => {
+									if (results.pcm !== '0') {
+										await Clipboard.setStringAsync(results.pcm);
+									}
+								}}
+								disabled={results.pcm === '0'}
+							>
+								<Text
+									style={
+										results.pcm === '0'
+											? styles.resultValueEmpty
+											: styles.resultValue
+									}
+								>
+									{results.pcm === '0' ? '—' : results.pcm}
+								</Text>
+							</TouchableOpacity>
+						</View>
+						<View style={styles.resultItem}>
+							<Text style={styles.resultLabel}>PREN</Text>
+							<TouchableOpacity
+								onPress={async () => {
+									if (results.pren !== '0') {
+										await Clipboard.setStringAsync(results.pren);
+									}
+								}}
+								disabled={results.pren === '0'}
+							>
+								<Text
+									style={
+										results.pren === '0'
+											? styles.resultValueEmpty
+											: styles.resultValue
+									}
+								>
+									{results.pren === '0' ? '—' : results.pren}
+								</Text>
+							</TouchableOpacity>
+						</View>
 					</View>
-					<View style={styles.resultItem}>
-						<Text style={styles.resultLabel}>CE (AWS)</Text>
-						<Text style={results.ceAws === '0' ? styles.resultValueEmpty : styles.resultValue}>
-							{results.ceAws === '0' ? '—' : results.ceAws}
-						</Text>
-					</View>
-					<View style={styles.resultItem}>
-						<Text style={styles.resultLabel}>PCM</Text>
-						<Text style={results.pcm === '0' ? styles.resultValueEmpty : styles.resultValue}>
-							{results.pcm === '0' ? '—' : results.pcm}
-						</Text>
-					</View>
-					<View style={styles.resultItem}>
-						<Text style={styles.resultLabel}>PREN</Text>
-						<Text style={results.pren === '0' ? styles.resultValueEmpty : styles.resultValue}>
-							{results.pren === '0' ? '—' : results.pren}
-						</Text>
-					</View>
-				</View>
-			</GlassView>
+				</GlassView>
 			</TouchableWithoutFeedback>
 
 			<ScrollView
@@ -277,113 +393,113 @@ const WeldabilityScreen = () => {
 				keyboardShouldPersistTaps="handled"
 				keyboardDismissMode="interactive"
 			>
-					{/* Input Fields */}
-					<View style={styles.inputsContainer}>
-						<View style={styles.column}>
-							<InputField
-								ref={carbonRef}
-								label="Carbon (C)"
-								value={carbon}
-								onChangeText={setCarbon}
-								returnKeyType="next"
-								onSubmitEditing={() => manganeseRef.current?.focus()}
-								accessibilityLabel="Carbon input field"
-								accessibilityHint="Enter carbon percentage"
-							/>
-							<InputField
-								ref={manganeseRef}
-								label="Manganese (Mn)"
-								value={manganese}
-								onChangeText={setManganese}
-								returnKeyType="next"
-								onSubmitEditing={() => siliconRef.current?.focus()}
-								accessibilityLabel="Manganese input field"
-								accessibilityHint="Enter manganese percentage"
-							/>
-							<InputField
-								ref={siliconRef}
-								label="Silicon (Si)"
-								value={silicon}
-								onChangeText={setSilicon}
-								returnKeyType="next"
-								onSubmitEditing={() => chromiumRef.current?.focus()}
-								accessibilityLabel="Silicon input field"
-								accessibilityHint="Enter silicon percentage"
-							/>
-							<InputField
-								ref={chromiumRef}
-								label="Chromium (Cr)"
-								value={chromium}
-								onChangeText={setChromium}
-								returnKeyType="next"
-								onSubmitEditing={() => nickelRef.current?.focus()}
-								accessibilityLabel="Chromium input field"
-								accessibilityHint="Enter chromium percentage"
-							/>
-							<InputField
-								ref={nickelRef}
-								label="Nickel (Ni)"
-								value={nickel}
-								onChangeText={setNickel}
-								returnKeyType="next"
-								onSubmitEditing={() => molybdenumRef.current?.focus()}
-								accessibilityLabel="Nickel input field"
-								accessibilityHint="Enter nickel percentage"
-							/>
-						</View>
-						<View style={styles.column}>
-							<InputField
-								ref={molybdenumRef}
-								label="Molybdenum (Mo)"
-								value={molybdenum}
-								onChangeText={setMolybdenum}
-								returnKeyType="next"
-								onSubmitEditing={() => copperRef.current?.focus()}
-								accessibilityLabel="Molybdenum input field"
-								accessibilityHint="Enter molybdenum percentage"
-							/>
-							<InputField
-								ref={copperRef}
-								label="Copper (Cu)"
-								value={copper}
-								onChangeText={setCopper}
-								returnKeyType="next"
-								onSubmitEditing={() => vanadiumRef.current?.focus()}
-								accessibilityLabel="Copper input field"
-								accessibilityHint="Enter copper percentage"
-							/>
-							<InputField
-								ref={vanadiumRef}
-								label="Vanadium (V)"
-								value={vanadium}
-								onChangeText={setVanadium}
-								returnKeyType="next"
-								onSubmitEditing={() => nitrogenRef.current?.focus()}
-								accessibilityLabel="Vanadium input field"
-								accessibilityHint="Enter vanadium percentage"
-							/>
-							<InputField
-								ref={nitrogenRef}
-								label="Nitrogen (N)"
-								value={nitrogen}
-								onChangeText={setNitrogen}
-								returnKeyType="next"
-								onSubmitEditing={() => boronRef.current?.focus()}
-								accessibilityLabel="Nitrogen input field"
-								accessibilityHint="Enter nitrogen percentage"
-							/>
-							<InputField
-								ref={boronRef}
-								label="Boron (B)"
-								value={boron}
-								onChangeText={setBoron}
-								returnKeyType="done"
-								accessibilityLabel="Boron input field"
-								accessibilityHint="Enter boron percentage"
-							/>
-						</View>
+				{/* Input Fields */}
+				<View style={styles.inputsContainer}>
+					<View style={styles.column}>
+						<InputField
+							ref={carbonRef}
+							label="Carbon (C)"
+							value={carbon}
+							onChangeText={setCarbon}
+							returnKeyType="next"
+							onSubmitEditing={() => manganeseRef.current?.focus()}
+							accessibilityLabel="Carbon input field"
+							accessibilityHint="Enter carbon percentage"
+						/>
+						<InputField
+							ref={manganeseRef}
+							label="Manganese (Mn)"
+							value={manganese}
+							onChangeText={setManganese}
+							returnKeyType="next"
+							onSubmitEditing={() => siliconRef.current?.focus()}
+							accessibilityLabel="Manganese input field"
+							accessibilityHint="Enter manganese percentage"
+						/>
+						<InputField
+							ref={siliconRef}
+							label="Silicon (Si)"
+							value={silicon}
+							onChangeText={setSilicon}
+							returnKeyType="next"
+							onSubmitEditing={() => chromiumRef.current?.focus()}
+							accessibilityLabel="Silicon input field"
+							accessibilityHint="Enter silicon percentage"
+						/>
+						<InputField
+							ref={chromiumRef}
+							label="Chromium (Cr)"
+							value={chromium}
+							onChangeText={setChromium}
+							returnKeyType="next"
+							onSubmitEditing={() => nickelRef.current?.focus()}
+							accessibilityLabel="Chromium input field"
+							accessibilityHint="Enter chromium percentage"
+						/>
+						<InputField
+							ref={nickelRef}
+							label="Nickel (Ni)"
+							value={nickel}
+							onChangeText={setNickel}
+							returnKeyType="next"
+							onSubmitEditing={() => molybdenumRef.current?.focus()}
+							accessibilityLabel="Nickel input field"
+							accessibilityHint="Enter nickel percentage"
+						/>
 					</View>
-				</ScrollView>
+					<View style={styles.column}>
+						<InputField
+							ref={molybdenumRef}
+							label="Molybdenum (Mo)"
+							value={molybdenum}
+							onChangeText={setMolybdenum}
+							returnKeyType="next"
+							onSubmitEditing={() => copperRef.current?.focus()}
+							accessibilityLabel="Molybdenum input field"
+							accessibilityHint="Enter molybdenum percentage"
+						/>
+						<InputField
+							ref={copperRef}
+							label="Copper (Cu)"
+							value={copper}
+							onChangeText={setCopper}
+							returnKeyType="next"
+							onSubmitEditing={() => vanadiumRef.current?.focus()}
+							accessibilityLabel="Copper input field"
+							accessibilityHint="Enter copper percentage"
+						/>
+						<InputField
+							ref={vanadiumRef}
+							label="Vanadium (V)"
+							value={vanadium}
+							onChangeText={setVanadium}
+							returnKeyType="next"
+							onSubmitEditing={() => nitrogenRef.current?.focus()}
+							accessibilityLabel="Vanadium input field"
+							accessibilityHint="Enter vanadium percentage"
+						/>
+						<InputField
+							ref={nitrogenRef}
+							label="Nitrogen (N)"
+							value={nitrogen}
+							onChangeText={setNitrogen}
+							returnKeyType="next"
+							onSubmitEditing={() => boronRef.current?.focus()}
+							accessibilityLabel="Nitrogen input field"
+							accessibilityHint="Enter nitrogen percentage"
+						/>
+						<InputField
+							ref={boronRef}
+							label="Boron (B)"
+							value={boron}
+							onChangeText={setBoron}
+							returnKeyType="done"
+							accessibilityLabel="Boron input field"
+							accessibilityHint="Enter boron percentage"
+						/>
+					</View>
+				</View>
+			</ScrollView>
 		</View>
 	);
 };
@@ -443,15 +559,17 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		paddingHorizontal: spacing.md,
-		paddingTop: Platform.OS === 'ios' ? (isIPad ? 110 : 60) : 32,
+		paddingTop: Platform.OS === 'ios' ? (isIPad() ? 110 : 60) : 32,
 		paddingBottom: spacing.md,
 		backgroundColor: colors.background,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		borderBottomColor: colors.border,
 		...Platform.select({
-			ios: isIPad ? {
-				paddingHorizontal: spacing.xxl * 2,
-			} : {},
+			ios: isIPad()
+				? {
+						paddingHorizontal: spacing.xxl * 2,
+					}
+				: {},
 		}),
 	},
 	headerTitle: {
@@ -467,14 +585,49 @@ const styles = StyleSheet.create({
 		color: colors.primary,
 		fontWeight: '600',
 	},
+	liquidGlassButtonSquare: {
+		width: 70,
+		height: 36,
+		borderRadius: borderRadius.xl,
+		overflow: 'hidden',
+		...Platform.select({
+			ios: {
+				shadowColor: '#000',
+				shadowOffset: { width: 0, height: 4 },
+				shadowOpacity: 0.15,
+				shadowRadius: 8,
+			},
+			android: {
+				elevation: 3,
+			},
+		}),
+	},
+	headerTextButton: {
+		width: 70,
+		height: 36,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	clearButtonText: {
+		...typography.body,
+		color: colors.text,
+		fontSize: 15,
+	},
+	glassButtonAndroidFallback: {
+		backgroundColor: 'rgba(255, 255, 255, 0.1)',
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: 'rgba(255, 255, 255, 0.15)',
+	},
 	scrollContent: {
 		paddingHorizontal: spacing.md,
 		paddingTop: 0,
 		paddingBottom: spacing.md,
 		...Platform.select({
-			ios: isIPad ? {
-				paddingHorizontal: spacing.xxl * 2,
-			} : {},
+			ios: isIPad()
+				? {
+						paddingHorizontal: spacing.xxl * 2,
+					}
+				: {},
 		}),
 	},
 	resultsCard: {
@@ -490,10 +643,12 @@ const styles = StyleSheet.create({
 				shadowOffset: { width: 0, height: 2 },
 				shadowOpacity: 0.25,
 				shadowRadius: 4,
-				...(isIPad ? {
-					marginHorizontal: spacing.xxl * 2,
-					padding: spacing.lg,
-				} : {}),
+				...(isIPad()
+					? {
+							marginHorizontal: spacing.xxl * 2,
+							padding: spacing.lg,
+						}
+					: {}),
 			},
 			android: {
 				elevation: 4,
@@ -525,7 +680,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: -spacing.sm,
 	},
 	resultItem: {
-		width: isIPad ? '20%' : '33.33%',
+		width: isIPad() ? '20%' : '33.33%',
 		paddingHorizontal: spacing.sm,
 		marginBottom: spacing.md,
 	},

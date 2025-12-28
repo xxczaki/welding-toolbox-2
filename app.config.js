@@ -42,7 +42,8 @@ module.exports = {
 		ios: {
 			bundleIdentifier: 'me.kepinski.weldingtoolbox2',
 			appleTeamId: '34P8Q35U2Y',
-			appStoreUrl: 'https://apps.apple.com/us/app/welding-toolbox-2/id1546617906',
+			appStoreUrl:
+				'https://apps.apple.com/us/app/welding-toolbox-2/id1546617906',
 			buildNumber: '3',
 			supportsTablet: true,
 			infoPlist: {
@@ -88,4 +89,3 @@ module.exports = {
 		],
 	},
 };
-

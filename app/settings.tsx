@@ -19,9 +19,6 @@ import {
 	View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-const isIPad = Platform.OS === 'ios' && (Platform as any).isPad;
-
 import storage from '../storage';
 import {
 	borderRadius,
@@ -31,6 +28,7 @@ import {
 	typography,
 } from '../theme';
 import type { CustomField, Settings } from '../types';
+import { isIPad } from '../utils/platform';
 
 const SettingsScreen = () => {
 	const insets = useSafeAreaInsets();
@@ -155,22 +153,22 @@ const SettingsScreen = () => {
 
 	return (
 		<View style={styles.container}>
-		{/* Header */}
-		<View style={styles.header}>
-			<Text style={styles.headerTitle}>Settings</Text>
-			{Platform.OS === 'android' && (
-				<TouchableOpacity
-					onPress={() => Linking.openURL('https://liberapay.com/xxczaki/')}
-					style={styles.headerButton}
-				>
-					<MaterialCommunityIcons
-						name="gift-outline"
-						size={24}
-						color={colors.primary}
-					/>
-				</TouchableOpacity>
-			)}
-		</View>
+			{/* Header */}
+			<View style={styles.header}>
+				<Text style={styles.headerTitle}>Settings</Text>
+				{Platform.OS === 'android' && (
+					<TouchableOpacity
+						onPress={() => Linking.openURL('https://liberapay.com/xxczaki/')}
+						style={styles.headerButton}
+					>
+						<MaterialCommunityIcons
+							name="gift-outline"
+							size={24}
+							color={colors.primary}
+						/>
+					</TouchableOpacity>
+				)}
+			</View>
 
 			<KeyboardAvoidingView
 				enabled
@@ -495,15 +493,17 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		paddingHorizontal: spacing.md,
-		paddingTop: Platform.OS === 'ios' ? (isIPad ? 110 : 60) : 32,
+		paddingTop: Platform.OS === 'ios' ? (isIPad() ? 110 : 60) : 32,
 		paddingBottom: spacing.md,
 		backgroundColor: colors.background,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		borderBottomColor: colors.border,
 		...Platform.select({
-			ios: isIPad ? {
-				paddingHorizontal: spacing.xxl * 2,
-			} : {},
+			ios: isIPad()
+				? {
+						paddingHorizontal: spacing.xxl * 2,
+					}
+				: {},
 		}),
 	},
 	headerTitle: {
@@ -516,12 +516,14 @@ const styles = StyleSheet.create({
 	scrollContent: {
 		padding: spacing.md,
 		...Platform.select({
-			ios: isIPad ? {
-				paddingHorizontal: spacing.xxl * 2,
-				maxWidth: 800,
-				width: '100%',
-				alignSelf: 'center',
-			} : {},
+			ios: isIPad()
+				? {
+						paddingHorizontal: spacing.xxl * 2,
+						maxWidth: 800,
+						width: '100%',
+						alignSelf: 'center',
+					}
+				: {},
 		}),
 	},
 	section: {

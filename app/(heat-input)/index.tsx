@@ -21,9 +21,6 @@ import {
 	View,
 } from 'react-native';
 import { heatInput } from 'welding-utils';
-
-const isIPad = Platform.OS === 'ios' && (Platform as any).isPad;
-
 import { useStopwatch } from '../../hooks/use-stopwatch';
 import storage from '../../storage';
 import {
@@ -34,6 +31,7 @@ import {
 	typography,
 } from '../../theme';
 import type { HistoryEntry, Settings } from '../../types';
+import { isIPad } from '../../utils/platform';
 import { toSeconds } from '../../utils/to-seconds';
 
 const HeatInputScreen = () => {
@@ -324,167 +322,168 @@ const HeatInputScreen = () => {
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 				<View style={styles.header}>
 					<Text style={styles.headerTitle}>Heat Input</Text>
-				<View style={styles.headerActions}>
-					<GlassView
-						glassEffectStyle="clear"
-						style={[
-							styles.liquidGlassButton,
-							Platform.OS === 'android' && styles.glassButtonAndroidFallback,
-						]}
-					>
-						<TouchableOpacity
-							onPress={() => router.push('/(heat-input)/history')}
-							style={styles.headerIconButton}
-						>
-							{Platform.OS === 'ios' ? (
-								<SymbolView
-									name="clock.arrow.circlepath"
-									size={24}
-									type="hierarchical"
-									tintColor={colors.text}
-									style={styles.icon}
-								/>
-							) : (
-								<MaterialCommunityIcons
-									name="history"
-									size={24}
-									color={colors.text}
-								/>
-							)}
-						</TouchableOpacity>
-					</GlassView>
-					{hasInputs && (
+					<View style={styles.headerActions}>
 						<GlassView
 							glassEffectStyle="clear"
 							style={[
-								styles.liquidGlassButtonSquare,
-								{ marginLeft: spacing.xs },
+								styles.liquidGlassButton,
 								Platform.OS === 'android' && styles.glassButtonAndroidFallback,
 							]}
 						>
 							<TouchableOpacity
-								onPress={resetForm}
-								style={styles.headerTextButton}
+								onPress={() => router.push('/(heat-input)/history')}
+								style={styles.headerIconButton}
 							>
-								<Text style={styles.clearButtonText}>Clear</Text>
+								{Platform.OS === 'ios' ? (
+									<SymbolView
+										name="clock.arrow.circlepath"
+										size={24}
+										type="hierarchical"
+										tintColor={colors.text}
+										style={styles.icon}
+									/>
+								) : (
+									<MaterialCommunityIcons
+										name="history"
+										size={24}
+										color={colors.text}
+									/>
+								)}
 							</TouchableOpacity>
 						</GlassView>
-					)}
-				</View>
-			</View>
-			</TouchableWithoutFeedback>
-
-		{/* Result Card - Always Visible at Top */}
-		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-			<GlassView
-				glassEffectStyle="clear"
-				style={[
-					styles.resultCard,
-					Platform.OS === 'android' && styles.glassCardAndroidFallback,
-				]}
-			>
-				<View style={styles.resultRow}>
-					<View style={styles.resultContent}>
-						{result === 0 ? (
-							<>
-								<Text style={styles.resultPlaceholder}>—</Text>
-								<Text style={styles.resultUnitLabel}>
-									kJ/{settings?.resultUnit || 'mm'}
-								</Text>
-							</>
-						) : (
-							<>
-								<Text style={styles.resultValue}>{result}</Text>
-								<Text style={styles.resultUnitLabel}>
-									kJ/{settings?.resultUnit || 'mm'}
-								</Text>
-							</>
+						{hasInputs && (
+							<GlassView
+								glassEffectStyle="clear"
+								style={[
+									styles.liquidGlassButtonSquare,
+									{ marginLeft: spacing.xs },
+									Platform.OS === 'android' &&
+										styles.glassButtonAndroidFallback,
+								]}
+							>
+								<TouchableOpacity
+									onPress={resetForm}
+									style={styles.headerTextButton}
+								>
+									<Text style={styles.clearButtonText}>Clear</Text>
+								</TouchableOpacity>
+							</GlassView>
 						)}
 					</View>
-					{result > 0 && (
-						<View style={styles.resultActions}>
-							<GlassView
-								glassEffectStyle="clear"
-								style={[
-									styles.actionButtonGlass,
-									Platform.OS === 'android' &&
-										styles.glassButtonAndroidFallback,
-								]}
-							>
-								<TouchableOpacity
-									onPress={async () => {
-										await Clipboard.setStringAsync(`${result}`);
-									}}
-									style={styles.actionButton}
-								>
-									{Platform.OS === 'ios' ? (
-										<SymbolView
-											name="doc.on.doc"
-											size={20}
-											type="hierarchical"
-											tintColor={colors.text}
-											style={styles.iconSmall}
-										/>
-									) : (
-										<MaterialCommunityIcons
-											name="content-copy"
-											size={18}
-											color={colors.text}
-										/>
-									)}
-								</TouchableOpacity>
-							</GlassView>
-							<GlassView
-								glassEffectStyle="clear"
-								style={[
-									styles.actionButtonGlass,
-									Platform.OS === 'android' &&
-										styles.glassButtonAndroidFallback,
-								]}
-							>
-								<TouchableOpacity
-									onPress={saveToHistory}
-									style={styles.actionButton}
-								>
-									{Platform.OS === 'ios' ? (
-										<SymbolView
-											name="arrow.down.doc"
-											size={20}
-											type="hierarchical"
-											tintColor={colors.primary}
-											style={styles.iconSmall}
-										/>
-									) : (
-										<MaterialCommunityIcons
-											name="content-save"
-											size={18}
-											color={colors.primary}
-										/>
-									)}
-								</TouchableOpacity>
-							</GlassView>
-						</View>
-					)}
 				</View>
-			</GlassView>
+			</TouchableWithoutFeedback>
+
+			{/* Result Card - Always Visible at Top */}
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<GlassView
+					glassEffectStyle="clear"
+					style={[
+						styles.resultCard,
+						Platform.OS === 'android' && styles.glassCardAndroidFallback,
+					]}
+				>
+					<View style={styles.resultRow}>
+						<View style={styles.resultContent}>
+							{result === 0 ? (
+								<>
+									<Text style={styles.resultPlaceholder}>—</Text>
+									<Text style={styles.resultUnitLabel}>
+										kJ/{settings?.resultUnit || 'mm'}
+									</Text>
+								</>
+							) : (
+								<>
+									<Text style={styles.resultValue}>{result}</Text>
+									<Text style={styles.resultUnitLabel}>
+										kJ/{settings?.resultUnit || 'mm'}
+									</Text>
+								</>
+							)}
+						</View>
+						{result > 0 && (
+							<View style={styles.resultActions}>
+								<GlassView
+									glassEffectStyle="clear"
+									style={[
+										styles.actionButtonGlass,
+										Platform.OS === 'android' &&
+											styles.glassButtonAndroidFallback,
+									]}
+								>
+									<TouchableOpacity
+										onPress={async () => {
+											await Clipboard.setStringAsync(`${result}`);
+										}}
+										style={styles.actionButton}
+									>
+										{Platform.OS === 'ios' ? (
+											<SymbolView
+												name="doc.on.doc"
+												size={20}
+												type="hierarchical"
+												tintColor={colors.text}
+												style={styles.iconSmall}
+											/>
+										) : (
+											<MaterialCommunityIcons
+												name="content-copy"
+												size={18}
+												color={colors.text}
+											/>
+										)}
+									</TouchableOpacity>
+								</GlassView>
+								<GlassView
+									glassEffectStyle="clear"
+									style={[
+										styles.actionButtonGlass,
+										Platform.OS === 'android' &&
+											styles.glassButtonAndroidFallback,
+									]}
+								>
+									<TouchableOpacity
+										onPress={saveToHistory}
+										style={styles.actionButton}
+									>
+										{Platform.OS === 'ios' ? (
+											<SymbolView
+												name="arrow.down.doc"
+												size={20}
+												type="hierarchical"
+												tintColor={colors.primary}
+												style={styles.iconSmall}
+											/>
+										) : (
+											<MaterialCommunityIcons
+												name="content-save"
+												size={18}
+												color={colors.primary}
+											/>
+										)}
+									</TouchableOpacity>
+								</GlassView>
+							</View>
+						)}
+					</View>
+				</GlassView>
 			</TouchableWithoutFeedback>
 
 			<ScrollView
-			contentContainerStyle={[
-				styles.scrollContent,
-				{
-					paddingBottom: Platform.OS === 'ios' ? 300 : 20,
-				},
-			]}
-			keyboardShouldPersistTaps="handled"
-			keyboardDismissMode="interactive"
-		>
-					{/* Total Energy Mode Toggle */}
-					{!settings?.totalEnergy && (
-						<View style={styles.section}>
-							<View style={styles.inputContainer}>
-								<Text style={styles.inputLabel}>Amperage</Text>
-								<View style={styles.inputWithUnit}>
+				contentContainerStyle={[
+					styles.scrollContent,
+					{
+						paddingBottom: Platform.OS === 'ios' ? 300 : 20,
+					},
+				]}
+				keyboardShouldPersistTaps="handled"
+				keyboardDismissMode="interactive"
+			>
+				{/* Total Energy Mode Toggle */}
+				{!settings?.totalEnergy && (
+					<View style={styles.section}>
+						<View style={styles.inputContainer}>
+							<Text style={styles.inputLabel}>Amperage</Text>
+							<View style={styles.inputWithUnit}>
 								<TextInput
 									ref={amperageRef}
 									style={styles.inputFlex}
@@ -499,13 +498,13 @@ const HeatInputScreen = () => {
 									accessibilityLabel="Amperage input field"
 									accessibilityHint="Enter welding amperage in amps"
 								/>
-									<Text style={styles.unitText}>A</Text>
-								</View>
+								<Text style={styles.unitText}>A</Text>
 							</View>
+						</View>
 
-							<View style={styles.inputContainer}>
-								<Text style={styles.inputLabel}>Voltage</Text>
-								<View style={styles.inputWithUnit}>
+						<View style={styles.inputContainer}>
+							<Text style={styles.inputLabel}>Voltage</Text>
+							<View style={styles.inputWithUnit}>
 								<TextInput
 									ref={voltageRef}
 									style={styles.inputFlex}
@@ -520,67 +519,67 @@ const HeatInputScreen = () => {
 									accessibilityLabel="Voltage input field"
 									accessibilityHint="Enter welding voltage in volts"
 								/>
-									<Text style={styles.unitText}>V</Text>
-								</View>
-							</View>
-						</View>
-					)}
-
-					{/* Length Input */}
-					<View style={styles.section}>
-						<View style={styles.inputContainer}>
-							<SegmentedControl
-								values={['Length', 'Diameter']}
-								selectedIndex={isDiameter ? 1 : 0}
-								onChange={(event) => {
-									setDiameter(event.nativeEvent.selectedSegmentIndex === 1);
-								}}
-								style={styles.segmentedControl}
-								backgroundColor={colors.background}
-								tintColor={colors.surfaceVariant}
-								fontStyle={{ color: colors.textSecondary, fontSize: 15 }}
-								activeFontStyle={{
-									color: colors.text,
-									fontSize: 15,
-									fontWeight: '600',
-								}}
-								appearance="dark"
-							/>
-
-							<View style={styles.inputWithUnit}>
-								<TextInput
-									ref={lengthRef}
-									style={styles.inputFlex}
-									value={length}
-									onChangeText={setLength}
-									keyboardType="decimal-pad"
-									placeholder="0"
-									placeholderTextColor={colors.textSecondary}
-									returnKeyType={settings?.totalEnergy ? 'next' : 'next'}
-									onSubmitEditing={() => {
-										if (settings?.totalEnergy) {
-											totalEnergyRef.current?.focus();
-										} else {
-											timeRef.current?.focus();
-										}
-									}}
-									blurOnSubmit={false}
-									accessibilityLabel={`${isDiameter ? 'Diameter' : 'Length'} input field`}
-									accessibilityHint={`Enter weld ${isDiameter ? 'diameter' : 'length'} in ${settings?.lengthImperial ? 'inches' : 'millimeters'}`}
-								/>
-								<Text style={styles.unitText}>
-									{settings?.lengthImperial ? 'in' : 'mm'}
-								</Text>
+								<Text style={styles.unitText}>V</Text>
 							</View>
 						</View>
 					</View>
+				)}
 
-					{/* Time or Total Energy */}
-					{settings?.totalEnergy ? (
-						<View style={styles.section}>
-							<View style={styles.inputContainer}>
-								<Text style={styles.inputLabel}>Total Energy</Text>
-								<View style={styles.inputWithUnit}>
+				{/* Length Input */}
+				<View style={styles.section}>
+					<View style={styles.inputContainer}>
+						<SegmentedControl
+							values={['Length', 'Diameter']}
+							selectedIndex={isDiameter ? 1 : 0}
+							onChange={(event) => {
+								setDiameter(event.nativeEvent.selectedSegmentIndex === 1);
+							}}
+							style={styles.segmentedControl}
+							backgroundColor={colors.background}
+							tintColor={colors.surfaceVariant}
+							fontStyle={{ color: colors.textSecondary, fontSize: 15 }}
+							activeFontStyle={{
+								color: colors.text,
+								fontSize: 15,
+								fontWeight: '600',
+							}}
+							appearance="dark"
+						/>
+
+						<View style={styles.inputWithUnit}>
+							<TextInput
+								ref={lengthRef}
+								style={styles.inputFlex}
+								value={length}
+								onChangeText={setLength}
+								keyboardType="decimal-pad"
+								placeholder="0"
+								placeholderTextColor={colors.textSecondary}
+								returnKeyType={settings?.totalEnergy ? 'next' : 'next'}
+								onSubmitEditing={() => {
+									if (settings?.totalEnergy) {
+										totalEnergyRef.current?.focus();
+									} else {
+										timeRef.current?.focus();
+									}
+								}}
+								blurOnSubmit={false}
+								accessibilityLabel={`${isDiameter ? 'Diameter' : 'Length'} input field`}
+								accessibilityHint={`Enter weld ${isDiameter ? 'diameter' : 'length'} in ${settings?.lengthImperial ? 'inches' : 'millimeters'}`}
+							/>
+							<Text style={styles.unitText}>
+								{settings?.lengthImperial ? 'in' : 'mm'}
+							</Text>
+						</View>
+					</View>
+				</View>
+
+				{/* Time or Total Energy */}
+				{settings?.totalEnergy ? (
+					<View style={styles.section}>
+						<View style={styles.inputContainer}>
+							<Text style={styles.inputLabel}>Total Energy</Text>
+							<View style={styles.inputWithUnit}>
 								<TextInput
 									ref={totalEnergyRef}
 									style={styles.inputFlex}
@@ -593,16 +592,16 @@ const HeatInputScreen = () => {
 									accessibilityLabel="Total energy input field"
 									accessibilityHint="Enter total welding energy in kilojoules"
 								/>
-									<Text style={styles.unitText}>kJ</Text>
-								</View>
+								<Text style={styles.unitText}>kJ</Text>
 							</View>
 						</View>
-					) : (
-						<>
-							<View style={styles.section}>
-								<View style={styles.inputContainer}>
-									<Text style={styles.inputLabel}>Time</Text>
-									<View style={styles.inputWithButtons}>
+					</View>
+				) : (
+					<>
+						<View style={styles.section}>
+							<View style={styles.inputContainer}>
+								<Text style={styles.inputLabel}>Time</Text>
+								<View style={styles.inputWithButtons}>
 									<TextInput
 										ref={timeRef}
 										style={styles.inputFlexTime}
@@ -615,37 +614,8 @@ const HeatInputScreen = () => {
 										accessibilityLabel="Time input field"
 										accessibilityHint="Enter welding time in hours, minutes, and seconds format"
 									/>
-										<View style={styles.timerControlsInline}>
-											{hasTimerValue && (
-												<GlassView
-													glassEffectStyle="clear"
-													style={[
-														styles.timerIconGlass,
-														Platform.OS === 'android' &&
-															styles.glassButtonAndroidFallback,
-													]}
-												>
-													<TouchableOpacity
-														onPress={handleStopTimer}
-														style={styles.stopwatchButtonInline}
-													>
-														{Platform.OS === 'ios' ? (
-															<SymbolView
-																name="stop.fill"
-																size={16}
-																type="monochrome"
-																tintColor={colors.text}
-															/>
-														) : (
-															<MaterialCommunityIcons
-																name="stop"
-																size={16}
-																color={colors.text}
-															/>
-														)}
-													</TouchableOpacity>
-												</GlassView>
-											)}
+									<View style={styles.timerControlsInline}>
+										{hasTimerValue && (
 											<GlassView
 												glassEffectStyle="clear"
 												style={[
@@ -655,80 +625,107 @@ const HeatInputScreen = () => {
 												]}
 											>
 												<TouchableOpacity
-													onPress={handleStartStop}
+													onPress={handleStopTimer}
 													style={styles.stopwatchButtonInline}
 												>
 													{Platform.OS === 'ios' ? (
 														<SymbolView
-															name={
-																isRunning
-																	? 'pause.fill'
-																	: hasTimerValue
-																		? 'play.fill'
-																		: 'timer'
-															}
+															name="stop.fill"
 															size={16}
 															type="monochrome"
-															tintColor={
-																isRunning ? colors.text : colors.primary
-															}
+															tintColor={colors.text}
 														/>
 													) : (
 														<MaterialCommunityIcons
-															name={
-																isRunning
-																	? 'pause'
-																	: hasTimerValue
-																		? 'play'
-																		: 'timer-outline'
-															}
+															name="stop"
 															size={16}
-															color={isRunning ? colors.text : colors.primary}
+															color={colors.text}
 														/>
 													)}
 												</TouchableOpacity>
 											</GlassView>
-										</View>
+										)}
+										<GlassView
+											glassEffectStyle="clear"
+											style={[
+												styles.timerIconGlass,
+												Platform.OS === 'android' &&
+													styles.glassButtonAndroidFallback,
+											]}
+										>
+											<TouchableOpacity
+												onPress={handleStartStop}
+												style={styles.stopwatchButtonInline}
+											>
+												{Platform.OS === 'ios' ? (
+													<SymbolView
+														name={
+															isRunning
+																? 'pause.fill'
+																: hasTimerValue
+																	? 'play.fill'
+																	: 'timer'
+														}
+														size={16}
+														type="monochrome"
+														tintColor={isRunning ? colors.text : colors.primary}
+													/>
+												) : (
+													<MaterialCommunityIcons
+														name={
+															isRunning
+																? 'pause'
+																: hasTimerValue
+																	? 'play'
+																	: 'timer-outline'
+														}
+														size={16}
+														color={isRunning ? colors.text : colors.primary}
+													/>
+												)}
+											</TouchableOpacity>
+										</GlassView>
 									</View>
 								</View>
 							</View>
+						</View>
 
-							<View style={styles.section}>
-								<View style={styles.inputContainer}>
-									<Text style={styles.inputLabel}>Efficiency Factor</Text>
-									<TouchableOpacity
-										style={styles.selectButton}
-										onPress={showEfficiencyPicker}
+						<View style={styles.section}>
+							<View style={styles.inputContainer}>
+								<Text style={styles.inputLabel}>Efficiency Factor</Text>
+								<TouchableOpacity
+									style={styles.selectButton}
+									onPress={showEfficiencyPicker}
+								>
+									<Text
+										style={[
+											styles.selectButtonText,
+											!efficiencyFactor && styles.selectButtonTextPlaceholder,
+										]}
 									>
-										<Text
-											style={[
-												styles.selectButtonText,
-												!efficiencyFactor && styles.selectButtonTextPlaceholder,
-											]}
-										>
-											{getEfficiencyLabel()}
-										</Text>
-										{Platform.OS === 'ios' ? (
-											<SymbolView
-												name="chevron.down"
-												size={20}
-												type="hierarchical"
-												tintColor={colors.textSecondary}
-												style={styles.iconSmall}
-											/>
-										) : (
-											<MaterialCommunityIcons
-												name="chevron-down"
-												size={20}
-												color={colors.textSecondary}
-											/>
-										)}
-									</TouchableOpacity>
-								</View>
+										{getEfficiencyLabel()}
+									</Text>
+									{Platform.OS === 'ios' ? (
+										<SymbolView
+											name="chevron.down"
+											size={20}
+											type="hierarchical"
+											tintColor={colors.textSecondary}
+											style={styles.iconSmall}
+										/>
+									) : (
+										<MaterialCommunityIcons
+											name="chevron-down"
+											size={20}
+											color={colors.textSecondary}
+										/>
+									)}
+								</TouchableOpacity>
 							</View>
-						</>
-					)}
-				</ScrollView>
+						</View>
+					</>
+				)}
+			</ScrollView>
 		</View>
 	);
 };
@@ -742,15 +739,17 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		paddingHorizontal: spacing.md,
-		paddingTop: Platform.OS === 'ios' ? (isIPad ? 110 : 60) : 32,
+		paddingTop: Platform.OS === 'ios' ? (isIPad() ? 110 : 60) : 32,
 		paddingBottom: spacing.md,
 		backgroundColor: colors.background,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		borderBottomColor: colors.border,
 		...Platform.select({
-			ios: isIPad ? {
-				paddingHorizontal: spacing.xxl * 2,
-			} : {},
+			ios: isIPad()
+				? {
+						paddingHorizontal: spacing.xxl * 2,
+					}
+				: {},
 		}),
 	},
 	headerTitle: {
@@ -819,9 +818,11 @@ const styles = StyleSheet.create({
 		paddingTop: 0,
 		paddingBottom: spacing.md,
 		...Platform.select({
-			ios: isIPad ? {
-				paddingHorizontal: spacing.xxl * 2,
-			} : {},
+			ios: isIPad()
+				? {
+						paddingHorizontal: spacing.xxl * 2,
+					}
+				: {},
 		}),
 	},
 	resultCard: {
@@ -837,10 +838,12 @@ const styles = StyleSheet.create({
 				shadowOffset: { width: 0, height: 2 },
 				shadowOpacity: 0.25,
 				shadowRadius: 4,
-				...(isIPad ? {
-					marginHorizontal: spacing.xxl * 2,
-					padding: spacing.lg,
-				} : {}),
+				...(isIPad()
+					? {
+							marginHorizontal: spacing.xxl * 2,
+							padding: spacing.lg,
+						}
+					: {}),
 			},
 			android: {
 				elevation: 4,
@@ -859,19 +862,19 @@ const styles = StyleSheet.create({
 		gap: spacing.sm,
 	},
 	resultValue: {
-		fontSize: isIPad ? 64 : 48,
+		fontSize: isIPad() ? 64 : 48,
 		fontWeight: '700',
 		color: colors.primary,
 		letterSpacing: -0.5,
 	},
 	resultPlaceholder: {
-		fontSize: isIPad ? 64 : 48,
+		fontSize: isIPad() ? 64 : 48,
 		fontWeight: '700',
 		color: colors.textSecondary,
 		letterSpacing: -0.5,
 	},
 	resultUnitLabel: {
-		fontSize: isIPad ? 28 : 20,
+		fontSize: isIPad() ? 28 : 20,
 		fontWeight: '500',
 		color: colors.textSecondary,
 	},

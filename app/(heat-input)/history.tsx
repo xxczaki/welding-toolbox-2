@@ -18,9 +18,6 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as XLSX from 'xlsx';
-
-const isIPad = Platform.OS === 'ios' && (Platform as any).isPad;
-
 import storage from '../../storage';
 import {
 	borderRadius,
@@ -30,6 +27,7 @@ import {
 	typography,
 } from '../../theme';
 import type { HistoryEntry, Settings } from '../../types';
+import { isIPad } from '../../utils/platform';
 
 const HistoryScreen = () => {
 	const router = useRouter();
@@ -358,13 +356,15 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		paddingHorizontal: spacing.md,
-		paddingTop: Platform.OS === 'ios' ? (isIPad ? 110 : 60) : 32,
+		paddingTop: Platform.OS === 'ios' ? (isIPad() ? 110 : 60) : 32,
 		paddingBottom: spacing.md,
 		backgroundColor: colors.background,
 		...Platform.select({
-			ios: isIPad ? {
-				paddingHorizontal: spacing.xxl * 2,
-			} : {},
+			ios: isIPad()
+				? {
+						paddingHorizontal: spacing.xxl * 2,
+					}
+				: {},
 		}),
 	},
 	backButtonContainer: {
@@ -458,9 +458,11 @@ const styles = StyleSheet.create({
 	scrollContent: {
 		padding: spacing.md,
 		...Platform.select({
-			ios: isIPad ? {
-				paddingHorizontal: spacing.xxl * 2,
-			} : {},
+			ios: isIPad()
+				? {
+						paddingHorizontal: spacing.xxl * 2,
+					}
+				: {},
 		}),
 	},
 	emptyState: {

@@ -9,7 +9,7 @@
  */
 export function toSeconds(timeString: string): number {
 	const parts = timeString.split(':');
-    
+
 	let seconds = 0;
 	let minutes = 1;
 
@@ -24,5 +24,3 @@ export function toSeconds(timeString: string): number {
 
 	return seconds;
 }
-
-
