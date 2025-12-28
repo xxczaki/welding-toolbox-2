@@ -14,7 +14,8 @@
 		"test": "pnpm lint && node --test --import tsx utils/**/*.test.ts && pnpm --filter welding-utils test",
 		"changeset": "changeset",
 		"version-packages": "changeset version",
-		"release": "pnpm build && changeset publish"
+		"release": "pnpm build && changeset publish",
+		"eas-build-post-install": "pnpm build"
 	},
 	"dependencies": {
 		"@react-native-async-storage/async-storage": "^2.2.0",
