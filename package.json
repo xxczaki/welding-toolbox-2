@@ -1,6 +1,6 @@
 {
 	"name": "weldingtoolbox2",
-	"version": "2.0.1",
+	"version": "2.1.0",
 	"private": true,
 	"packageManager": "pnpm@10.26.2",
 	"scripts": {
@@ -28,6 +28,7 @@
 		"expo-file-system": "~19.0.21",
 		"expo-glass-effect": "~0.1.8",
 		"expo-linking": "~8.0.11",
+		"expo-live-activity": "^0.4.2",
 		"expo-router": "~6.0.21",
 		"expo-sharing": "~14.0.8",
 		"expo-splash-screen": "~31.0.13",

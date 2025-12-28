@@ -8,7 +8,7 @@ module.exports = {
 			silentLaunch: true,
 		},
 		slug: 'weldingtoolbox2',
-		version: '2.0.1',
+		version: '2.1.0',
 		icon: 'assets/images/icon.png',
 		android: {
 			package: 'me.kepinski.weldingtoolbox2',
@@ -19,7 +19,7 @@ module.exports = {
 				monochromeImage: 'assets/images/foreground.png',
 				backgroundColor: '#ff9800',
 			},
-			versionCode: 3145774,
+			versionCode: 3145775,
 			userInterfaceStyle: 'dark',
 			// Only block permissions in production builds
 			blockedPermissions: IS_PRODUCTION
@@ -83,6 +83,14 @@ module.exports = {
 					},
 					ios: {
 						deploymentTarget: '15.1',
+					},
+				},
+			],
+			[
+				'expo-live-activity',
+				{
+					ios: {
+						enablePushNotifications: false,
 					},
 				},
 			],

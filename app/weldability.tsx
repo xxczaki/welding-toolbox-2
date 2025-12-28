@@ -392,6 +392,7 @@ const WeldabilityScreen = () => {
 				]}
 				keyboardShouldPersistTaps="handled"
 				keyboardDismissMode="interactive"
+				automaticallyAdjustKeyboardInsets={true}
 			>
 				{/* Input Fields */}
 				<View style={styles.inputsContainer}>

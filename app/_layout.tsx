@@ -28,12 +28,9 @@ export default function TabLayout() {
 				tintColor="#ff9800"
 				backgroundColor={isIPad() ? '#1c1c1e' : '#121212'}
 				indicatorColor="#ff9800"
-				labelStyle={{
-					color: '#ff9800',
-				}}
 				iconColor={{
 					default: '#888888',
-					selected: '#ff9800',
+					selected: Platform.OS === 'android' ? '#1e1e1e' : '#ff9800',
 				}}
 			>
 				<NativeTabs.Trigger name="(heat-input)">

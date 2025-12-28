@@ -3,6 +3,7 @@ import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { useFocusEffect } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
 import { GlassView } from 'expo-glass-effect';
+import * as LiveActivity from 'expo-live-activity';
 import { useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { nanoid } from 'nanoid/non-secure';
@@ -43,6 +44,7 @@ const HeatInputScreen = () => {
 	const lengthRef = useRef<TextInput>(null);
 	const timeRef = useRef<TextInput>(null);
 	const totalEnergyRef = useRef<TextInput>(null);
+	const scrollViewRef = useRef<ScrollView>(null);
 
 	// Settings
 	const [settings, setSettings] = useState<Settings>({});
@@ -55,12 +57,18 @@ const HeatInputScreen = () => {
 	const [efficiencyFactor, setEfficiencyFactor] = useState<string>('');
 	const [totalEnergy, setTotalEnergy] = useState<string>('');
 	const [isDiameter, setDiameter] = useState<boolean>(false);
+	const [customFieldValues, setCustomFieldValues] = useState<
+		Record<string, string>
+	>({});
 
 	// Stopwatch
 	const { ms, start, stop, resetStopwatch, isRunning } = useStopwatch();
 	const [accumulatedTime, setAccumulatedTime] = useState<number>(0);
 	const [isStopped, setIsStopped] = useState<boolean>(false);
 	const [timerUsed, setTimerUsed] = useState<boolean>(false);
+	const [activityId, setActivityId] = useState<string | null>(null);
+	const updateIntervalRef = useRef<NodeJS.Timeout | null>(null);
+	const startTimeRef = useRef<number | null>(null);
 
 	// Result
 	const [result, setResult] = useState<number>(0);
@@ -91,13 +99,97 @@ const HeatInputScreen = () => {
 		}
 	}, [settings]);
 
+	// Format time for display
+	const formatTime = useCallback((totalMs: number): string => {
+		return new Date(totalMs).toISOString().slice(11, -5);
+	}, []);
+
 	// Update time field when stopwatch is running
 	useEffect(() => {
 		if (isRunning) {
 			const totalMs = ms + accumulatedTime;
-			setTime(new Date(totalMs).toISOString().slice(11, -5));
+			setTime(formatTime(totalMs));
 		}
-	}, [isRunning, ms, accumulatedTime]);
+	}, [isRunning, ms, accumulatedTime, formatTime]);
+
+	// Update Live Activity when timer value changes
+	useEffect(() => {
+		if (Platform.OS === 'ios' && activityId && timerUsed) {
+			if (updateIntervalRef.current) {
+				clearInterval(updateIntervalRef.current);
+			}
+
+			if (isRunning && startTimeRef.current === null) {
+				startTimeRef.current = Date.now() - accumulatedTime;
+			} else if (!isRunning) {
+				startTimeRef.current = null;
+			}
+
+			const updateLiveActivity = () => {
+				let totalMs = accumulatedTime;
+				if (isRunning && startTimeRef.current !== null) {
+					totalMs = Date.now() - startTimeRef.current;
+				}
+
+				const formattedTime = formatTime(totalMs);
+				const isPaused = !isRunning && accumulatedTime > 0;
+
+				try {
+					LiveActivity.updateActivity(activityId, {
+						title: isPaused ? 'Heat Input (Paused)' : 'Heat Input',
+						subtitle: formattedTime,
+					});
+				} catch {
+					// Activity dismissed - will be cleaned up by listener
+				}
+			};
+
+			updateLiveActivity();
+
+			if (isRunning) {
+				updateIntervalRef.current = setInterval(updateLiveActivity, 1000);
+			}
+
+			return () => {
+				if (updateIntervalRef.current) {
+					clearInterval(updateIntervalRef.current);
+				}
+			};
+		}
+		return undefined;
+	}, [accumulatedTime, isRunning, timerUsed, activityId, formatTime]);
+
+	// Listen for Live Activity dismissal
+	useEffect(() => {
+		if (Platform.OS !== 'ios') return;
+
+		const subscription = LiveActivity.addActivityUpdatesListener((event) => {
+			if (
+				event.activityID === activityId &&
+				(event.activityState === 'dismissed' || event.activityState === 'ended')
+			) {
+				setActivityId(null);
+			}
+		});
+
+		return () => subscription?.remove();
+	}, [activityId]);
+
+	// Cleanup Live Activity on unmount
+	useEffect(() => {
+		return () => {
+			if (Platform.OS === 'ios' && activityId) {
+				try {
+					LiveActivity.stopActivity(activityId, {
+						title: 'Heat Input (Stopped)',
+						subtitle: '00:00:00',
+					});
+				} catch {
+					// Activity already dismissed - ignore
+				}
+			}
+		};
+	}, [activityId]);
 
 	// Auto-calculate whenever inputs change using useMemo for better performance
 	// Only depend on specific settings properties to avoid unnecessary recalculations
@@ -181,38 +273,90 @@ const HeatInputScreen = () => {
 		setResult(calculatedResult);
 	}, [calculatedResult]);
 
-	const handleStartStop = () => {
+	const handleStartStop = async () => {
 		if (isRunning) {
 			// Pause: accumulate the time and reset the stopwatch
-			setAccumulatedTime((prev) => prev + ms);
+			// Calculate current elapsed time from startTimeRef if available
+			if (startTimeRef.current !== null) {
+				const currentElapsed = Date.now() - startTimeRef.current;
+				setAccumulatedTime(currentElapsed);
+			} else {
+				setAccumulatedTime((prev) => prev + ms);
+			}
 			stop();
 			resetStopwatch();
+			startTimeRef.current = null;
 		} else {
-			// Resume/Start
 			start();
 			setIsStopped(false);
 			setTimerUsed(true);
+
+			// Start Live Activity if not already started
+			if (Platform.OS === 'ios' && !activityId) {
+				const id = LiveActivity.startActivity(
+					{
+						title: 'Heat Input',
+						subtitle: formatTime(accumulatedTime),
+					},
+					{
+						backgroundColor: '#1c1c1e',
+						titleColor: '#ffffff',
+						subtitleColor: '#98989d',
+						deepLinkUrl: '/(heat-input)',
+					},
+				);
+				if (id) {
+					setActivityId(id);
+					startTimeRef.current = Date.now() - accumulatedTime;
+				}
+			} else {
+				startTimeRef.current = Date.now() - accumulatedTime;
+			}
 		}
 	};
 
 	const handleStopTimer = () => {
+		const finalTime = formatTime(accumulatedTime);
 		stop();
 		resetStopwatch();
 		setAccumulatedTime(0);
 		setIsStopped(true);
 		setTimerUsed(false);
-		// Keep the time value in the input, but reset the timer state
+
+		if (Platform.OS === 'ios' && activityId) {
+			try {
+				LiveActivity.stopActivity(activityId, {
+					title: 'Heat Input (Stopped)',
+					subtitle: finalTime,
+				});
+			} catch {
+				// Activity already dismissed - ignore
+			}
+			setActivityId(null);
+		}
 	};
 
 	const handleTimeChange = (value: string) => {
 		setTime(value);
-		// If user manually edits time, stop and reset the timer
 		if (timerUsed || isRunning) {
+			const finalTime = formatTime(accumulatedTime);
 			stop();
 			resetStopwatch();
 			setAccumulatedTime(0);
 			setIsStopped(true);
 			setTimerUsed(false);
+
+			if (Platform.OS === 'ios' && activityId) {
+				try {
+					LiveActivity.stopActivity(activityId, {
+						title: 'Heat Input (Stopped)',
+						subtitle: finalTime,
+					});
+				} catch {
+					// Activity already dismissed - ignore
+				}
+				setActivityId(null);
+			}
 		}
 	};
 
@@ -236,7 +380,7 @@ const HeatInputScreen = () => {
 
 		const custom: Record<string, string>[] =
 			settings?.customFields?.map((element) => ({
-				[element.name]: 'N/A', // Custom fields would need to be implemented
+				[element.name]: customFieldValues[element.name] || 'N/A',
 			})) || [];
 
 		const historyEntry: HistoryEntry = Object.assign(
@@ -270,15 +414,35 @@ const HeatInputScreen = () => {
 		setEfficiencyFactor('');
 		setTotalEnergy('');
 		setDiameter(false);
+		setCustomFieldValues({});
+		const finalTime = formatTime(accumulatedTime);
 		resetStopwatch();
 		setAccumulatedTime(0);
 		setIsStopped(false);
 		setTimerUsed(false);
 		setResult(0);
+
+		if (Platform.OS === 'ios' && activityId) {
+			try {
+				LiveActivity.stopActivity(activityId, {
+					title: 'Heat Input (Stopped)',
+					subtitle: finalTime,
+				});
+			} catch {
+				// Activity already dismissed - ignore
+			}
+			setActivityId(null);
+		}
 	};
 
 	const hasInputs =
-		amperage || voltage || length || time || efficiencyFactor || totalEnergy;
+		amperage ||
+		voltage ||
+		length ||
+		time ||
+		efficiencyFactor ||
+		totalEnergy ||
+		Object.keys(customFieldValues).length > 0;
 
 	const efficiencyOptions = [
 		{ label: '0.6 - 141, 15', value: '0.6' },
@@ -469,14 +633,16 @@ const HeatInputScreen = () => {
 			</TouchableWithoutFeedback>
 
 			<ScrollView
+				ref={scrollViewRef}
 				contentContainerStyle={[
 					styles.scrollContent,
 					{
-						paddingBottom: Platform.OS === 'ios' ? 300 : 20,
+						paddingBottom: Platform.OS === 'ios' ? 300 : 150,
 					},
 				]}
 				keyboardShouldPersistTaps="handled"
 				keyboardDismissMode="interactive"
+				automaticallyAdjustKeyboardInsets={true}
 			>
 				{/* Total Energy Mode Toggle */}
 				{!settings?.totalEnergy && (
@@ -610,7 +776,8 @@ const HeatInputScreen = () => {
 										placeholder="HH:MM:SS"
 										placeholderTextColor={colors.textSecondary}
 										keyboardType="numbers-and-punctuation"
-										returnKeyType="done"
+										returnKeyType="next"
+										onSubmitEditing={showEfficiencyPicker}
 										accessibilityLabel="Time input field"
 										accessibilityHint="Enter welding time in hours, minutes, and seconds format"
 									/>
@@ -722,6 +889,42 @@ const HeatInputScreen = () => {
 									)}
 								</TouchableOpacity>
 							</View>
+						</View>
+					</>
+				)}
+
+				{/* Custom Fields */}
+				{settings?.customFields && settings.customFields.length > 0 && (
+					<>
+						<View style={styles.separator} />
+						<View style={styles.sectionWithSeparator}>
+							{settings.customFields.map((field, index) => (
+								<View key={field.timestamp} style={styles.inputContainer}>
+									<Text style={styles.inputLabel}>
+										{field.name}
+										{field.unit && ` (${field.unit})`}
+									</Text>
+									<TextInput
+										style={styles.input}
+										value={customFieldValues[field.name] || ''}
+										onChangeText={(value) =>
+											setCustomFieldValues({
+												...customFieldValues,
+												[field.name]: value,
+											})
+										}
+										placeholder="Enter value"
+										placeholderTextColor={colors.textSecondary}
+										returnKeyType={
+											index === (settings.customFields?.length ?? 0) - 1
+												? 'done'
+												: 'next'
+										}
+										accessibilityLabel={`${field.name} input field`}
+										accessibilityHint={`Enter value for ${field.name}`}
+									/>
+								</View>
+							))}
 						</View>
 					</>
 				)}
@@ -934,6 +1137,10 @@ const styles = StyleSheet.create({
 	section: {
 		marginBottom: spacing.md,
 	},
+	sectionWithSeparator: {
+		marginTop: spacing.md,
+		marginBottom: spacing.md,
+	},
 	inputContainer: {
 		marginBottom: spacing.md,
 	},
@@ -944,7 +1151,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		backgroundColor: colors.surfaceVariant,
-		borderRadius: borderRadius.md,
+		borderRadius: borderRadius.lg,
 		paddingLeft: spacing.md,
 		paddingRight: spacing.sm,
 		paddingVertical: spacing.xs,
@@ -992,11 +1199,28 @@ const styles = StyleSheet.create({
 		borderWidth: Platform.OS === 'ios' ? 0 : StyleSheet.hairlineWidth,
 		borderColor: colors.border,
 	},
+	sectionTitle: {
+		...typography.title3,
+		color: colors.textSecondary,
+		marginBottom: spacing.sm,
+		...Platform.select({
+			ios: {
+				textTransform: 'uppercase',
+				fontSize: 13,
+				fontWeight: '600',
+				letterSpacing: -0.08,
+			},
+		}),
+	},
+	separator: {
+		height: StyleSheet.hairlineWidth,
+		backgroundColor: colors.border,
+	},
 	inputWithUnit: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		backgroundColor: colors.surfaceVariant,
-		borderRadius: borderRadius.md,
+		borderRadius: borderRadius.lg,
 		paddingHorizontal: spacing.md,
 		minHeight: 44,
 		borderWidth: Platform.OS === 'ios' ? 0 : StyleSheet.hairlineWidth,
@@ -1026,7 +1250,7 @@ const styles = StyleSheet.create({
 	},
 	selectButton: {
 		backgroundColor: colors.surfaceVariant,
-		borderRadius: borderRadius.md,
+		borderRadius: borderRadius.lg,
 		paddingVertical: spacing.sm,
 		paddingHorizontal: spacing.md,
 		flexDirection: 'row',

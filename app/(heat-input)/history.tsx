@@ -337,6 +337,27 @@ const HistoryScreen = () => {
 												</Text>
 											</>
 										)}
+										{/* Display custom fields */}
+										{Object.entries(entry)
+											.filter(
+												([key]) =>
+													![
+														'id',
+														'Date',
+														'Amperage',
+														'Voltage',
+														'Total energy',
+														'Length',
+														'Time',
+														'Efficiency factor',
+														'Heat Input',
+													].includes(key),
+											)
+											.map(([key, value]) => (
+												<Text key={key} style={styles.historyDetailText}>
+													{key}: {value}
+												</Text>
+											))}
 									</View>
 								</GlassView>
 							))

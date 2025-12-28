@@ -116,10 +116,10 @@ export const spacing = {
 
 // Border radius
 export const borderRadius = {
-	sm: Platform.select({ ios: 8, android: 4 }),
-	md: Platform.select({ ios: 10, android: 8 }),
-	lg: Platform.select({ ios: 12, android: 12 }),
-	xl: Platform.select({ ios: 16, android: 16 }),
+	sm: Platform.select({ ios: 10, android: 4 }),
+	md: Platform.select({ ios: 13, android: 8 }),
+	lg: Platform.select({ ios: 24, android: 12 }),
+	xl: Platform.select({ ios: 28, android: 16 }),
 	round: 9999,
 };
 
@@ -148,7 +148,7 @@ export const commonStyles = StyleSheet.create({
 	},
 	input: {
 		backgroundColor: colors.surfaceVariant,
-		borderRadius: borderRadius.md,
+		borderRadius: borderRadius.lg,
 		padding: spacing.md,
 		color: colors.text,
 		fontSize: 17,
@@ -176,7 +176,7 @@ export const commonStyles = StyleSheet.create({
 	},
 	button: {
 		backgroundColor: colors.primary,
-		borderRadius: borderRadius.md,
+		borderRadius: borderRadius.lg,
 		padding: spacing.md,
 		alignItems: 'center' as const,
 		justifyContent: 'center' as const,
@@ -196,7 +196,7 @@ export const commonStyles = StyleSheet.create({
 	},
 	secondaryButton: {
 		backgroundColor: colors.surfaceVariant,
-		borderRadius: borderRadius.md,
+		borderRadius: borderRadius.lg,
 		padding: spacing.md,
 		alignItems: 'center' as const,
 		justifyContent: 'center' as const,
