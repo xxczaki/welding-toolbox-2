@@ -22,6 +22,8 @@ import {
 } from 'react-native';
 import { heatInput } from 'welding-utils';
 
+const isIPad = Platform.OS === 'ios' && (Platform as any).isPad;
+
 import { useStopwatch } from '../../hooks/use-stopwatch';
 import storage from '../../storage';
 import {
@@ -60,6 +62,7 @@ const HeatInputScreen = () => {
 	const { ms, start, stop, resetStopwatch, isRunning } = useStopwatch();
 	const [accumulatedTime, setAccumulatedTime] = useState<number>(0);
 	const [isStopped, setIsStopped] = useState<boolean>(false);
+	const [timerUsed, setTimerUsed] = useState<boolean>(false);
 
 	// Result
 	const [result, setResult] = useState<number>(0);
@@ -182,11 +185,15 @@ const HeatInputScreen = () => {
 
 	const handleStartStop = () => {
 		if (isRunning) {
-			stop();
+			// Pause: accumulate the time and reset the stopwatch
 			setAccumulatedTime((prev) => prev + ms);
+			stop();
+			resetStopwatch();
 		} else {
+			// Resume/Start
 			start();
 			setIsStopped(false);
+			setTimerUsed(true);
 		}
 	};
 
@@ -195,10 +202,23 @@ const HeatInputScreen = () => {
 		resetStopwatch();
 		setAccumulatedTime(0);
 		setIsStopped(true);
+		setTimerUsed(false);
 		// Keep the time value in the input, but reset the timer state
 	};
 
-	const hasTimerValue = time && time !== '00:00:00' && !isStopped;
+	const handleTimeChange = (value: string) => {
+		setTime(value);
+		// If user manually edits time, stop and reset the timer
+		if (timerUsed || isRunning) {
+			stop();
+			resetStopwatch();
+			setAccumulatedTime(0);
+			setIsStopped(true);
+			setTimerUsed(false);
+		}
+	};
+
+	const hasTimerValue = timerUsed && time && time !== '00:00:00' && !isStopped;
 
 	const saveToHistory = () => {
 		if (result === 0) {
@@ -255,6 +275,7 @@ const HeatInputScreen = () => {
 		resetStopwatch();
 		setAccumulatedTime(0);
 		setIsStopped(false);
+		setTimerUsed(false);
 		setResult(0);
 	};
 
@@ -586,7 +607,7 @@ const HeatInputScreen = () => {
 										ref={timeRef}
 										style={styles.inputFlexTime}
 										value={time}
-										onChangeText={setTime}
+										onChangeText={handleTimeChange}
 										placeholder="HH:MM:SS"
 										placeholderTextColor={colors.textSecondary}
 										keyboardType="numbers-and-punctuation"
@@ -721,11 +742,16 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		paddingHorizontal: spacing.md,
-		paddingTop: Platform.OS === 'ios' ? 60 : 32,
+		paddingTop: Platform.OS === 'ios' ? (isIPad ? 110 : 60) : 32,
 		paddingBottom: spacing.md,
 		backgroundColor: colors.background,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		borderBottomColor: colors.border,
+		...Platform.select({
+			ios: isIPad ? {
+				paddingHorizontal: spacing.xxl * 2,
+			} : {},
+		}),
 	},
 	headerTitle: {
 		...typography.largeTitle,
@@ -792,6 +818,11 @@ const styles = StyleSheet.create({
 		paddingHorizontal: spacing.md,
 		paddingTop: 0,
 		paddingBottom: spacing.md,
+		...Platform.select({
+			ios: isIPad ? {
+				paddingHorizontal: spacing.xxl * 2,
+			} : {},
+		}),
 	},
 	resultCard: {
 		borderRadius: borderRadius.lg,
@@ -806,6 +837,10 @@ const styles = StyleSheet.create({
 				shadowOffset: { width: 0, height: 2 },
 				shadowOpacity: 0.25,
 				shadowRadius: 4,
+				...(isIPad ? {
+					marginHorizontal: spacing.xxl * 2,
+					padding: spacing.lg,
+				} : {}),
 			},
 			android: {
 				elevation: 4,
@@ -824,19 +859,19 @@ const styles = StyleSheet.create({
 		gap: spacing.sm,
 	},
 	resultValue: {
-		fontSize: 48,
+		fontSize: isIPad ? 64 : 48,
 		fontWeight: '700',
 		color: colors.primary,
 		letterSpacing: -0.5,
 	},
 	resultPlaceholder: {
-		fontSize: 48,
+		fontSize: isIPad ? 64 : 48,
 		fontWeight: '700',
 		color: colors.textSecondary,
 		letterSpacing: -0.5,
 	},
 	resultUnitLabel: {
-		fontSize: 20,
+		fontSize: isIPad ? 28 : 20,
 		fontWeight: '500',
 		color: colors.textSecondary,
 	},

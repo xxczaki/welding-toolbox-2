@@ -19,6 +19,8 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as XLSX from 'xlsx';
 
+const isIPad = Platform.OS === 'ios' && (Platform as any).isPad;
+
 import storage from '../../storage';
 import {
 	borderRadius,
@@ -356,9 +358,14 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		paddingHorizontal: spacing.md,
-		paddingTop: Platform.OS === 'ios' ? 60 : 32,
+		paddingTop: Platform.OS === 'ios' ? (isIPad ? 110 : 60) : 32,
 		paddingBottom: spacing.md,
 		backgroundColor: colors.background,
+		...Platform.select({
+			ios: isIPad ? {
+				paddingHorizontal: spacing.xxl * 2,
+			} : {},
+		}),
 	},
 	backButtonContainer: {
 		width: 50,
@@ -450,6 +457,11 @@ const styles = StyleSheet.create({
 	},
 	scrollContent: {
 		padding: spacing.md,
+		...Platform.select({
+			ios: isIPad ? {
+				paddingHorizontal: spacing.xxl * 2,
+			} : {},
+		}),
 	},
 	emptyState: {
 		flex: 1,

@@ -34,3 +34,5 @@ describe('toSeconds', () => {
 		assert.strictEqual(toSeconds('5:0:0'), 18000);
 	});
 });
+
+

@@ -20,6 +20,8 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+const isIPad = Platform.OS === 'ios' && (Platform as any).isPad;
+
 import storage from '../storage';
 import {
 	borderRadius,
@@ -493,11 +495,16 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		paddingHorizontal: spacing.md,
-		paddingTop: Platform.OS === 'ios' ? 60 : 32,
+		paddingTop: Platform.OS === 'ios' ? (isIPad ? 110 : 60) : 32,
 		paddingBottom: spacing.md,
 		backgroundColor: colors.background,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		borderBottomColor: colors.border,
+		...Platform.select({
+			ios: isIPad ? {
+				paddingHorizontal: spacing.xxl * 2,
+			} : {},
+		}),
 	},
 	headerTitle: {
 		...typography.largeTitle,
@@ -508,6 +515,14 @@ const styles = StyleSheet.create({
 	},
 	scrollContent: {
 		padding: spacing.md,
+		...Platform.select({
+			ios: isIPad ? {
+				paddingHorizontal: spacing.xxl * 2,
+				maxWidth: 800,
+				width: '100%',
+				alignSelf: 'center',
+			} : {},
+		}),
 	},
 	section: {
 		marginBottom: spacing.xl,

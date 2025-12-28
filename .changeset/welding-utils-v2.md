@@ -7,3 +7,5 @@
 - Replaced bundler with plain TypeScript compiler
 - Converted arrow functions to regular function declarations
 - Simplified build process and reduced dependencies
+
+

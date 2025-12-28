@@ -16,6 +16,8 @@ import {
 } from 'react-native';
 import { ceAws, ceq, cet, pcm, pren } from 'welding-utils';
 
+const isIPad = Platform.OS === 'ios' && (Platform as any).isPad;
+
 import {
 	borderRadius,
 	colors,
@@ -233,23 +235,33 @@ const WeldabilityScreen = () => {
 				<View style={styles.resultsGrid}>
 					<View style={styles.resultItem}>
 						<Text style={styles.resultLabel}>CEQ</Text>
-						<Text style={styles.resultValue}>{results.ceq}</Text>
+						<Text style={results.ceq === '0' ? styles.resultValueEmpty : styles.resultValue}>
+							{results.ceq === '0' ? '—' : results.ceq}
+						</Text>
 					</View>
 					<View style={styles.resultItem}>
 						<Text style={styles.resultLabel}>CET</Text>
-						<Text style={styles.resultValue}>{results.cet}</Text>
+						<Text style={results.cet === '0' ? styles.resultValueEmpty : styles.resultValue}>
+							{results.cet === '0' ? '—' : results.cet}
+						</Text>
 					</View>
 					<View style={styles.resultItem}>
 						<Text style={styles.resultLabel}>CE (AWS)</Text>
-						<Text style={styles.resultValue}>{results.ceAws}</Text>
+						<Text style={results.ceAws === '0' ? styles.resultValueEmpty : styles.resultValue}>
+							{results.ceAws === '0' ? '—' : results.ceAws}
+						</Text>
 					</View>
 					<View style={styles.resultItem}>
 						<Text style={styles.resultLabel}>PCM</Text>
-						<Text style={styles.resultValue}>{results.pcm}</Text>
+						<Text style={results.pcm === '0' ? styles.resultValueEmpty : styles.resultValue}>
+							{results.pcm === '0' ? '—' : results.pcm}
+						</Text>
 					</View>
 					<View style={styles.resultItem}>
 						<Text style={styles.resultLabel}>PREN</Text>
-						<Text style={styles.resultValue}>{results.pren}</Text>
+						<Text style={results.pren === '0' ? styles.resultValueEmpty : styles.resultValue}>
+							{results.pren === '0' ? '—' : results.pren}
+						</Text>
 					</View>
 				</View>
 			</GlassView>
@@ -431,11 +443,16 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		paddingHorizontal: spacing.md,
-		paddingTop: Platform.OS === 'ios' ? 60 : 32,
+		paddingTop: Platform.OS === 'ios' ? (isIPad ? 110 : 60) : 32,
 		paddingBottom: spacing.md,
 		backgroundColor: colors.background,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		borderBottomColor: colors.border,
+		...Platform.select({
+			ios: isIPad ? {
+				paddingHorizontal: spacing.xxl * 2,
+			} : {},
+		}),
 	},
 	headerTitle: {
 		...typography.largeTitle,
@@ -454,6 +471,11 @@ const styles = StyleSheet.create({
 		paddingHorizontal: spacing.md,
 		paddingTop: 0,
 		paddingBottom: spacing.md,
+		...Platform.select({
+			ios: isIPad ? {
+				paddingHorizontal: spacing.xxl * 2,
+			} : {},
+		}),
 	},
 	resultsCard: {
 		borderRadius: borderRadius.lg,
@@ -468,6 +490,10 @@ const styles = StyleSheet.create({
 				shadowOffset: { width: 0, height: 2 },
 				shadowOpacity: 0.25,
 				shadowRadius: 4,
+				...(isIPad ? {
+					marginHorizontal: spacing.xxl * 2,
+					padding: spacing.lg,
+				} : {}),
 			},
 			android: {
 				elevation: 4,
@@ -499,7 +525,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: -spacing.sm,
 	},
 	resultItem: {
-		width: '33.33%',
+		width: isIPad ? '20%' : '33.33%',
 		paddingHorizontal: spacing.sm,
 		marginBottom: spacing.md,
 	},
@@ -518,6 +544,11 @@ const styles = StyleSheet.create({
 	resultValue: {
 		...typography.title2,
 		color: colors.primary,
+		fontWeight: '700',
+	},
+	resultValueEmpty: {
+		...typography.title2,
+		color: colors.textSecondary,
 		fontWeight: '700',
 	},
 	inputsContainer: {

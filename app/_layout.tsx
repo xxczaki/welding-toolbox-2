@@ -7,9 +7,12 @@ import {
 } from 'expo-router/unstable-native-tabs';
 import { setBackgroundColorAsync } from 'expo-system-ui';
 import { useEffect } from 'react';
-import { Platform } from 'react-native';
+import { Platform, PlatformColor } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { initializeStorage } from '../storage';
+
+// Detect if running on iPad
+const isIPad = Platform.OS === 'ios' && Platform.isPad;
 
 export default function TabLayout() {
 	useEffect(() => {
@@ -25,58 +28,52 @@ export default function TabLayout() {
 			<NativeTabs
 				minimizeBehavior="onScrollDown"
 				tintColor="#ff9800"
-				backgroundColor="#121212"
+				backgroundColor={isIPad ? '#1c1c1e' : '#121212'}
 				indicatorColor="#ff9800"
+				labelStyle={{
+					color: '#ff9800',
+				}}
 				iconColor={{
 					default: '#888888',
-					selected: Platform.select({
-						ios: '#ff9800',
-						android: '#121212',
-					}),
+					selected: '#ff9800',
 				}}
 			>
 				<NativeTabs.Trigger name="(heat-input)">
 					<Label>Heat Input</Label>
-					{Platform.select({
-						ios: <Icon sf="flame.fill" />,
-						android: (
-							<Icon
-								src={<VectorIcon family={MaterialCommunityIcons} name="fire" />}
-							/>
-						),
-					})}
+					{Platform.OS === 'ios' ? (
+						<Icon sf="flame.fill" />
+					) : (
+						<Icon
+							src={<VectorIcon family={MaterialCommunityIcons} name="fire" />}
+						/>
+					)}
 				</NativeTabs.Trigger>
 				<NativeTabs.Trigger name="weldability">
 					<Label>Weldability</Label>
-					{Platform.select({
-						ios: <Icon sf="function" />,
-						android: (
-							<Icon
-								src={
-									<VectorIcon
-										family={MaterialCommunityIcons}
-										name="calculator"
-									/>
-								}
-							/>
-						),
-					})}
+					{Platform.OS === 'ios' ? (
+						<Icon sf="function" />
+					) : (
+						<Icon
+							src={
+								<VectorIcon
+									family={MaterialCommunityIcons}
+									name="calculator"
+								/>
+							}
+						/>
+					)}
 				</NativeTabs.Trigger>
 				<NativeTabs.Trigger name="settings">
 					<Label>Settings</Label>
-					{Platform.select({
-						ios: <Icon sf="gearshape.fill" />,
-						android: (
-							<Icon
-								src={
-									<VectorIcon
-										family={MaterialCommunityIcons}
-										name="cog-outline"
-									/>
-								}
-							/>
-						),
-					})}
+					{Platform.OS === 'ios' ? (
+						<Icon sf="gearshape.fill" />
+					) : (
+						<Icon
+							src={
+								<VectorIcon family={MaterialCommunityIcons} name="cog-outline" />
+							}
+						/>
+					)}
 				</NativeTabs.Trigger>
 			</NativeTabs>
 		</SafeAreaProvider>

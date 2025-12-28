@@ -24,3 +24,5 @@ export function toSeconds(timeString: string): number {
 
 	return seconds;
 }
+
+

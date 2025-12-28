@@ -34,3 +34,5 @@ export const DEFAULT_SETTINGS: Settings = {
 	resultHistory: [],
 	customFields: [],
 };
+
+
