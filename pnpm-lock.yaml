@@ -17,9 +17,6 @@ importers:
       babel-plugin-transform-remove-console:
         specifier: ^6.9.4
         version: 6.9.4
-      camelcase:
-        specifier: ^9.0.0
-        version: 9.0.0
       expo:
         specifier: ~54.0.30
         version: 54.0.30(@babel/core@7.28.5)(@expo/metro-runtime@6.1.2)(expo-router@6.0.21)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -32,9 +29,6 @@ importers:
       expo-constants:
         specifier: ~18.0.12
         version: 18.0.12(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))
-      expo-dev-client:
-        specifier: ~6.0.20
-        version: 6.0.20(expo@54.0.30)
       expo-file-system:
         specifier: ~19.0.21
         version: 19.0.21(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))
@@ -99,6 +93,9 @@ importers:
       '@types/react':
         specifier: ~19.1.10
         version: 19.1.17
+      expo-dev-client:
+        specifier: ~6.0.20
+        version: 6.0.20(expo@54.0.30)
       tsx:
         specifier: ^4.19.2
         version: 4.21.0
@@ -1921,10 +1918,6 @@ packages:
   camelcase@6.3.0:
     resolution: {integrity: sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==}
     engines: {node: '>=10'}
-
-  camelcase@9.0.0:
-    resolution: {integrity: sha512-TO9xmyXTZ9HUHI8M1OnvExxYB0eYVS/1e5s7IDMTAoIcwUd+aNcFODs6Xk83mobk0velyHFQgA1yIrvYc6wclw==}
-    engines: {node: '>=20'}
 
   caniuse-lite@1.0.30001761:
     resolution: {integrity: sha512-JF9ptu1vP2coz98+5051jZ4PwQgd2ni8A+gYSN7EA7dPKIMf0pDlSUxhdmVOaV3/fYK5uWBkgSXJaRLr4+3A6g==}
@@ -6184,8 +6177,6 @@ snapshots:
   camelcase@5.3.1: {}
 
   camelcase@6.3.0: {}
-
-  camelcase@9.0.0: {}
 
   caniuse-lite@1.0.30001761: {}
 

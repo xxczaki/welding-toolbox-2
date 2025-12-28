@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react';
 import {
 	Alert,
 	KeyboardAvoidingView,
-	PermissionsAndroid,
 	Platform,
 	ScrollView,
 	StyleSheet,
@@ -75,16 +74,9 @@ const HistoryScreen = () => {
 	};
 
 	const shareHistory = async () => {
-		const granted =
-			Platform.OS === 'android'
-				? await PermissionsAndroid.check(
-						'android.permission.WRITE_EXTERNAL_STORAGE',
-					)
-				: true;
+		if (!settings?.resultHistory) return;
 
-		const saveAndShare = async () => {
-			if (!settings?.resultHistory) return;
-
+		try {
 			const newArray = [...settings.resultHistory].sort(
 				(a, b) => new Date(a.Date).getTime() - new Date(b.Date).getTime(),
 			);
@@ -115,26 +107,8 @@ const HistoryScreen = () => {
 				dialogTitle: 'Result history',
 				UTI: 'com.microsoft.excel.xlsx',
 			});
-		};
-
-		if (!granted && Platform.OS === 'android') {
-			await PermissionsAndroid.request(
-				'android.permission.WRITE_EXTERNAL_STORAGE',
-				{
-					title: 'Information about permission',
-					message:
-						"Welding Toolbox 2 requires write permission in order to share your result history. If you choose not to grant the app this permission, sharing your result history won't be available.",
-					buttonPositive: 'Allow',
-					buttonNegative: 'Disallow',
-					buttonNeutral: "I'm not sure",
-				},
-			);
-
-			await saveAndShare();
-		}
-
-		if (granted) {
-			await saveAndShare();
+		} catch {
+			Alert.alert('Error', 'Failed to export history. Please try again.');
 		}
 	};
 
