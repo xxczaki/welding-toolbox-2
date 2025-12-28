@@ -78,7 +78,6 @@ pnpm-debug.log
 # Expo
 .expo
 web-build/
-credentials.json
 
 # Expo prebuild generated folders (regenerated via `npx expo prebuild`)
 android/
