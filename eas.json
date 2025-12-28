@@ -10,8 +10,8 @@
 			"env": {
 				"NODE_ENV": "development"
 			},
-			"postInstall": {
-				"command": "pnpm build"
+			"hooks": {
+				"postInstall": "pnpm build"
 			}
 		},
 		"preview": {
@@ -19,8 +19,8 @@
 			"env": {
 				"NODE_ENV": "production"
 			},
-			"postInstall": {
-				"command": "pnpm build"
+			"hooks": {
+				"postInstall": "pnpm build"
 			}
 		},
 		"production": {
@@ -38,8 +38,8 @@
 			"cache": {
 				"key": "production-v1"
 			},
-			"postInstall": {
-				"command": "pnpm build"
+			"hooks": {
+				"postInstall": "pnpm build"
 			}
 		}
 	},
