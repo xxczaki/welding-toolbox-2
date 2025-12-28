@@ -18,7 +18,7 @@
 			}
 		},
 		"production": {
-			"autoIncrement": true,
+			"autoIncrement": false,
 			"env": {
 				"NODE_ENV": "production",
 				"EXPO_USE_METRO_WORKSPACE_ROOT": "1"
