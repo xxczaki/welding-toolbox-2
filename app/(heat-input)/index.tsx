@@ -646,49 +646,53 @@ const HeatInputScreen = () => {
 			>
 				{/* Total Energy Mode Toggle */}
 				{!settings?.totalEnergy && (
-					<View style={styles.section}>
-						<View style={styles.inputContainer}>
-							<Text style={styles.inputLabel}>Amperage</Text>
-							<View style={styles.inputWithUnit}>
-								<TextInput
-									ref={amperageRef}
-									style={styles.inputFlex}
-									value={amperage}
-									onChangeText={setAmperage}
-									keyboardType="decimal-pad"
-									placeholder="0"
-									placeholderTextColor={colors.textSecondary}
-									returnKeyType="next"
-									onSubmitEditing={() => voltageRef.current?.focus()}
-									blurOnSubmit={false}
-									accessibilityLabel="Amperage input field"
-									accessibilityHint="Enter welding amperage in amps"
-								/>
-								<Text style={styles.unitText}>A</Text>
+					<>
+						<View style={styles.section}>
+							<View style={styles.inputContainer}>
+								<Text style={styles.inputLabel}>Amperage</Text>
+								<View style={styles.inputWithUnit}>
+									<TextInput
+										ref={amperageRef}
+										style={styles.inputFlex}
+										value={amperage}
+										onChangeText={setAmperage}
+										keyboardType="decimal-pad"
+										placeholder="0"
+										placeholderTextColor={colors.textSecondary}
+										returnKeyType="next"
+										onSubmitEditing={() => voltageRef.current?.focus()}
+										blurOnSubmit={false}
+										accessibilityLabel="Amperage input field"
+										accessibilityHint="Enter welding amperage in amps"
+									/>
+									<Text style={styles.unitText}>A</Text>
+								</View>
 							</View>
 						</View>
 
-						<View style={styles.inputContainer}>
-							<Text style={styles.inputLabel}>Voltage</Text>
-							<View style={styles.inputWithUnit}>
-								<TextInput
-									ref={voltageRef}
-									style={styles.inputFlex}
-									value={voltage}
-									onChangeText={setVoltage}
-									keyboardType="decimal-pad"
-									placeholder="0"
-									placeholderTextColor={colors.textSecondary}
-									returnKeyType="next"
-									onSubmitEditing={() => lengthRef.current?.focus()}
-									blurOnSubmit={false}
-									accessibilityLabel="Voltage input field"
-									accessibilityHint="Enter welding voltage in volts"
-								/>
-								<Text style={styles.unitText}>V</Text>
+						<View style={styles.section}>
+							<View style={styles.inputContainer}>
+								<Text style={styles.inputLabel}>Voltage</Text>
+								<View style={styles.inputWithUnit}>
+									<TextInput
+										ref={voltageRef}
+										style={styles.inputFlex}
+										value={voltage}
+										onChangeText={setVoltage}
+										keyboardType="decimal-pad"
+										placeholder="0"
+										placeholderTextColor={colors.textSecondary}
+										returnKeyType="next"
+										onSubmitEditing={() => lengthRef.current?.focus()}
+										blurOnSubmit={false}
+										accessibilityLabel="Voltage input field"
+										accessibilityHint="Enter welding voltage in volts"
+									/>
+									<Text style={styles.unitText}>V</Text>
+								</View>
 							</View>
 						</View>
-					</View>
+					</>
 				)}
 
 				{/* Length Input */}
@@ -896,10 +900,10 @@ const HeatInputScreen = () => {
 				{/* Custom Fields */}
 				{settings?.customFields && settings.customFields.length > 0 && (
 					<>
-						<View style={styles.separator} />
-						<View style={styles.sectionWithSeparator}>
-							{settings.customFields.map((field, index) => (
-								<View key={field.timestamp} style={styles.inputContainer}>
+						<View style={[styles.separator, { marginBottom: spacing.md }]} />
+						{settings.customFields.map((field, index) => (
+							<View key={field.timestamp} style={styles.section}>
+								<View style={styles.inputContainer}>
 									<Text style={styles.inputLabel}>
 										{field.name}
 										{field.unit && ` (${field.unit})`}
@@ -924,8 +928,8 @@ const HeatInputScreen = () => {
 										accessibilityHint={`Enter value for ${field.name}`}
 									/>
 								</View>
-							))}
-						</View>
+							</View>
+						))}
 					</>
 				)}
 			</ScrollView>
@@ -1137,15 +1141,12 @@ const styles = StyleSheet.create({
 	section: {
 		marginBottom: spacing.md,
 	},
-	sectionWithSeparator: {
-		marginTop: spacing.md,
-		marginBottom: spacing.md,
-	},
 	inputContainer: {
-		marginBottom: spacing.md,
+		gap: spacing.xs,
 	},
 	inputLabel: {
 		...commonStyles.inputLabel,
+		marginBottom: 0,
 	},
 	inputWithButtons: {
 		flexDirection: 'row',
@@ -1246,7 +1247,6 @@ const styles = StyleSheet.create({
 	},
 	segmentedControl: {
 		height: 32,
-		marginBottom: spacing.sm,
 	},
 	selectButton: {
 		backgroundColor: colors.surfaceVariant,
