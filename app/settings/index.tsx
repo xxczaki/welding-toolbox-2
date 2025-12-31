@@ -3,10 +3,12 @@ import { useFocusEffect } from '@react-navigation/native';
 import { GlassView } from 'expo-glass-effect';
 import { useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
 	ActionSheetIOS,
 	Alert,
+	Animated,
+	Easing,
 	KeyboardAvoidingView,
 	Linking,
 	Platform,
@@ -35,10 +37,20 @@ const SettingsScreen = () => {
 	const [settings, setSettings] = useState<Settings>({});
 	const [isLayoutReady, setIsLayoutReady] = useState<boolean>(false);
 
+	// Animated value for disabled state
+	const travelSpeedUnitOpacity = useRef(new Animated.Value(1)).current;
+
 	const resultUnitOptions = [
 		{ label: 'kJ/mm', value: 'mm' },
 		{ label: 'kJ/cm', value: 'cm' },
 		{ label: 'kJ/in', value: 'in' },
+	];
+
+	const travelSpeedUnitOptions = [
+		{ label: 'mm/min', value: 'mm/min' },
+		{ label: 'mm/s', value: 'mm/s' },
+		{ label: 'in/min', value: 'in/min' },
+		{ label: 'in/s', value: 'in/s' },
 	];
 
 	const showResultUnitPicker = () => {
@@ -59,7 +71,7 @@ const SettingsScreen = () => {
 				},
 			);
 		} else {
-			Alert.alert('Display result in', '', [
+			Alert.alert('Result Unit', '', [
 				...resultUnitOptions.map((option) => ({
 					text: option.label,
 					onPress: () =>
@@ -73,11 +85,58 @@ const SettingsScreen = () => {
 		}
 	};
 
+	const showTravelSpeedUnitPicker = () => {
+		if (Platform.OS === 'ios') {
+			ActionSheetIOS.showActionSheetWithOptions(
+				{
+					options: ['Cancel', ...travelSpeedUnitOptions.map((o) => o.label)],
+					cancelButtonIndex: 0,
+				},
+				(buttonIndex) => {
+					if (buttonIndex > 0) {
+						const selectedOption = travelSpeedUnitOptions[buttonIndex - 1];
+						setSettings({
+							...settings,
+							travelSpeedUnit: selectedOption.value as
+								| 'mm/min'
+								| 'mm/s'
+								| 'in/min'
+								| 'in/s',
+						});
+					}
+				},
+			);
+		} else {
+			Alert.alert('Travel Speed Unit', '', [
+				...travelSpeedUnitOptions.map((option) => ({
+					text: option.label,
+					onPress: () =>
+						setSettings({
+							...settings,
+							travelSpeedUnit: option.value as
+								| 'mm/min'
+								| 'mm/s'
+								| 'in/min'
+								| 'in/s',
+						}),
+				})),
+				{ text: 'Cancel', style: 'cancel' as const },
+			]);
+		}
+	};
+
 	const getResultUnitLabel = () => {
 		const option = resultUnitOptions.find(
 			(o) => o.value === (settings?.resultUnit || 'mm'),
 		);
 		return option ? option.label : 'kJ/mm';
+	};
+
+	const getTravelSpeedUnitLabel = () => {
+		const option = travelSpeedUnitOptions.find(
+			(o) => o.value === (settings?.travelSpeedUnit || 'mm/min'),
+		);
+		return option ? option.label : 'mm/min';
 	};
 
 	useFocusEffect(
@@ -105,6 +164,16 @@ const SettingsScreen = () => {
 			})();
 		}
 	}, [settings]);
+
+	// Animate disabled state for travel speed unit
+	useEffect(() => {
+		Animated.timing(travelSpeedUnitOpacity, {
+			toValue: settings?.totalEnergy ? 0.4 : 1,
+			duration: 300,
+			easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+			useNativeDriver: true,
+		}).start();
+	}, [settings?.totalEnergy, travelSpeedUnitOpacity]);
 
 	return (
 		<View style={styles.container}>
@@ -163,12 +232,12 @@ const SettingsScreen = () => {
 								]}
 							>
 								{/* Result Unit */}
-								<View style={styles.settingItem}>
-									<Text style={styles.settingLabel}>Display result in</Text>
-									<TouchableOpacity
-										style={styles.settingValue}
-										onPress={showResultUnitPicker}
-									>
+								<TouchableOpacity
+									style={styles.settingItem}
+									onPress={showResultUnitPicker}
+								>
+									<Text style={styles.settingLabel}>Result Unit</Text>
+									<View style={styles.settingValue}>
 										<Text style={styles.settingValueText}>
 											{getResultUnitLabel()}
 										</Text>
@@ -186,8 +255,52 @@ const SettingsScreen = () => {
 												color={colors.textSecondary}
 											/>
 										)}
+									</View>
+								</TouchableOpacity>
+
+								<View style={styles.separator} />
+
+								{/* Travel Speed Unit */}
+								<Animated.View style={{ opacity: travelSpeedUnitOpacity }}>
+									<TouchableOpacity
+										style={styles.settingItem}
+										onPress={showTravelSpeedUnitPicker}
+										disabled={settings?.totalEnergy}
+									>
+										<Text
+											style={[
+												styles.settingLabel,
+												settings?.totalEnergy && styles.settingLabelDisabled,
+											]}
+										>
+											Travel Speed Unit
+										</Text>
+										<View style={styles.settingValue}>
+											<Text
+												style={[
+													styles.settingValueText,
+													settings?.totalEnergy && styles.settingLabelDisabled,
+												]}
+											>
+												{getTravelSpeedUnitLabel()}
+											</Text>
+											{Platform.OS === 'ios' ? (
+												<SymbolView
+													name="chevron.right"
+													size={14}
+													type="hierarchical"
+													tintColor={colors.textSecondary}
+												/>
+											) : (
+												<MaterialCommunityIcons
+													name="chevron-right"
+													size={18}
+													color={colors.textSecondary}
+												/>
+											)}
+										</View>
 									</TouchableOpacity>
-								</View>
+								</Animated.View>
 
 								<View style={styles.separator} />
 
@@ -195,7 +308,7 @@ const SettingsScreen = () => {
 								<View style={styles.settingItem}>
 									<View style={styles.settingLabelContainer}>
 										<Text style={styles.settingLabel}>
-											Enter length/diameter in inches
+											Use Imperial Units for Inputs
 										</Text>
 									</View>
 									<Switch
@@ -223,7 +336,7 @@ const SettingsScreen = () => {
 								<View style={styles.settingItem}>
 									<View style={styles.settingLabelContainer}>
 										<Text style={styles.settingLabel}>
-											Use total energy and length
+											Use Total Energy and Length
 										</Text>
 										<Text style={styles.settingDescription}>
 											For newer welders.
@@ -412,10 +525,16 @@ const styles = StyleSheet.create({
 		...typography.body,
 		color: colors.text,
 	},
+	settingLabelDisabled: {
+		color: colors.textSecondary,
+	},
 	settingDescription: {
 		...typography.caption1,
 		color: colors.textSecondary,
 		marginTop: spacing.xs,
+	},
+	settingDescriptionDisabled: {
+		opacity: 0.5,
 	},
 	settingValue: {
 		flexDirection: 'row',

@@ -46,7 +46,7 @@ export default function TabLayout() {
 				<NativeTabs.Trigger name="weldability">
 					<Label>Weldability</Label>
 					{Platform.OS === 'ios' ? (
-						<Icon sf="function" />
+						<Icon sf="hammer.fill" />
 					) : (
 						<Icon
 							src={

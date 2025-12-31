@@ -337,6 +337,13 @@ const HistoryScreen = () => {
 												</Text>
 											</>
 										)}
+										{/* Display travel speed if available */}
+										{entry['Travel Speed'] &&
+											entry['Travel Speed'] !== 'N/A' && (
+												<Text style={styles.historyDetailText}>
+													Travel Speed: {entry['Travel Speed']}
+												</Text>
+											)}
 										{/* Display custom fields */}
 										{Object.entries(entry)
 											.filter(
@@ -351,6 +358,7 @@ const HistoryScreen = () => {
 														'Time',
 														'Efficiency factor',
 														'Heat Input',
+														'Travel Speed',
 													].includes(key),
 											)
 											.map(([key, value]) => (

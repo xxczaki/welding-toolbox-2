@@ -1,7 +1,5 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import { GlassView } from 'expo-glass-effect';
-import { SymbolView } from 'expo-symbols';
 import React, { useEffect, useRef, useState } from 'react';
 import {
 	Keyboard,
@@ -246,36 +244,12 @@ const WeldabilityScreen = () => {
 						Platform.OS === 'android' && styles.glassAndroidFallback,
 					]}
 				>
-					<View style={styles.resultsHeader}>
-						<Text style={styles.resultsTitle}>Results</Text>
-						{(results.ceq !== '0' || results.cet !== '0') && (
-							<TouchableOpacity
-								onPress={async () => {
-									const text = `CEQ: ${results.ceq}, CET: ${results.cet}, CE (AWS): ${results.ceAws}, PCM: ${results.pcm}, PREN: ${results.pren}`;
-									await Clipboard.setStringAsync(text);
-								}}
-								style={styles.iconButton}
-							>
-								{Platform.OS === 'ios' ? (
-									<SymbolView
-										name="doc.on.doc"
-										size={18}
-										type="hierarchical"
-										tintColor={colors.textSecondary}
-									/>
-								) : (
-									<MaterialCommunityIcons
-										name="content-copy"
-										size={18}
-										color={colors.textSecondary}
-									/>
-								)}
-							</TouchableOpacity>
-						)}
-					</View>
-					<View style={styles.resultsGrid}>
-						<View style={styles.resultItem}>
-							<Text style={styles.resultLabel}>CEQ</Text>
+					<ScrollView
+						horizontal
+						showsHorizontalScrollIndicator={false}
+						contentContainerStyle={styles.resultsScrollContent}
+					>
+						<View style={styles.resultsGrid}>
 							<TouchableOpacity
 								onPress={async () => {
 									if (results.ceq !== '0') {
@@ -283,7 +257,9 @@ const WeldabilityScreen = () => {
 									}
 								}}
 								disabled={results.ceq === '0'}
+								style={styles.resultItem}
 							>
+								<Text style={styles.resultLabel}>CEQ</Text>
 								<Text
 									style={
 										results.ceq === '0'
@@ -294,9 +270,6 @@ const WeldabilityScreen = () => {
 									{results.ceq === '0' ? '—' : results.ceq}
 								</Text>
 							</TouchableOpacity>
-						</View>
-						<View style={styles.resultItem}>
-							<Text style={styles.resultLabel}>CET</Text>
 							<TouchableOpacity
 								onPress={async () => {
 									if (results.cet !== '0') {
@@ -304,7 +277,9 @@ const WeldabilityScreen = () => {
 									}
 								}}
 								disabled={results.cet === '0'}
+								style={styles.resultItem}
 							>
+								<Text style={styles.resultLabel}>CET</Text>
 								<Text
 									style={
 										results.cet === '0'
@@ -315,9 +290,6 @@ const WeldabilityScreen = () => {
 									{results.cet === '0' ? '—' : results.cet}
 								</Text>
 							</TouchableOpacity>
-						</View>
-						<View style={styles.resultItem}>
-							<Text style={styles.resultLabel}>CE (AWS)</Text>
 							<TouchableOpacity
 								onPress={async () => {
 									if (results.ceAws !== '0') {
@@ -325,7 +297,9 @@ const WeldabilityScreen = () => {
 									}
 								}}
 								disabled={results.ceAws === '0'}
+								style={styles.resultItem}
 							>
+								<Text style={styles.resultLabel}>CE (AWS)</Text>
 								<Text
 									style={
 										results.ceAws === '0'
@@ -336,9 +310,6 @@ const WeldabilityScreen = () => {
 									{results.ceAws === '0' ? '—' : results.ceAws}
 								</Text>
 							</TouchableOpacity>
-						</View>
-						<View style={styles.resultItem}>
-							<Text style={styles.resultLabel}>PCM</Text>
 							<TouchableOpacity
 								onPress={async () => {
 									if (results.pcm !== '0') {
@@ -346,7 +317,9 @@ const WeldabilityScreen = () => {
 									}
 								}}
 								disabled={results.pcm === '0'}
+								style={styles.resultItem}
 							>
+								<Text style={styles.resultLabel}>PCM</Text>
 								<Text
 									style={
 										results.pcm === '0'
@@ -357,9 +330,6 @@ const WeldabilityScreen = () => {
 									{results.pcm === '0' ? '—' : results.pcm}
 								</Text>
 							</TouchableOpacity>
-						</View>
-						<View style={styles.resultItem}>
-							<Text style={styles.resultLabel}>PREN</Text>
 							<TouchableOpacity
 								onPress={async () => {
 									if (results.pren !== '0') {
@@ -367,7 +337,9 @@ const WeldabilityScreen = () => {
 									}
 								}}
 								disabled={results.pren === '0'}
+								style={styles.resultItem}
 							>
+								<Text style={styles.resultLabel}>PREN</Text>
 								<Text
 									style={
 										results.pren === '0'
@@ -379,7 +351,7 @@ const WeldabilityScreen = () => {
 								</Text>
 							</TouchableOpacity>
 						</View>
-					</View>
+					</ScrollView>
 				</GlassView>
 			</TouchableWithoutFeedback>
 
@@ -403,7 +375,7 @@ const WeldabilityScreen = () => {
 							value={carbon}
 							onChangeText={setCarbon}
 							returnKeyType="next"
-							onSubmitEditing={() => manganeseRef.current?.focus()}
+							onSubmitEditing={() => molybdenumRef.current?.focus()}
 							accessibilityLabel="Carbon input field"
 							accessibilityHint="Enter carbon percentage"
 						/>
@@ -413,7 +385,7 @@ const WeldabilityScreen = () => {
 							value={manganese}
 							onChangeText={setManganese}
 							returnKeyType="next"
-							onSubmitEditing={() => siliconRef.current?.focus()}
+							onSubmitEditing={() => copperRef.current?.focus()}
 							accessibilityLabel="Manganese input field"
 							accessibilityHint="Enter manganese percentage"
 						/>
@@ -423,7 +395,7 @@ const WeldabilityScreen = () => {
 							value={silicon}
 							onChangeText={setSilicon}
 							returnKeyType="next"
-							onSubmitEditing={() => chromiumRef.current?.focus()}
+							onSubmitEditing={() => vanadiumRef.current?.focus()}
 							accessibilityLabel="Silicon input field"
 							accessibilityHint="Enter silicon percentage"
 						/>
@@ -433,7 +405,7 @@ const WeldabilityScreen = () => {
 							value={chromium}
 							onChangeText={setChromium}
 							returnKeyType="next"
-							onSubmitEditing={() => nickelRef.current?.focus()}
+							onSubmitEditing={() => nitrogenRef.current?.focus()}
 							accessibilityLabel="Chromium input field"
 							accessibilityHint="Enter chromium percentage"
 						/>
@@ -443,7 +415,7 @@ const WeldabilityScreen = () => {
 							value={nickel}
 							onChangeText={setNickel}
 							returnKeyType="next"
-							onSubmitEditing={() => molybdenumRef.current?.focus()}
+							onSubmitEditing={() => boronRef.current?.focus()}
 							accessibilityLabel="Nickel input field"
 							accessibilityHint="Enter nickel percentage"
 						/>
@@ -455,7 +427,7 @@ const WeldabilityScreen = () => {
 							value={molybdenum}
 							onChangeText={setMolybdenum}
 							returnKeyType="next"
-							onSubmitEditing={() => copperRef.current?.focus()}
+							onSubmitEditing={() => manganeseRef.current?.focus()}
 							accessibilityLabel="Molybdenum input field"
 							accessibilityHint="Enter molybdenum percentage"
 						/>
@@ -465,7 +437,7 @@ const WeldabilityScreen = () => {
 							value={copper}
 							onChangeText={setCopper}
 							returnKeyType="next"
-							onSubmitEditing={() => vanadiumRef.current?.focus()}
+							onSubmitEditing={() => siliconRef.current?.focus()}
 							accessibilityLabel="Copper input field"
 							accessibilityHint="Enter copper percentage"
 						/>
@@ -475,7 +447,7 @@ const WeldabilityScreen = () => {
 							value={vanadium}
 							onChangeText={setVanadium}
 							returnKeyType="next"
-							onSubmitEditing={() => nitrogenRef.current?.focus()}
+							onSubmitEditing={() => chromiumRef.current?.focus()}
 							accessibilityLabel="Vanadium input field"
 							accessibilityHint="Enter vanadium percentage"
 						/>
@@ -485,7 +457,7 @@ const WeldabilityScreen = () => {
 							value={nitrogen}
 							onChangeText={setNitrogen}
 							returnKeyType="next"
-							onSubmitEditing={() => boronRef.current?.focus()}
+							onSubmitEditing={() => nickelRef.current?.focus()}
 							accessibilityLabel="Nitrogen input field"
 							accessibilityHint="Enter nitrogen percentage"
 						/>
@@ -636,7 +608,8 @@ const styles = StyleSheet.create({
 		marginHorizontal: spacing.md,
 		marginTop: spacing.sm,
 		marginBottom: spacing.md,
-		padding: spacing.md,
+		paddingHorizontal: spacing.md,
+		paddingVertical: spacing.md,
 		overflow: 'hidden',
 		...Platform.select({
 			ios: {
@@ -647,7 +620,8 @@ const styles = StyleSheet.create({
 				...(isIPad()
 					? {
 							marginHorizontal: spacing.xxl * 2,
-							padding: spacing.lg,
+							paddingHorizontal: spacing.lg,
+							paddingVertical: spacing.md,
 						}
 					: {}),
 			},
@@ -661,51 +635,52 @@ const styles = StyleSheet.create({
 		borderWidth: StyleSheet.hairlineWidth,
 		borderColor: colors.border,
 	},
-	resultsHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		marginBottom: spacing.md,
-	},
-	resultsTitle: {
-		...typography.title2,
-		color: colors.text,
-		flex: 1,
-	},
-	iconButton: {
-		padding: spacing.xs,
+	resultsScrollContent: {
+		flexGrow: 1,
 	},
 	resultsGrid: {
 		flexDirection: 'row',
-		flexWrap: 'wrap',
-		marginHorizontal: -spacing.sm,
+		flexWrap: 'nowrap',
+		justifyContent: 'space-between',
+		width: '100%',
+		gap: spacing.sm,
 	},
 	resultItem: {
-		width: isIPad() ? '20%' : '33.33%',
-		paddingHorizontal: spacing.sm,
-		marginBottom: spacing.md,
+		alignItems: 'center',
+		paddingVertical: spacing.xs,
+		flexShrink: 0,
+		minWidth: 50,
 	},
 	resultLabel: {
 		...typography.caption1,
 		color: colors.textSecondary,
-		marginBottom: spacing.xs,
+		marginBottom: 2,
+		fontSize: 10,
+		textAlign: 'center',
 		...Platform.select({
 			ios: {
 				textTransform: 'uppercase',
 				fontWeight: '600',
-				letterSpacing: 0.5,
+				letterSpacing: 0.3,
 			},
 		}),
 	},
 	resultValue: {
-		...typography.title2,
+		...typography.title3,
 		color: colors.primary,
 		fontWeight: '700',
+		fontSize: 17,
+		letterSpacing: -0.2,
+		textAlign: 'center',
+		flexShrink: 0,
 	},
 	resultValueEmpty: {
-		...typography.title2,
-		color: colors.textSecondary,
-		fontWeight: '700',
+		...typography.title3,
+		color: 'rgba(255, 255, 255, 0.2)',
+		fontWeight: '400',
+		fontSize: 17,
+		textAlign: 'center',
+		flexShrink: 0,
 	},
 	inputsContainer: {
 		flexDirection: 'row',

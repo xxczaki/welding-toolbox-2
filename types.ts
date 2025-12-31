@@ -16,6 +16,7 @@ export interface HistoryEntry {
 	Time: string;
 	'Efficiency factor': number | string;
 	'Heat Input': string;
+	'Travel Speed': string;
 	[key: string]: string | number; // For custom fields
 }
 
@@ -25,6 +26,7 @@ export interface Settings {
 	totalEnergy?: boolean;
 	customFields?: CustomField[];
 	resultHistory?: HistoryEntry[];
+	travelSpeedUnit?: 'mm/min' | 'mm/s' | 'in/min' | 'in/s';
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -33,4 +35,5 @@ export const DEFAULT_SETTINGS: Settings = {
 	totalEnergy: false,
 	resultHistory: [],
 	customFields: [],
+	travelSpeedUnit: 'mm/min',
 };
