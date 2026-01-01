@@ -80,9 +80,13 @@ pnpm-debug.log
 web-build/
 
 # Expo prebuild generated folders (regenerated via `npx expo prebuild`)
-android/
-ios/
+# Only ignore root-level android/ios folders (Expo prebuild artifacts)
+/android/
+/ios/
 
 # Package build outputs
 packages/*/dist/
 packages/*/coverage/
+
+# Local Expo modules are NOT ignored - they contain source code
+# modules/* should be tracked by git

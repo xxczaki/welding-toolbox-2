@@ -21,6 +21,7 @@ import {
 	TouchableWithoutFeedback,
 	View,
 } from 'react-native';
+import ARKitMeasurement from 'react-native-arkit-measurement';
 import { heatInput } from 'welding-utils';
 import { useStopwatch } from '../../hooks/use-stopwatch';
 import storage from '../../storage';
@@ -73,6 +74,20 @@ const HeatInputScreen = () => {
 	// Result
 	const [result, setResult] = useState<number>(0);
 	const [travelSpeed, setTravelSpeed] = useState<number>(0);
+
+	// AR measurement support
+	const [isARSupported, setIsARSupported] = useState<boolean>(false);
+
+	// Check AR support on mount
+	useEffect(() => {
+		if (Platform.OS === 'ios') {
+			ARKitMeasurement.isSupported()
+				.then(setIsARSupported)
+				.catch(() => {
+					setIsARSupported(false);
+				});
+		}
+	}, []);
 
 	// Load settings on focus
 	useFocusEffect(
@@ -538,6 +553,33 @@ const HeatInputScreen = () => {
 		return option ? option.label : 'Select…';
 	};
 
+	const handleARMeasurement = async () => {
+		try {
+			// Pass the unit preference to the AR module
+			const unit = settings?.lengthImperial ? 'in' : 'mm';
+			const result = await ARKitMeasurement.measureDistance({ unit });
+
+			// The AR module now returns the distance in the correct unit
+			// Round appropriately based on unit
+			const formattedDistance =
+				unit === 'in' ? result.distance.toFixed(2) : result.distance.toFixed(1);
+
+			setLength(formattedDistance);
+		} catch (error) {
+			// Expo modules reject with { code, message } - check both
+			const errorCode = (error as { code?: string })?.code;
+			const errorMessage =
+				error instanceof Error ? error.message : 'Unknown error';
+			// Silently ignore user cancellation
+			if (
+				errorCode !== 'USER_CANCELLED' &&
+				!errorMessage.includes('cancelled')
+			) {
+				Alert.alert('AR Measurement Error', errorMessage);
+			}
+		}
+	};
+
 	return (
 		<View style={styles.container}>
 			{/* Header */}
@@ -787,12 +829,17 @@ const HeatInputScreen = () => {
 					<>
 						<View style={styles.section}>
 							<View style={styles.twoColumnRow}>
-								<View style={styles.columnHalf}>
+								<View style={styles.columnWide}>
 									<View style={styles.inputContainer}>
 										<Text style={styles.inputLabel}>
 											{isDiameter ? 'Diameter' : 'Length'}
 										</Text>
-										<View style={styles.inputWithUnit}>
+										<View
+											style={[
+												styles.inputWithUnit,
+												isARSupported && styles.inputWithArButton,
+											]}
+										>
 											<TextInput
 												ref={lengthRef}
 												style={styles.inputFlex}
@@ -810,10 +857,33 @@ const HeatInputScreen = () => {
 											<Text style={styles.unitText}>
 												{settings?.lengthImperial ? 'in' : 'mm'}
 											</Text>
+											{isARSupported && (
+												<GlassView
+													glassEffectStyle="clear"
+													style={[
+														styles.arButtonGlassInline,
+														Platform.OS === 'android' &&
+															styles.glassButtonAndroidFallback,
+													]}
+												>
+													<TouchableOpacity
+														onPress={handleARMeasurement}
+														style={styles.arButtonInline}
+													>
+														<SymbolView
+															name="arkit"
+															size={16}
+															type="hierarchical"
+															tintColor={colors.primary}
+															style={styles.iconTiny}
+														/>
+													</TouchableOpacity>
+												</GlassView>
+											)}
 										</View>
 									</View>
 								</View>
-								<View style={styles.columnHalf}>
+								<View style={styles.columnNarrow}>
 									<View style={styles.inputContainer}>
 										<Text style={styles.inputLabel}>Total Energy</Text>
 										<View style={styles.inputWithUnit}>
@@ -839,30 +909,26 @@ const HeatInputScreen = () => {
 						{/* Controls Row */}
 						<View style={[styles.section, { marginTop: -spacing.xs }]}>
 							<View style={styles.twoColumnRow}>
-								<View style={styles.columnHalf}>
-									<View style={styles.controlWrapper}>
-										<SegmentedControl
-											values={['Length', 'Diameter']}
-											selectedIndex={isDiameter ? 1 : 0}
-											onChange={(event) => {
-												setDiameter(
-													event.nativeEvent.selectedSegmentIndex === 1,
-												);
-											}}
-											style={styles.segmentedControl}
-											backgroundColor={colors.background}
-											tintColor={colors.surfaceVariant}
-											fontStyle={{ color: colors.textSecondary, fontSize: 15 }}
-											activeFontStyle={{
-												color: colors.text,
-												fontSize: 15,
-												fontWeight: '600',
-											}}
-											appearance="dark"
-										/>
-									</View>
+								<View style={styles.columnWide}>
+									<SegmentedControl
+										values={['Length', 'Diameter']}
+										selectedIndex={isDiameter ? 1 : 0}
+										onChange={(event) => {
+											setDiameter(event.nativeEvent.selectedSegmentIndex === 1);
+										}}
+										style={styles.segmentedControl}
+										backgroundColor={colors.background}
+										tintColor={colors.surfaceVariant}
+										fontStyle={{ color: colors.textSecondary, fontSize: 15 }}
+										activeFontStyle={{
+											color: colors.text,
+											fontSize: 15,
+											fontWeight: '600',
+										}}
+										appearance="dark"
+									/>
 								</View>
-								<View style={styles.columnHalf} />
+								<View style={styles.columnNarrow} />
 							</View>
 						</View>
 					</>
@@ -870,12 +936,17 @@ const HeatInputScreen = () => {
 					<>
 						<View style={styles.section}>
 							<View style={styles.twoColumnRow}>
-								<View style={styles.columnHalf}>
+								<View style={styles.columnWide}>
 									<View style={styles.inputContainer}>
 										<Text style={styles.inputLabel}>
 											{isDiameter ? 'Diameter' : 'Length'}
 										</Text>
-										<View style={styles.inputWithUnit}>
+										<View
+											style={[
+												styles.inputWithUnit,
+												isARSupported && styles.inputWithArButton,
+											]}
+										>
 											<TextInput
 												ref={lengthRef}
 												style={styles.inputFlex}
@@ -893,10 +964,33 @@ const HeatInputScreen = () => {
 											<Text style={styles.unitText}>
 												{settings?.lengthImperial ? 'in' : 'mm'}
 											</Text>
+											{isARSupported && (
+												<GlassView
+													glassEffectStyle="clear"
+													style={[
+														styles.arButtonGlassInline,
+														Platform.OS === 'android' &&
+															styles.glassButtonAndroidFallback,
+													]}
+												>
+													<TouchableOpacity
+														onPress={handleARMeasurement}
+														style={styles.arButtonInline}
+													>
+														<SymbolView
+															name="arkit"
+															size={16}
+															type="hierarchical"
+															tintColor={colors.primary}
+															style={styles.iconTiny}
+														/>
+													</TouchableOpacity>
+												</GlassView>
+											)}
 										</View>
 									</View>
 								</View>
-								<View style={styles.columnHalf}>
+								<View style={styles.columnNarrow}>
 									<View style={styles.inputContainer}>
 										<Text style={styles.inputLabel}>Time</Text>
 										<View style={styles.inputWithUnit}>
@@ -922,30 +1016,26 @@ const HeatInputScreen = () => {
 						{/* Controls Row */}
 						<View style={[styles.section, { marginTop: -spacing.xs }]}>
 							<View style={styles.twoColumnRow}>
-								<View style={styles.columnHalf}>
-									<View style={styles.controlWrapper}>
-										<SegmentedControl
-											values={['Length', 'Diameter']}
-											selectedIndex={isDiameter ? 1 : 0}
-											onChange={(event) => {
-												setDiameter(
-													event.nativeEvent.selectedSegmentIndex === 1,
-												);
-											}}
-											style={styles.segmentedControl}
-											backgroundColor={colors.background}
-											tintColor={colors.surfaceVariant}
-											fontStyle={{ color: colors.textSecondary, fontSize: 15 }}
-											activeFontStyle={{
-												color: colors.text,
-												fontSize: 15,
-												fontWeight: '600',
-											}}
-											appearance="dark"
-										/>
-									</View>
+								<View style={styles.columnWide}>
+									<SegmentedControl
+										values={['Length', 'Diameter']}
+										selectedIndex={isDiameter ? 1 : 0}
+										onChange={(event) => {
+											setDiameter(event.nativeEvent.selectedSegmentIndex === 1);
+										}}
+										style={styles.segmentedControl}
+										backgroundColor={colors.background}
+										tintColor={colors.surfaceVariant}
+										fontStyle={{ color: colors.textSecondary, fontSize: 15 }}
+										activeFontStyle={{
+											color: colors.text,
+											fontSize: 15,
+											fontWeight: '600',
+										}}
+										appearance="dark"
+									/>
 								</View>
-								<View style={styles.columnHalf}>
+								<View style={styles.columnNarrow}>
 									<View style={styles.timerControlsRow}>
 										<GlassView
 											glassEffectStyle="clear"
@@ -1359,6 +1449,12 @@ const styles = StyleSheet.create({
 	columnHalf: {
 		flex: 1,
 	},
+	columnWide: {
+		flex: 1,
+	},
+	columnNarrow: {
+		flex: 1,
+	},
 	inputContainer: {
 		gap: spacing.xs,
 	},
@@ -1445,6 +1541,9 @@ const styles = StyleSheet.create({
 		borderWidth: Platform.OS === 'ios' ? 0 : StyleSheet.hairlineWidth,
 		borderColor: colors.border,
 	},
+	inputWithArButton: {
+		paddingRight: spacing.sm,
+	},
 	inputFlex: {
 		flex: 1,
 		...typography.body,
@@ -1456,6 +1555,19 @@ const styles = StyleSheet.create({
 		...typography.body,
 		color: colors.textSecondary,
 		fontWeight: '500',
+	},
+	arButtonGlassInline: {
+		width: 28,
+		height: 28,
+		borderRadius: 14,
+		marginLeft: spacing.sm,
+		overflow: 'hidden',
+	},
+	arButtonInline: {
+		width: 28,
+		height: 28,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	switchButton: {
 		paddingHorizontal: spacing.sm,
@@ -1469,6 +1581,37 @@ const styles = StyleSheet.create({
 	},
 	controlWrapper: {
 		flex: 1,
+	},
+	controlWrapperWithButton: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: spacing.xs,
+	},
+	segmentedControlWrapper: {
+		flex: 1,
+	},
+	arButtonGlass: {
+		width: 32,
+		height: 32,
+		borderRadius: 16,
+		overflow: 'hidden',
+		...Platform.select({
+			ios: {
+				shadowColor: '#000',
+				shadowOffset: { width: 0, height: 2 },
+				shadowOpacity: 0.25,
+				shadowRadius: 4,
+			},
+			android: {
+				elevation: 4,
+			},
+		}),
+	},
+	arButton: {
+		width: 32,
+		height: 32,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	timerControlsRow: {
 		flexDirection: 'row',

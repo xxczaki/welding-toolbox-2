@@ -7,6 +7,10 @@ export default function HeatInputLayout() {
 			screenOptions={{
 				headerShown: false,
 				animation: 'simple_push',
+				// Fix for white flash when opening/closing notification center on iOS
+				// The react-native-screens library hardcodes a white background which doesn't respect dark mode
+				// See: https://github.com/expo/expo/issues/39969
+				contentStyle: { backgroundColor: '#000000' },
 			}}
 		>
 			<Stack.Screen name="index" />

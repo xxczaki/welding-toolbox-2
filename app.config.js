@@ -50,6 +50,8 @@ module.exports = {
 			infoPlist: {
 				ITSAppUsesNonExemptEncryption: false,
 				UIUserInterfaceStyle: 'Dark',
+				NSCameraUsageDescription:
+					'This app uses the camera for optional, AR-based distance measurements to help you measure weld lengths.',
 			},
 		},
 		githubUrl: 'https://github.com/xxczaki/welding-toolbox-2',
@@ -83,7 +85,7 @@ module.exports = {
 						},
 					},
 					ios: {
-						deploymentTarget: '15.1',
+						deploymentTarget: '16.0',
 					},
 				},
 			],

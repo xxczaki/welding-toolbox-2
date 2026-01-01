@@ -1,0 +1,35 @@
+{
+	"name": "react-native-arkit-measurement",
+	"version": "1.0.0",
+	"description": "ARKit distance measurement module for React Native with Expo",
+	"main": "index.ts",
+	"types": "src/index.ts",
+	"scripts": {},
+	"keywords": [
+		"react-native",
+		"expo",
+		"arkit",
+		"measurement",
+		"ar",
+		"augmented-reality",
+		"ios"
+	],
+	"author": "Antoni Kępiński",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/xxczaki/react-native-arkit-measurement"
+	},
+	"bugs": {
+		"url": "https://github.com/xxczaki/react-native-arkit-measurement/issues"
+	},
+	"homepage": "https://github.com/xxczaki/react-native-arkit-measurement#readme",
+	"peerDependencies": {
+		"expo": ">=51.0.0",
+		"react": ">=18.0.0",
+		"react-native": ">=0.74.0"
+	},
+	"devDependencies": {
+		"expo-modules-core": "^2.0.0"
+	}
+}
