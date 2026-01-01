@@ -109,7 +109,21 @@ importers:
         specifier: ~5.9.2
         version: 5.9.3
 
-  modules/react-native-arkit-measurement: {}
+  modules/react-native-arkit-measurement:
+    dependencies:
+      expo:
+        specifier: '>=51.0.0'
+        version: 54.0.30(@babel/core@7.28.5)(@expo/metro-runtime@6.1.2)(expo-router@6.0.21)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      react:
+        specifier: '>=18.0.0'
+        version: 19.1.0
+      react-native:
+        specifier: '>=0.74.0'
+        version: 0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)
+    devDependencies:
+      expo-modules-core:
+        specifier: ^2.0.0
+        version: 2.5.0
 
   packages/welding-utils:
     devDependencies:
@@ -2301,6 +2315,9 @@ packages:
   expo-modules-autolinking@3.0.23:
     resolution: {integrity: sha512-YZnaE0G+52xftjH5nsIRaWsoVBY38SQCECclpdgLisdbRY/6Mzo7ndokjauOv3mpFmzMZACHyJNu1YSAffQwTg==}
     hasBin: true
+
+  expo-modules-core@2.5.0:
+    resolution: {integrity: sha512-aIbQxZE2vdCKsolQUl6Q9Farlf8tjh/ROR4hfN1qT7QBGPl1XrJGnaOKkcgYaGrlzCPg/7IBe0Np67GzKMZKKQ==}
 
   expo-modules-core@3.0.29:
     resolution: {integrity: sha512-LzipcjGqk8gvkrOUf7O2mejNWugPkf3lmd9GkqL9WuNyeN2fRwU0Dn77e3ZUKI3k6sI+DNwjkq4Nu9fNN9WS7Q==}
@@ -6562,6 +6579,10 @@ snapshots:
       commander: 7.2.0
       require-from-string: 2.0.2
       resolve-from: 5.0.0
+
+  expo-modules-core@2.5.0:
+    dependencies:
+      invariant: 2.2.4
 
   expo-modules-core@3.0.29(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0):
     dependencies:
