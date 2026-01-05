@@ -26,7 +26,7 @@ export const useStopwatch = (): UseStopwatchReturn => {
 
 		return () => {
 			if (intervalRef.current) {
-				clearTimeout(intervalRef.current);
+				clearInterval(intervalRef.current);
 			}
 		};
 	}, [started, startTime]);

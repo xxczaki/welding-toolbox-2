@@ -8,9 +8,10 @@ module.exports = {
 			silentLaunch: true,
 		},
 		slug: 'weldingtoolbox2',
-		version: '2.2.0',
+		version: '2.3.0',
 		icon: 'assets/images/icon.png',
 		android: {
+			label: 'WT2',
 			package: 'me.kepinski.weldingtoolbox2',
 			playStoreUrl:
 				'https://play.google.com/store/apps/details?id=me.kepinski.weldingtoolbox2',
@@ -19,7 +20,7 @@ module.exports = {
 				monochromeImage: 'assets/images/foreground.png',
 				backgroundColor: '#ff9800',
 			},
-			versionCode: 3145777,
+			versionCode: 3145778,
 			userInterfaceStyle: 'dark',
 			softwareKeyboardLayoutMode: 'pan',
 			// Only block permissions in production builds
@@ -48,6 +49,7 @@ module.exports = {
 			buildNumber: '1',
 			supportsTablet: true,
 			infoPlist: {
+				CFBundleDisplayName: 'WT2',
 				ITSAppUsesNonExemptEncryption: false,
 				UIUserInterfaceStyle: 'Dark',
 				NSCameraUsageDescription:

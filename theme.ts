@@ -207,3 +207,66 @@ export const commonStyles = StyleSheet.create({
 		fontWeight: '600' as const,
 	},
 });
+
+// Shadow/Elevation presets
+export const shadows = {
+	sm: Platform.select({
+		ios: {
+			shadowColor: '#000',
+			shadowOffset: { width: 0, height: 1 },
+			shadowOpacity: 0.18,
+			shadowRadius: 1.0,
+		},
+		android: {
+			elevation: 1,
+		},
+	}),
+	md: Platform.select({
+		ios: {
+			shadowColor: '#000',
+			shadowOffset: { width: 0, height: 2 },
+			shadowOpacity: 0.23,
+			shadowRadius: 2.62,
+		},
+		android: {
+			elevation: 3,
+		},
+	}),
+	lg: Platform.select({
+		ios: {
+			shadowColor: '#000',
+			shadowOffset: { width: 0, height: 2 },
+			shadowOpacity: 0.25,
+			shadowRadius: 4,
+		},
+		android: {
+			elevation: 4,
+		},
+	}),
+	xl: Platform.select({
+		ios: {
+			shadowColor: '#000',
+			shadowOffset: { width: 0, height: 4 },
+			shadowOpacity: 0.3,
+			shadowRadius: 8,
+		},
+		android: {
+			elevation: 6,
+		},
+	}),
+};
+
+// Glass effect styles
+export const glassStyles = {
+	// Common fallback for platforms that don't support glass effects
+	fallback: {
+		backgroundColor: 'rgba(255, 255, 255, 0.1)',
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: 'rgba(255, 255, 255, 0.15)',
+	},
+	cardFallback: {
+		backgroundColor: colors.surface,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: colors.border,
+	},
+};

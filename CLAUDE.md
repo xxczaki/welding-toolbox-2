@@ -1,0 +1,3 @@
+- Only use SF symbols on iOS – never use any other icons without explicit instructions
+- When interacting with a library which you don't know or don't recognize the current version (e.g. it appears to be the latest, possibly recently released), use context7 MCP
+- When you suspect that the usage of a third-party library may be incorrect, use context7 MCP
