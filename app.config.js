@@ -20,9 +20,9 @@ module.exports = {
 				monochromeImage: 'assets/images/foreground.png',
 				backgroundColor: '#ff9800',
 			},
-			versionCode: 3145778,
+			versionCode: 3145779,
 			userInterfaceStyle: 'dark',
-			softwareKeyboardLayoutMode: 'pan',
+			softwareKeyboardLayoutMode: 'adjustNothing',
 			// Only block permissions in production builds
 			blockedPermissions: IS_PRODUCTION
 				? [
@@ -46,7 +46,7 @@ module.exports = {
 			appleTeamId: '34P8Q35U2Y',
 			appStoreUrl:
 				'https://apps.apple.com/us/app/welding-toolbox-2/id1546617906',
-			buildNumber: '1',
+			buildNumber: '2',
 			supportsTablet: true,
 			infoPlist: {
 				CFBundleDisplayName: 'WT2',
@@ -76,15 +76,8 @@ module.exports = {
 				'expo-build-properties',
 				{
 					android: {
-						enableProguardInReleaseBuilds: true,
 						enableShrinkResourcesInReleaseBuilds: true,
-						extraProguardRules:
-							'-keep class com.swmansion.reanimated.** { *; }\n-keep class com.facebook.react.turbomodule.** { *; }',
-						useLegacyPackaging: false,
-						packagingOptions: {
-							pickFirst: [],
-							exclude: [],
-						},
+						enableMinifyInReleaseBuilds: true,
 					},
 					ios: {
 						deploymentTarget: '16.0',

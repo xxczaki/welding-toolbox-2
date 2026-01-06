@@ -1,4 +1,4 @@
-import { AlertDialog, Button } from '@expo/ui/jetpack-compose';
+import { AlertDialog } from '@expo/ui/jetpack-compose';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
@@ -115,7 +115,11 @@ const HistoryScreen = () => {
 			</View>
 
 			<ScrollView
-				contentContainerStyle={[styles.scrollContent, { paddingBottom: 20 }]}
+				style={{ flex: 1 }}
+				contentContainerStyle={[
+					styles.scrollContent,
+					{ paddingBottom: 100, flexGrow: 1 },
+				]}
 			>
 				{!hasHistory ? (
 					<View style={styles.emptyState}>
@@ -143,14 +147,16 @@ const HistoryScreen = () => {
 										</Text>
 										<Text style={styles.historyDate}>{formattedDate}</Text>
 									</View>
-									<Button
+									<TouchableOpacity
 										onPress={() => handleDeletePress(entry)}
-										leadingIcon="outlined.Delete"
-										variant="borderless"
-										elementColors={{ contentColor: colors.error }}
+										style={styles.deleteButton}
 									>
-										{''}
-									</Button>
+										<MaterialCommunityIcons
+											name="delete-outline"
+											size={24}
+											color={colors.error}
+										/>
+									</TouchableOpacity>
 								</View>
 								<View style={styles.historyDetails}>
 									{entry['Total energy'] !== 'N/A' ? (

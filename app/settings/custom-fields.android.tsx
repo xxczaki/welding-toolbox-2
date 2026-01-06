@@ -108,9 +108,6 @@ const HistoryExportScreen = () => {
 
 						<View style={styles.fieldLabelContainer}>
 							<Text style={styles.fieldLabel}>{item.label}</Text>
-							{item.type === 'custom' && (
-								<Text style={styles.customBadge}>Custom</Text>
-							)}
 						</View>
 
 						{item.type === 'custom' && item.customFieldTimestamp && (
@@ -177,9 +174,10 @@ const HistoryExportScreen = () => {
 				onDragEnd={({ data }) => setExportFields(data)}
 				keyExtractor={(item) => item.id}
 				renderItem={renderItem}
+				containerStyle={{ flex: 1 }}
 				contentContainerStyle={[
 					styles.listContent,
-					{ paddingBottom: insets.bottom + 20 },
+					{ paddingBottom: insets.bottom + 100 },
 				]}
 			/>
 
@@ -367,15 +365,6 @@ const styles = StyleSheet.create({
 	fieldLabel: {
 		...typography.body,
 		color: colors.text,
-	},
-	customBadge: {
-		...typography.caption2,
-		color: colors.primary,
-		backgroundColor: colors.surfaceVariant,
-		paddingHorizontal: spacing.xs,
-		paddingVertical: 2,
-		borderRadius: borderRadius.sm,
-		overflow: 'hidden',
 	},
 	deleteButton: {
 		padding: spacing.xs,

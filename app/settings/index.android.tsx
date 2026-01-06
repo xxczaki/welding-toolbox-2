@@ -156,14 +156,16 @@ const SettingsScreen = () => {
 							<Text style={styles.settingLabel}>
 								Use Imperial Units for Inputs
 							</Text>
-							<Switch
-								value={settings.lengthImperial || false}
-								onValueChange={(value) =>
-									updateSetting('lengthImperial', value)
-								}
-								color={colors.primary}
-								variant="switch"
-							/>
+							<View style={styles.switchContainer}>
+								<Switch
+									value={settings.lengthImperial || false}
+									onValueChange={(value) =>
+										updateSetting('lengthImperial', value)
+									}
+									color={colors.primary}
+									variant="switch"
+								/>
+							</View>
 						</View>
 
 						<View style={styles.separator} />
@@ -178,12 +180,14 @@ const SettingsScreen = () => {
 									For newer welders.
 								</Text>
 							</View>
-							<Switch
-								value={settings.totalEnergy || false}
-								onValueChange={(value) => updateSetting('totalEnergy', value)}
-								color={colors.primary}
-								variant="switch"
-							/>
+							<View style={styles.switchContainer}>
+								<Switch
+									value={settings.totalEnergy || false}
+									onValueChange={(value) => updateSetting('totalEnergy', value)}
+									color={colors.primary}
+									variant="switch"
+								/>
+							</View>
 						</View>
 
 						<View style={styles.separator} />
@@ -391,6 +395,12 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		gap: spacing.xs,
+	},
+	switchContainer: {
+		width: 52,
+		height: 32,
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	settingValueText: {
 		...typography.body,

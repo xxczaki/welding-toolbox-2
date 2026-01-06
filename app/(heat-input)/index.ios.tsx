@@ -69,6 +69,7 @@ const HeatInputScreen = () => {
 	const lengthRef = useRef<TextInput>(null);
 	const timeRef = useRef<TextInput>(null);
 	const totalEnergyRef = useRef<TextInput>(null);
+	const customFieldRefs = useRef<Record<string, TextInput | null>>({});
 
 	const {
 		time,
@@ -184,6 +185,11 @@ const HeatInputScreen = () => {
 			(buttonIndex) => {
 				if (buttonIndex > 0) {
 					setEfficiencyFactor(EFFICIENCY_FACTOR_OPTIONS[buttonIndex - 1].value);
+					// Focus first custom field if available
+					const firstCustomField = settings?.customFields?.[0];
+					if (firstCustomField) {
+						customFieldRefs.current[firstCustomField.name]?.focus();
+					}
 				}
 			},
 		);
@@ -301,6 +307,7 @@ const HeatInputScreen = () => {
 					{ paddingBottom: insets.bottom + 100 },
 				]}
 				keyboardShouldPersistTaps="handled"
+				automaticallyAdjustKeyboardInsets
 			>
 				{/* Amperage & Voltage Row */}
 				{!settings?.totalEnergy && (
@@ -518,30 +525,45 @@ const HeatInputScreen = () => {
 				{/* Custom Fields */}
 				{settings?.customFields &&
 					settings.customFields.length > 0 &&
-					settings.customFields.map((field) => (
-						<View key={field.timestamp} style={styles.customFieldRow}>
-							<RNText style={styles.inputLabel}>
-								{field.name}
-								{field.unit && (
-									<RNText style={styles.inputLabel}> ({field.unit})</RNText>
-								)}
-							</RNText>
-							<View style={styles.inputWithUnit}>
-								<TextInput
-									style={styles.input}
-									value={customFieldValues[field.name] || ''}
-									onChangeText={(value) =>
-										setCustomFieldValues((prev) => ({
-											...prev,
-											[field.name]: value,
-										}))
-									}
-									placeholder="Enter value…"
-									placeholderTextColor={colors.textSecondary}
-								/>
+					settings.customFields.map((field, index, arr) => {
+						const isLastField = index === arr.length - 1;
+						const nextField = arr[index + 1];
+						return (
+							<View key={field.timestamp} style={styles.customFieldRow}>
+								<RNText style={styles.inputLabel}>
+									{field.name}
+									{field.unit && (
+										<RNText style={styles.inputLabel}> ({field.unit})</RNText>
+									)}
+								</RNText>
+								<View style={styles.inputWithUnit}>
+									<TextInput
+										ref={(ref) => {
+											customFieldRefs.current[field.name] = ref;
+										}}
+										style={styles.input}
+										value={customFieldValues[field.name] || ''}
+										onChangeText={(value) =>
+											setCustomFieldValues((prev) => ({
+												...prev,
+												[field.name]: value,
+											}))
+										}
+										placeholder="Enter value…"
+										placeholderTextColor={colors.textSecondary}
+										returnKeyType={isLastField ? 'done' : 'next'}
+										onSubmitEditing={() => {
+											if (isLastField) {
+												Keyboard.dismiss();
+											} else {
+												customFieldRefs.current[nextField.name]?.focus();
+											}
+										}}
+									/>
+								</View>
 							</View>
-						</View>
-					))}
+						);
+					})}
 			</ScrollView>
 		</View>
 	);

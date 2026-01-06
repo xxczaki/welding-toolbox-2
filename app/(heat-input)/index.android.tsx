@@ -66,6 +66,7 @@ const HeatInputScreen = () => {
 	const lengthRef = useRef<TextInput>(null);
 	const timeRef = useRef<TextInput>(null);
 	const totalEnergyRef = useRef<TextInput>(null);
+	const customFieldRefs = useRef<Record<string, TextInput | null>>({});
 
 	const {
 		time,
@@ -285,7 +286,12 @@ const HeatInputScreen = () => {
 
 			<ScrollView
 				ref={scrollViewRef}
-				contentContainerStyle={styles.scrollContent}
+				contentContainerStyle={[
+					styles.scrollContent,
+					{
+						paddingBottom: 350,
+					},
+				]}
 				keyboardShouldPersistTaps="handled"
 			>
 				{/* Amperage & Voltage */}
@@ -420,7 +426,7 @@ const HeatInputScreen = () => {
 								inactiveContainerColor: colors.surfaceVariant,
 								inactiveContentColor: colors.textSecondary,
 							}}
-							modifiers={[size(185, 40)]}
+							modifiers={[size(185, 45)]}
 						/>
 					</View>
 					<View style={styles.inputGroup}>
@@ -496,33 +502,47 @@ const HeatInputScreen = () => {
 				)}
 
 				{/* Custom Fields */}
-				{settings?.customFields && settings.customFields.length > 0 && (
-					<View style={styles.section}>
-						<Text style={styles.sectionLabel}>Custom Fields</Text>
-						{settings.customFields.map((field) => (
-							<View key={field.timestamp} style={styles.customField}>
-								<Text style={styles.customFieldLabel}>
+				{settings?.customFields &&
+					settings.customFields.length > 0 &&
+					settings.customFields.map((field, index, arr) => {
+						const isLastField = index === arr.length - 1;
+						const nextField = arr[index + 1];
+						return (
+							<View key={field.timestamp} style={styles.customFieldRow}>
+								<Text style={styles.inputLabel}>
 									{field.name}
 									{field.unit && (
 										<Text style={styles.customFieldUnit}> ({field.unit})</Text>
 									)}
 								</Text>
-								<TextInput
-									style={styles.customFieldInput}
-									value={customFieldValues[field.name] || ''}
-									onChangeText={(value) =>
-										setCustomFieldValues((prev) => ({
-											...prev,
-											[field.name]: value,
-										}))
-									}
-									placeholder="Value"
-									placeholderTextColor={colors.textSecondary}
-								/>
+								<View style={styles.inputWithUnit}>
+									<TextInput
+										ref={(ref) => {
+											customFieldRefs.current[field.name] = ref;
+										}}
+										style={styles.input}
+										value={customFieldValues[field.name] || ''}
+										onChangeText={(value) =>
+											setCustomFieldValues((prev) => ({
+												...prev,
+												[field.name]: value,
+											}))
+										}
+										placeholder="Enter value…"
+										placeholderTextColor={colors.textSecondary}
+										returnKeyType={isLastField ? 'done' : 'next'}
+										onSubmitEditing={() => {
+											if (isLastField) {
+												Keyboard.dismiss();
+											} else {
+												customFieldRefs.current[nextField.name]?.focus();
+											}
+										}}
+									/>
+								</View>
 							</View>
-						))}
-					</View>
-				)}
+						);
+					})}
 			</ScrollView>
 
 			{/* Save Success Dialog */}
@@ -571,6 +591,13 @@ const HeatInputScreen = () => {
 								onPress={() => {
 									setEfficiencyFactor(option.value);
 									setEfficiencyPickerVisible(false);
+									// Focus first custom field if available
+									const firstCustomField = settings?.customFields?.[0];
+									if (firstCustomField) {
+										setTimeout(() => {
+											customFieldRefs.current[firstCustomField.name]?.focus();
+										}, 100);
+									}
 								}}
 							>
 								<Text
@@ -717,8 +744,8 @@ const styles = StyleSheet.create({
 		color: colors.textSecondary,
 	},
 	scrollContent: {
-		padding: spacing.md,
-		paddingBottom: 150,
+		paddingTop: spacing.md,
+		paddingHorizontal: spacing.md,
 		gap: spacing.md,
 	},
 	section: {
@@ -738,6 +765,7 @@ const styles = StyleSheet.create({
 	},
 	controlsRow: {
 		flexDirection: 'row',
+		alignItems: 'center',
 		gap: spacing.sm,
 	},
 	inputGroup: {
@@ -785,7 +813,7 @@ const styles = StyleSheet.create({
 		gap: spacing.xs,
 		backgroundColor: colors.surfaceVariant,
 		borderRadius: borderRadius.round,
-		height: 40,
+		height: 43,
 		paddingHorizontal: spacing.sm,
 	},
 	timerButtonText: {
@@ -800,7 +828,7 @@ const styles = StyleSheet.create({
 		gap: spacing.xs,
 		backgroundColor: colors.surfaceVariant,
 		borderRadius: borderRadius.round,
-		height: 40,
+		height: 43,
 		paddingHorizontal: spacing.sm,
 	},
 	timerStopButtonText: {
@@ -862,26 +890,11 @@ const styles = StyleSheet.create({
 		color: colors.primary,
 		fontWeight: '600',
 	},
-	customField: {
-		marginBottom: spacing.sm,
-	},
-	customFieldLabel: {
-		...typography.caption1,
-		color: colors.text,
-		marginBottom: spacing.xs,
+	customFieldRow: {
+		// Spacing handled by scrollContent gap
 	},
 	customFieldUnit: {
 		color: colors.textSecondary,
-	},
-	customFieldInput: {
-		backgroundColor: colors.surfaceVariant,
-		borderRadius: borderRadius.round,
-		paddingHorizontal: spacing.md,
-		paddingVertical: spacing.sm,
-		...typography.body,
-		color: colors.text,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: colors.border,
 	},
 });
 
