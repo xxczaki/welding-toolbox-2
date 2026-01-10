@@ -1,6 +1,5 @@
-import { nanoid } from 'nanoid/non-secure';
-
 import type { HistoryEntry, Settings } from '../types';
+import { generateId } from '../utils/generate-id';
 import { parseDecimal } from '../utils/parse-decimal';
 import { toSeconds } from '../utils/to-seconds';
 
@@ -56,7 +55,7 @@ export function createHistoryEntry(
 			: 'N/A';
 
 	const historyEntry: HistoryEntry = {
-		id: nanoid(),
+		id: generateId(),
 		Date: new Date().toISOString(),
 		Amperage: parseDecimal(amperage) || 'N/A',
 		Voltage: parseDecimal(voltage) || 'N/A',

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useStopwatch } from './use-stopwatch';
-import { useLiveActivity } from './useLiveActivity';
 
 interface UseTimerWithLiveActivityReturn {
 	time: string;
@@ -29,14 +28,6 @@ export function useTimerWithLiveActivity(): UseTimerWithLiveActivityReturn {
 		return new Date(totalMs).toISOString().slice(11, -5);
 	}, []);
 
-	const { activityId, startActivity, stopActivity, startTimeRef } =
-		useLiveActivity({
-			isRunning,
-			accumulatedTime,
-			timerUsed,
-			formatTime,
-		});
-
 	useEffect(() => {
 		if (isRunning) {
 			const totalMs = ms + accumulatedTime;
@@ -49,87 +40,45 @@ export function useTimerWithLiveActivity(): UseTimerWithLiveActivityReturn {
 
 	const handleStartStop = useCallback(() => {
 		if (isRunning) {
-			if (startTimeRef.current !== null) {
-				const currentElapsed = Date.now() - startTimeRef.current;
-
-				setAccumulatedTime(currentElapsed);
-			} else {
-				setAccumulatedTime((prev) => prev + ms);
-			}
-
+			setAccumulatedTime((prev) => prev + ms);
 			stop();
 			resetStopwatch();
-
-			startTimeRef.current = null;
 		} else {
 			start();
 			setIsStopped(false);
 			setTimerUsed(true);
-
-			if (!activityId) {
-				startActivity(accumulatedTime);
-			} else {
-				startTimeRef.current = Date.now() - accumulatedTime;
-			}
 		}
-	}, [
-		isRunning,
-		ms,
-		stop,
-		resetStopwatch,
-		start,
-		activityId,
-		accumulatedTime,
-		startActivity,
-		startTimeRef,
-	]);
+	}, [isRunning, ms, stop, resetStopwatch, start]);
 
 	const handleStopTimer = useCallback(() => {
-		const finalTime = formatTime(accumulatedTime);
 		stop();
 		resetStopwatch();
 		setAccumulatedTime(0);
 		setIsStopped(true);
 		setTimerUsed(false);
-
-		stopActivity(finalTime);
-	}, [accumulatedTime, formatTime, stop, resetStopwatch, stopActivity]);
+	}, [stop, resetStopwatch]);
 
 	const handleTimeChange = useCallback(
 		(value: string) => {
 			setTime(value);
 			if (timerUsed || isRunning) {
-				const finalTime = formatTime(accumulatedTime);
 				stop();
 				resetStopwatch();
 				setAccumulatedTime(0);
 				setIsStopped(true);
 				setTimerUsed(false);
-
-				stopActivity(finalTime);
 			}
 		},
-		[
-			timerUsed,
-			isRunning,
-			formatTime,
-			accumulatedTime,
-			stop,
-			resetStopwatch,
-			stopActivity,
-		],
+		[timerUsed, isRunning, stop, resetStopwatch],
 	);
 
 	const resetTimer = useCallback(() => {
-		const finalTime = formatTime(accumulatedTime);
 		setTime('');
 		resetStopwatch();
 		setAccumulatedTime(0);
 		setIsStopped(false);
 		setTimerUsed(false);
-
-		stopActivity(finalTime);
-	}, [accumulatedTime, formatTime, resetStopwatch, stopActivity]);
+	}, [resetStopwatch]);
 
 	return {
 		time,

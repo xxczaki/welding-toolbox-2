@@ -1,11 +1,10 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
-import { nanoid } from 'nanoid/non-secure';
 import { useCallback, useState } from 'react';
 import * as XLSX from 'xlsx';
-
 import type { Settings } from '../types';
 import { DEFAULT_EXPORT_FIELDS } from '../types';
+import { generateId } from '../utils/generate-id';
 import { getHistoryKey, sortHistoryByDate } from '../utils/history';
 
 export interface UseHistoryExportProps {
@@ -59,7 +58,7 @@ export function useHistoryExport({
 
 			XLSX.utils.book_append_sheet(wb, ws, 'WeldingToolbox2History');
 
-			const id = nanoid(5);
+			const id = generateId();
 
 			const wbout = XLSX.write(wb, {
 				type: 'base64',

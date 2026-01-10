@@ -20,7 +20,7 @@ module.exports = {
 				monochromeImage: 'assets/images/foreground.png',
 				backgroundColor: '#ff9800',
 			},
-			versionCode: 3145779,
+			versionCode: 3145780,
 			userInterfaceStyle: 'dark',
 			softwareKeyboardLayoutMode: 'adjustNothing',
 			// Only block permissions in production builds
@@ -46,7 +46,7 @@ module.exports = {
 			appleTeamId: '34P8Q35U2Y',
 			appStoreUrl:
 				'https://apps.apple.com/us/app/welding-toolbox-2/id1546617906',
-			buildNumber: '2',
+			buildNumber: '3',
 			supportsTablet: true,
 			infoPlist: {
 				CFBundleDisplayName: 'WT2',
@@ -81,14 +81,6 @@ module.exports = {
 					},
 					ios: {
 						deploymentTarget: '16.0',
-					},
-				},
-			],
-			[
-				'expo-live-activity',
-				{
-					ios: {
-						enablePushNotifications: false,
 					},
 				},
 			],
