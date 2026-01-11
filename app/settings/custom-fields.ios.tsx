@@ -9,7 +9,12 @@ import {
 	Spacer,
 	Text,
 } from '@expo/ui/swift-ui';
-import { frame, glassEffect, opacity } from '@expo/ui/swift-ui/modifiers';
+import {
+	foregroundStyle,
+	frame,
+	glassEffect,
+	opacity,
+} from '@expo/ui/swift-ui/modifiers';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -89,11 +94,11 @@ const HistoryExportScreen = () => {
 					<Host matchContents>
 						<Button
 							systemImage="chevron.left"
-							color="white"
 							onPress={() => router.back()}
 							modifiers={[
 								frame({ width: 36, height: 36 }),
 								glassEffect({ shape: 'circle' }),
+								foregroundStyle('white'),
 							]}
 						/>
 					</Host>
@@ -101,12 +106,12 @@ const HistoryExportScreen = () => {
 					<Host matchContents>
 						<Button
 							systemImage="plus"
-							color="white"
 							disabled={!canAddMore}
 							onPress={() => canAddMore && setIsSheetOpen(true)}
 							modifiers={[
 								frame({ width: 36, height: 36 }),
 								glassEffect({ shape: 'circle' }),
+								foregroundStyle('white'),
 								...(!canAddMore ? [opacity(0.4)] : []),
 							]}
 						/>
@@ -131,7 +136,7 @@ const HistoryExportScreen = () => {
 									<Image
 										systemName="minus.circle.fill"
 										size={22}
-										color="#ff3b30"
+										color="red"
 										onPress={() => {
 											if (field.customFieldTimestamp) {
 												handleDeleteField(field.customFieldTimestamp);
@@ -156,7 +161,6 @@ const HistoryExportScreen = () => {
 							<Host matchContents>
 								<Button
 									systemImage="xmark"
-									color="white"
 									onPress={() => {
 										setIsSheetOpen(false);
 										setNewFieldName('');
@@ -165,6 +169,7 @@ const HistoryExportScreen = () => {
 									modifiers={[
 										frame({ width: 30, height: 30 }),
 										glassEffect({ shape: 'circle' }),
+										foregroundStyle('white'),
 									]}
 								/>
 							</Host>

@@ -10,6 +10,7 @@ import {
 } from '@expo/ui/swift-ui';
 import {
 	cornerRadius,
+	foregroundStyle,
 	frame,
 	glassEffect,
 	layoutPriority,
@@ -190,10 +191,10 @@ const HeatInputScreen = () => {
 							<Button
 								systemImage="clock.arrow.circlepath"
 								onPress={() => router.push('/(heat-input)/history')}
-								color="white"
 								modifiers={[
 									frame({ width: 36, height: 36 }),
 									glassEffect({ shape: 'circle' }),
+									foregroundStyle('white'),
 								]}
 							/>
 						</Host>
@@ -241,7 +242,6 @@ const HeatInputScreen = () => {
 							<HStack spacing={8} modifiers={[padding({ trailing: 12 })]}>
 								<Button
 									systemImage="doc.on.doc"
-									color="white"
 									disabled={calculatedResult <= 0}
 									onPress={() => {
 										// Copy to clipboard
@@ -249,11 +249,11 @@ const HeatInputScreen = () => {
 									modifiers={[
 										frame({ width: 36, height: 36 }),
 										glassEffect({ shape: 'circle' }),
+										...(calculatedResult > 0 ? [foregroundStyle('white')] : []),
 									]}
 								/>
 								<Button
 									systemImage="arrow.down.document"
-									color="#ff9800"
 									disabled={calculatedResult <= 0}
 									onPress={saveToHistory}
 									modifiers={[
@@ -364,7 +364,6 @@ const HeatInputScreen = () => {
 									<Button
 										systemImage="cube.transparent"
 										onPress={handleARMeasurement}
-										color="#ff9800"
 										modifiers={[
 											frame({ width: 36, height: 36 }),
 											glassEffect({ shape: 'circle' }),
@@ -449,7 +448,7 @@ const HeatInputScreen = () => {
 													size={10}
 													color="#ff9800"
 												/>
-												<Text color="#ff9800" size={13}>
+												<Text size={13} color="#ff9800">
 													{isRunning
 														? 'Pause'
 														: hasTimerValue
@@ -467,8 +466,14 @@ const HeatInputScreen = () => {
 												alignment="center"
 												modifiers={[frame({ height: 20 })]}
 											>
-												<SwiftImage systemName="stop.fill" size={10} />
-												<Text size={13}>Stop</Text>
+												<SwiftImage
+													systemName="stop.fill"
+													size={10}
+													color="white"
+												/>
+												<Text size={13} color="white">
+													Stop
+												</Text>
 											</HStack>
 										</Button>
 									)}
@@ -496,11 +501,7 @@ const HeatInputScreen = () => {
 								{getEfficiencyLabel(efficiencyFactor)}
 							</RNText>
 							<Host matchContents>
-								<SwiftImage
-									systemName="chevron.down"
-									size={14}
-									color="secondary"
-								/>
+								<SwiftImage systemName="chevron.down" size={14} />
 							</Host>
 						</TouchableOpacity>
 					</View>

@@ -9,7 +9,11 @@ import {
 	Text,
 	VStack,
 } from '@expo/ui/swift-ui';
-import { frame, glassEffect } from '@expo/ui/swift-ui/modifiers';
+import {
+	foregroundStyle,
+	frame,
+	glassEffect,
+} from '@expo/ui/swift-ui/modifiers';
 import { useRouter } from 'expo-router';
 import {
 	Alert,
@@ -76,11 +80,11 @@ const HistoryScreen = () => {
 					<Host matchContents>
 						<Button
 							systemImage="chevron.left"
-							color="white"
 							onPress={() => router.back()}
 							modifiers={[
 								frame({ width: 36, height: 36 }),
 								glassEffect({ shape: 'circle' }),
+								foregroundStyle('white'),
 							]}
 						/>
 					</Host>
@@ -89,12 +93,12 @@ const HistoryScreen = () => {
 						<Host matchContents>
 							<Button
 								systemImage="square.and.arrow.up"
-								color="white"
 								disabled={!hasHistory}
 								onPress={handleShareHistory}
 								modifiers={[
 									frame({ width: 36, height: 36 }),
 									glassEffect({ shape: 'circle' }),
+									...(hasHistory ? [foregroundStyle('white')] : []),
 								]}
 							/>
 						</Host>

@@ -99,7 +99,7 @@ const SettingsScreen = () => {
 									resultUnitValues[index] as Settings['resultUnit'],
 								);
 							}}
-							color="secondary"
+							color="#FFFFFF"
 						/>
 
 						{/* Travel Speed Unit Picker */}
@@ -116,7 +116,7 @@ const SettingsScreen = () => {
 									);
 								}
 							}}
-							color="secondary"
+							color="#FFFFFF"
 							modifiers={settings.totalEnergy ? [opacity(0.4)] : []}
 						/>
 
@@ -150,11 +150,7 @@ const SettingsScreen = () => {
 								<HStack>
 									<Text color="primary">History Export</Text>
 									<Spacer />
-									<Image
-										systemName="chevron.right"
-										size={14}
-										color="secondary"
-									/>
+									<Image systemName="chevron.right" size={14} color="white" />
 								</HStack>
 								<Text size={13} color="secondary">
 									Manage custom fields and column order.
