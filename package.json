@@ -49,7 +49,7 @@
 		"@types/react": "~19.2.17",
 		"expo-dev-client": "~6.0.21",
 		"tsx": "^4.22.4",
-		"typescript": "~5.9.3"
+		"typescript": "~6.0.3"
 	},
 	"expo": {
 		"doctor": {
