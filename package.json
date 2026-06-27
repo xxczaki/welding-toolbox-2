@@ -19,7 +19,7 @@
 	},
 	"dependencies": {
 		"@expo/ui": "0.2.0-canary-20260121-a63c0dd",
-		"@react-native-async-storage/async-storage": "^2.2.0",
+		"@react-native-async-storage/async-storage": "^3.1.1",
 		"babel-plugin-transform-remove-console": "^6.9.4",
 		"expo": "~54.0.35",
 		"expo-build-properties": "^1.0.10",
