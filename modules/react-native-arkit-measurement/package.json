@@ -26,7 +26,7 @@
 	"homepage": "https://github.com/xxczaki/react-native-arkit-measurement#readme",
 	"peerDependencies": {
 		"expo": ">=51.0.39",
-		"react": ">=18.0.0",
+		"react": ">=18.3.1",
 		"react-native": ">=0.86.0"
 	},
 	"devDependencies": {
