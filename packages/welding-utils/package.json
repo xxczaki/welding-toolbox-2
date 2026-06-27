@@ -42,7 +42,7 @@
 	},
 	"sideEffects": false,
 	"devDependencies": {
-		"@biomejs/biome": "2.3.10",
+		"@biomejs/biome": "2.5.1",
 		"tsx": "^4.19.2",
 		"typescript": "~5.9.2"
 	},
