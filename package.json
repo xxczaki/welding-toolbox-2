@@ -48,7 +48,7 @@
 		"@changesets/cli": "^2.31.0",
 		"@types/react": "~19.2.17",
 		"expo-dev-client": "~6.0.21",
-		"tsx": "^4.22.4",
+		"tsx": "^4.22.5",
 		"typescript": "~5.9.3"
 	},
 	"expo": {
